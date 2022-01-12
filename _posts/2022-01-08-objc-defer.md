@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "`defer` for Objective-C"
 timestamp: 2022-01-08 09:07:30 -0800
 tags: [💻]
