@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2019-03-10 10:12:25 -0800
-tags: [📰]
+tags: [👤]
 ---
 
 [Tristan O'Tierney died on February 23rd](https://www.sfchronicle.com/business/article/Square-co-founder-who-created-company-s-first-13655221.php). Heart failure after 35 high-mileage years.

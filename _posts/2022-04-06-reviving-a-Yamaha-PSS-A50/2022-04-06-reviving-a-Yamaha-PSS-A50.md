@@ -3,11 +3,12 @@ layout: post
 title:  "Reviving a Yamaha PSS-A50"
 date:   2022-04-06 20:55:32 -0700
 tags: [🎹, 🛠]
+excerpt: "We got a Yamaha PSS-A50 for our kiddo. The next day it wouldn't turn on."
 ---
 
 We got a Yamaha PSS-A50 for our kiddo. He loves banging away on it, I love that it's an order of magnitude cheaper than my OP-1.
 
-Then the next day it wouldn't turn on. I took it apart to see if there were any obvious burn marks (or baby drool), but everything looked clean. After giving it a quick once-over themselves, the staff at [The Starving Musician in Berkeley](https://starvingmusician.com/cart2/) exchanged it for another.
+The next day it wouldn't turn on. I took it apart to see if there were any obvious burn marks (or baby drool), but everything looked clean. After giving it a quick once-over themselves, the staff at [The Starving Musician in Berkeley](https://starvingmusician.com/cart2/) exchanged it for another.
 
 It's been a few months, and now the replacement won't turn on either. [Apparently this is a common problem](https://www.reddit.com/r/synthesizers/comments/kjzwj5/my_yamaha_pss_a50_wont_turn_on/). Luckily, the board's components are extensively labeled and [Stephen Griffiths already found the board's fuse](https://stegriff.co.uk/upblog/fixing-a-yamaha-pss-a50-that-wont-switch-on/) (photo his, see top right):
 

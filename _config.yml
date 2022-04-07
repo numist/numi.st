@@ -19,15 +19,28 @@
 # in the templates via {{ site.myvariable }}.
 
 title: "numist log"
+author: Scott Perry
 email: blog@numist.net
 description: >- # this means to ignore newlines until "baseurl:"
-  You are reading the public memory bank of Scott Perry.
+  The public memory bank of Scott Perry.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
 twitter_username: numist
 github_username:  numist
+facebook_username: numist
+flickr_username: numist
+instagram_username: numist
+linkedin_username: numist
+youtube_username: numistscp
+
+show_excerpts: true
 
 permalink: /post/:year/:title/
+
+header_pages:
+  - about.md
+
 
 # Build settings
 # theme: minima

@@ -6,6 +6,7 @@ updated: 2009-11-04 10:18:12 -0800
 permalink: post/2009/vinay-memorial.html
 tags: [👤]
 ---
+<!-- more -->
 
 Vinay Venkatesh's funeral proceedings were at 12:30 on November 3rd at Spangler Mortuaries in Sunnyvale.
 
