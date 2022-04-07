@@ -1,0 +1,6 @@
+// This source code is distributed under the terms of the Bad Code License.
+// You are forbidden from distributing software containing this code to end
+// users, because it is bad.
+//
+// You are welcome to copy it, but this notice must be included as a warning
+// to others.
