@@ -38,14 +38,14 @@ close(fds[1]);
 return rc;
 ```
 
-This reduces duplication while sacrificing code locality. I still don't love it, but I feel like it's a safer style.
+This reduces duplication, but has worse locality. I don't love it, but I feel like it's the safer style.
 
 Really what I want is something like [Swift's `defer`](https://docs.swift.org/swift-book/ReferenceManual/Statements.html#ID532):
 
 ``` c
 int fds[2] = { -1, -1}; 
 pipe(fds);
-defer {
+defer ^{
     close(fds[0]);
     close(fds[1]);
 };
@@ -85,7 +85,7 @@ static void __BA7F1207D89C2F82(void (^ *pBlock)(void)) {
 void (^ TOKENPASTE2(__defer_, __LINE__))(void) \
 __attribute__((__unused__, \
                deprecated("hands off!"), \
-               __cleanup__(__BA7F1207D89C2F82))) = ^
+               __cleanup__(__BA7F1207D89C2F82))) = 
 ```
 
 [^mmap]: as appealing as its promise is, `mmap` is bad and you should never use it unless you truly need garbage collected shared memory between processes, in which case your life already sucks and I'm sorry. `pread` and `pwrite` will set `errno` instead of crashing your process and are not nearly as slow as you think; you should stick with them until you can measure otherwise, at which point you should investigate doing your own paging because as I just said `mmap` is dangerous and bad.

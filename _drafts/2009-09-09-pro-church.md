@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[draft] Pro Church"
+title:  "Pro Church"
 date:   2009-09-09 14:02:12 -0800
 permalink: post/2009/hints-for-navigating-politics-1.html
 ---
