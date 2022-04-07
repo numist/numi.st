@@ -9,11 +9,6 @@ tags: [👤]
 
 Vinay Venkatesh's funeral proceedings were at 12:30 on November 3rd at Spangler Mortuaries in Sunnyvale.
 
-there wasn't even room to stand in the lobby during the service.
+There wasn't even room to stand in the lobby during the service.
 
-even in death, Vinay brought people together. after the proceedings friends were at Chez Fun into the early hours of the morning. memories were shared, new friendships were made. thanks to everyone who came.
-
-if you want to send wishes to the family, mail can be sent to:
-
-82 Chestnut Hill Drive<br />
-New Providence, NJ 07974-2711
+Even in death, Vinay brought people together. After the proceedings friends were at Chez Fun into the early hours of the morning. Memories were shared, new friendships were made. Thanks to everyone who came.
