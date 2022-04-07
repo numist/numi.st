@@ -10,7 +10,7 @@ Unless specified otherwise below or more explicitly in context, the original con
     
 * Source code: [Bad Code](LICENSES/Bad%20Code.txt)
     
-    You are forbidden from distributing software containing this code to end users, because it is bad.
+    You are forbidden from distributing software containing this code to end users, because it is bad. You're welcome to play with it though.
 
 Regardless of any available license permissivity, copies and derivatives of other work are released under the same license as their original. This includes, but is not limited to:
 
