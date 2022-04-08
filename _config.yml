@@ -42,6 +42,8 @@ permalink: /post/:year/:title/
 header_pages:
   - about.md
 
+mermaid:
+  src: '/assets/js/mermaid.min.js'
 
 # Build settings
 # theme: minima

@@ -16,3 +16,4 @@ Regardless of any available license permissivity, copies and derivatives of othe
 
 * [minima ~> 2.5](https://github.com/jekyll/minima), Copyright (c) 2016-present Parker Moore and the minima contributors and released under the [MIT License](LICENSES/MIT.txt).
 * [jekyll](https://github.com/jekyll/jekyll), Copyright (c) 2008-present Tom Preston-Werner and Jekyll contributors and released under the [MIT License](LICENSES/MIT.txt).
+* [mermaid](https://github.com/mermaid-js/mermaid), Copyright (c) 2014 - 2021 Knut Sveidqvist and released under the [MIT License](LICENSES/MIT.txt).
