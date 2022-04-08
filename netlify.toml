@@ -3,4 +3,7 @@
 package = "netlify-plugin-checklinks"
   [plugins.inputs]
   checkExternal = true
-
+  skipPatterns = [
+    "Unknown error",
+    "_site/feed.xml",
+  ]
