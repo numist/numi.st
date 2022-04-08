@@ -7,3 +7,7 @@ package = "netlify-plugin-checklinks"
     "main.css",
     "_site/feed.xml",
   ]
+  todoPatterns = [
+    "content-type-missing",
+    "https://github.com/numist/numi.st/blob/main/"
+  ]
