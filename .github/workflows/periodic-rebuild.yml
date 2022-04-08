@@ -1,0 +1,11 @@
+name: Trigger Netlify Build
+on:
+  schedule:
+    - cron: '17 9 * * *' # poorly-randomized substitute for @daily, which is not supported
+jobs:
+  build:
+    name: Hit Netlify Webhook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl request
+        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}
