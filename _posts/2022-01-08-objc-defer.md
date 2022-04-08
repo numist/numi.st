@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "`defer` for Objective-C"
-date: 2022-01-08 09:07:30 -0800
+<!-- date: 2022-01-08 09:07:30 -0800 -->
 tags: [💻]
 excerpt: Reducing code duplication and improving locality in Objective-C with macros.
 ---

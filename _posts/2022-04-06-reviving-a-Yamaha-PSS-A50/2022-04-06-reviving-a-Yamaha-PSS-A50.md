@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Reviving a Yamaha PSS-A50"
-date:   2022-04-06 20:55:32 -0700
+<!-- date:   2022-04-06 20:55:32-0700 -->
 tags: [🎹, 🛠]
 excerpt: "We got a Yamaha PSS-A50 for our kiddo. The next day it wouldn't turn on."
 ---
