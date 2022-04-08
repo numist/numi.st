@@ -23,8 +23,8 @@ author: Scott Perry
 email: blog@numist.net
 description: >- # this means to ignore newlines until "baseurl:"
   The public memory bank of Scott Perry.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: ""
+url: "https://numi.st"
 timezone: “Etc/UTC”
 
 twitter_username: numist
