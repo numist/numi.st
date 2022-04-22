@@ -10,4 +10,5 @@ package = "netlify-plugin-checklinks"
   todoPatterns = [
     "content-type-missing", # I would like this to error local links and warn external, but here we are
     "https://github.com/numist/numi.st/blob/main/", # posts link to themselves on github, but those links point to `main` which doesn't work for pull requests
+    "fragment-check", # false failures when using dynamic fragments, like line number ranges on GitHub source pages
   ]
