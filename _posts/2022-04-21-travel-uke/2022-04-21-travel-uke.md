@@ -56,7 +56,7 @@ I hand-filed a TUSQ bridge intonated for high-G, and found [V wheels](https://op
 
 ![A close-up of the V-wheels and the hand-carved bridge](IMG_1238.jpeg)
 
-I [crowdsourced the ideal angle](https://twitter.com/numist/status/1210394543301939200) for my tuning pegs ([22.5°](IMG_1171.jpeg)), but using any angle other than 90° means getting creative with how the tuners are mounted. I have no idea how Risa did it, but I was able to get angled flat faces on both sides by boring a full size hole through the body and then gluing a hollow plug back in:
+I [crowdsourced the ideal angle](https://twitter.com/numist/status/1210394543301939200) for my tuning pegs (it's [22.5°](IMG_1171.jpeg)), but using any angle other than 0° means getting creative with how the tuners are mounted. I have no idea how Risa did it, but I was able to get angled flat faces on both sides by boring a full size hole through the body and then gluing a hollow plug back in:
 
 ![Tuner mounts, the making of. Lots of sawdust and sandpaper](IMG_6196.jpeg)
 
