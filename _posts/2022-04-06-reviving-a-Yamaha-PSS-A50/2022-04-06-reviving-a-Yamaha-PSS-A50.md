@@ -15,6 +15,8 @@ It's been a few months, and now the replacement won't turn on either. [Apparentl
 
 ![A photo of the circuit board with component F001 circled (near the unpopulated twin inductors)](f001.jpg)
 
+<small>Photo credit: [Stephen Griffiths](https://stegriff.co.uk/upblog/fixing-a-yamaha-pss-a50-that-wont-switch-on/)</small>
+
 Like Stephen, our keyboard's F001 also failed continuity. We hooked the battery wires to a benchtop power supply, bridged the fuse with some hookup wire, and tried the power button. After raising the current limit to 200mA or so, we got lights and sounds!
 
 For the curious, the keyboard normally draws 100mA±20 (at 6VDC). We tried holding down various combinations of keys and buttons but other than initial power-on rush we never saw more than ~120mA so we have no idea what blew the fuse in the first place. Worse, [Jesse](https://fsck.com) found the part (it's a [1206L110TH](Littelfuse_PTC_1206L_Datasheet.pdf.pdf)) and it's supposed to be self-resetting with a trip current of 1.1A. Did Yamaha get a faulty batch? Is the circuit prone to odd shorts?
