@@ -61,32 +61,23 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 Turned out it's not too heinous to hack together. Here it is:
 
 ``` c
-#ifndef TOKENPASTE2
-# define TOKENPASTE(x, y) x ## y
-# define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#endif
-
-/* This function takes a pointer to a block, dereferences it, and invokes
- * it. It's this way because __attribute__((__cleanup__(…))) always passes
- * a _pointer_ to the thing as the cleanup functions' parameter.
- */
-static void __BA7F1207D89C2F82(void (^ *pBlock)(void)) {
-    void (^block)(void) = *pBlock;
-    block();
-}
+static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
+#define __defer_tokenpaste(prefix, suffix) prefix ## suffix
+#define __defer_blockname(nonce) __defer_tokenpaste(__defer_, nonce)
 
 /* Declare a local block variable that contains the cleanup code.
  * It has three attributes:
  *   __unused__: because you should NEVER touch this local yourself
  *   __deprecated__: because you should NEVER touch this local yourself
- *   __cleanup__: to get its pointer passed to __BA7F1207D89C2F82 (above)
+ *   __cleanup__: to get its pointer passed to __defer_cleanup (above)
  *                when the scope ends
  */
 #define defer \
-void (^ TOKENPASTE2(__defer_, __LINE__))(void) \
+void (^ __defer_blockname(__LINE__))(void) \
 __attribute__((__unused__, \
                deprecated("hands off!"), \
-               __cleanup__(__BA7F1207D89C2F82))) = 
+               __cleanup__(__defer_cleanup) \
+)) = 
 ```
 
 Update: as one might have predicted, [Peter Steinberger and Matej Bukovinski beat me to it](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/). They factored out the tokenpaste macro, which was probably a good idea.
