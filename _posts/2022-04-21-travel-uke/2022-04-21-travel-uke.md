@@ -27,7 +27,7 @@ The best known travel ukulele is probably the Risa Uke-Solid, which is pretty si
 
 ![A pictures of the front and back of a Risa Stick ukulele](IMG_0131.jpeg)
 
-One thing I really like about the Risa is how the tuners are angled so the strings naturally wrap down the post of the tuning pegs. I'm not sure how the Shaper demo ukulele is to tune, but it was a one-off while the Risa is A Product that you can purchase, so the angle is probably useful. It also looks nice. I really like their use of a [zero-fret](https://en.wikipedia.org/wiki/Zero_fret) and the strap buttons are smartly-placed as well.
+One thing I really like about the Risa is how the tuners are angled so the strings naturally wrap down the post of the tuning pegs. I'm not sure how the Shaper demo ukulele is to tune, but it was a one-off while the Risa is A Product that you can purchase, so the angle is probably useful. It also looks nice. I really like their use of a [zero-fret](https://en.wikipedia.org/wiki/Zero_fret), and the strap buttons are smartly-placed as well.
 
 The cutout of the Risa goes all the way through, while the Shaper demo uke keeps a thin bit of wood in the back for resonance. Both look longer than they need to be—why extend the body beyond the strings? In the Risa's case it's to fit a full size ¼" jack in the butt, but I reckoned a ⅛" jack along the bottom somewhere would be just as good.
 
@@ -39,7 +39,7 @@ This ukulele is truly only as long as it needs to be.
 
 It's pretty roughly-built, but it was really close to the form factor I had in mind and that built-in compass was a very nice touch.
 
-Obviously the compass is a gimmick; nobody is wayfinding out in the wilderness with a map in one hand and a ukulele balanced on the other, but you know what people with travel ukuleles _do_ need to do regularly? Tune their instrument! A bit of searching and I found the [Fender Bullet Tuner](https://www.fender.com/en-US/accessories/digital-tuners/fender-bullet-tuner/0239979002.html); a perfect built-in accessory for my travel ukulele.
+Obviously the compass is a gimmick—nobody is wayfinding out in the wilderness with a map in one hand and a ukulele balanced on the other—but you know what people with travel ukuleles _do_ need to do regularly? Tune their instrument! A bit of searching and I found the [Fender Bullet Tuner](https://www.fender.com/en-US/accessories/digital-tuners/fender-bullet-tuner/0239979002.html); a perfect built-in accessory for my travel ukulele.
 
 ## v1
 
