@@ -3,7 +3,7 @@ layout: post
 title: "`defer` for Objective-C"
 timestamp: Saturday January 8, 2022 09:07:30 PST
 tags: [💻]
-excerpt: Reducing code duplication and improving locality in Objective-C with macros.
+description: Reducing code duplication and improving locality in Objective-C with macros.
 ---
 
 This all started because I was complaining about some uninitialized pointer value causing me grief[^mmap] and someone (explicitly trolling) said they always check pointers using:

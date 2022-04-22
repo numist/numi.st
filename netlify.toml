@@ -5,7 +5,7 @@ package = "netlify-plugin-checklinks"
   checkExternal = true
   skipPatterns = [
     "main.css",
-    "_site/feed.xml",
+    "_site/feed.xml", # externality: https://github.com/jekyll/jekyll-feed
   ]
   todoPatterns = [
     "content-type-missing", # I would like this to error local links and warn external, but here we are

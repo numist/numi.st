@@ -22,7 +22,7 @@ layout: default
           {{ post.title | escape }}
         </a>
         {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
+          {{ post.description | default: post.excerpt }}
         {%- endif -%}
       </li>
       {%- endfor -%}

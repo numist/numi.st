@@ -2,7 +2,6 @@
 layout: post
 title: "Travel Ukuleles"
 tags: [🎹, 🛠]
-excerpt: "I go overboard making two tiny concert scale ukuleles"
 description: "I go overboard making concert scale travel ukuleles"
 image:
   path: /post/2022/travel-uke/IMG_1232.jpeg
