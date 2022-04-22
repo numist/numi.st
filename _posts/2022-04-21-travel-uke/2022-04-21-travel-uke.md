@@ -27,6 +27,8 @@ The best known travel ukulele is probably the Risa Uke-Solid, which is pretty si
 
 ![A pictures of the front and back of a Risa Stick ukulele](IMG_0131.jpeg)
 
+<small>(I downloaded this image so long ago that I cannot for the life of me find its origins. IIRC is was posted to a forum? Anyway if it's yours please let me know so I can credit you)</small>
+
 One thing I really like about the Risa is how the tuners are angled so the strings naturally wrap down the post of the tuning pegs. I'm not sure how the Shaper demo ukulele is to tune, but it was a one-off while the Risa is A Product that you can purchase, so the angle is probably useful. It also looks nice. I really like their use of a [zero-fret](https://en.wikipedia.org/wiki/Zero_fret), and the strap buttons are smartly-placed as well.
 
 The cutout of the Risa goes all the way through, while the Shaper demo uke keeps a thin bit of wood in the back for resonance. Both look longer than they need to be—why extend the body beyond the strings? In the Risa's case it's to fit a full size ¼" jack in the butt, but I reckoned a ⅛" jack along the bottom somewhere would be just as good.
@@ -36,6 +38,8 @@ The cutout of the Risa goes all the way through, while the Shaper demo uke keeps
 This ukulele is truly only as long as it needs to be.
 
 ![An even shorter ukulele, but also more obviously homemade](IMG_5256.jpeg)
+
+<small>Photo credit: [Daniel Hulbert](https://circuitsandstrings.wordpress.com/2015/11/16/backpacker-travel-ukulele/)</small>
 
 It's pretty roughly-built, but it was really close to the form factor I had in mind and that built-in compass was a very nice touch.
 
