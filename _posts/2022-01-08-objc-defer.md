@@ -61,33 +61,26 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 Turned out it's not too heinous to hack together. Here it is:
 
 ``` c
-#ifndef TOKENPASTE2
-# define TOKENPASTE(x, y) x ## y
-# define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#endif
-
-/* This function takes a pointer to a block, dereferences it, and invokes
- * it. It's this way because __attribute__((__cleanup__(…))) always passes
- * a _pointer_ to the thing as the cleanup functions' parameter.
- */
-static void __BA7F1207D89C2F82(void (^ *pBlock)(void)) {
-    void (^block)(void) = *pBlock;
-    block();
-}
+static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
+#define __defer_tokenpaste(prefix, suffix) prefix ## suffix
+#define __defer_blockname(nonce) __defer_tokenpaste(__defer_, nonce)
 
 /* Declare a local block variable that contains the cleanup code.
  * It has three attributes:
  *   __unused__: because you should NEVER touch this local yourself
  *   __deprecated__: because you should NEVER touch this local yourself
- *   __cleanup__: to get its pointer passed to __BA7F1207D89C2F82 (above)
+ *   __cleanup__: to get its pointer passed to __defer_cleanup (above)
  *                when the scope ends
  */
 #define defer \
-void (^ TOKENPASTE2(__defer_, __LINE__))(void) \
+void (^ __defer_blockname(__LINE__))(void) \
 __attribute__((__unused__, \
                deprecated("hands off!"), \
-               __cleanup__(__BA7F1207D89C2F82))) = 
+               __cleanup__(__defer_cleanup) \
+)) = 
 ```
+
+Update: predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33).
 
 [^mmap]: as appealing as its promise is, `mmap` is bad and you should never use it unless you truly need garbage collected shared memory between processes, in which case your life already sucks and I'm sorry. `pread` and `pwrite` will set `errno` instead of crashing your process and are not nearly as slow as you think; you should stick with them until you can measure otherwise, at which point you should investigate doing your own paging because as I just said `mmap` is dangerous and bad.
 [^mincore]: If you have a problem with wild pointers then you _also_ have much bigger problems that you should solve first. If you're just hacking away on code that will never run on someone else's computer you should try [`mincore`](https://man7.org/linux/man-pages/man2/mincore.2.html) or [`mach_vm_read`](https://developer.apple.com/documentation/kernel/1402405-mach_vm_read).
