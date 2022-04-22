@@ -3,7 +3,6 @@ layout: post
 title:  "Danny's Wager"
 timestamp: Wednesday February 20, 2008 22:58:12 PST
 permalink: post/2008/pascals-wager.html
-excerpt: "Or: the problem with Pascal's Wager."
 description: "Or: the problem with Pascal's Wager."
 ---
 

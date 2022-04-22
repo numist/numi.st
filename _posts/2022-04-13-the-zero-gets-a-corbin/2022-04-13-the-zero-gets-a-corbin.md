@@ -2,7 +2,6 @@
 layout: post
 title: "The Zero Gets a Corbin Saddle"
 tags: [🏍]
-excerpt: "Giving myself a little present now that I've been summoned back into the office."
 description: "Giving myself a little present now that I've been summoned back into the office."
 image: /post/2022/the-zero-gets-a-corbin/IMG_7480%20medium.jpeg
 ---

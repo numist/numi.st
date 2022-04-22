@@ -3,7 +3,6 @@ layout: post
 title:  "Improved Tie-downs for the Motorcycle Lift"
 timestamp: Wednesday March 16, 2022 23:48:51 PST
 tags: [🛠, 🏍]
-excerpt: I got a set of CargoBuckles and modified them for motorcycle lift duty.
 description: I got a set of CargoBuckles and modified them for motorcycle lift duty.
 image: /post/2022/cargobuckle-mods/IMG_7408.jpeg
 ---
