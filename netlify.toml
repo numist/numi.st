@@ -10,4 +10,5 @@ package = "netlify-plugin-checklinks"
   todoPatterns = [
     "content-type-missing", # I would like this to error local links and warn external, but here we are
     "https://github.com/numist/numi.st/blob/main/", # posts link to themselves on github, but those links point to `main` which doesn't work for pull requests
+    "<meta property=\"og:image\"", # meta links are absolute to the site's configured URL, not the actual deployed server
   ]
