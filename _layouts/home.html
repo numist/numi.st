@@ -19,7 +19,7 @@ layout: default
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <span class="post-meta">{{ post.date | date: date_format }}</span>
         <a class="post-link" href="{{ post.url | relative_url }}">
-          {{ post.title | escape }}
+          {{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}
         </a>
         {%- if site.show_excerpts -%}
           {{ post.description | default: post.excerpt }}
