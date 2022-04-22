@@ -3,9 +3,13 @@ layout: post
 title: "Travel Ukuleles"
 tags: [🎹, 🛠]
 excerpt: "I go overboard making two tiny concert scale ukuleles"
+description: "I go overboard making concert scale travel ukuleles"
+image:
+  path: /post/2022/travel-uke/IMG_1232.jpeg
+  alt: Tanya's finished ukulele with the wood slab and CNC router with which it was cut
 ---
 
-![View from above of Tanya's finished ukulele with the wood slab from which it was cut with the Origin's light shining down on it](IMG_1232.jpeg)
+![Tanya's finished ukulele with the wood slab and CNC router with which it was cut](IMG_1232.jpeg)
 
 A while ago I made a travel ukulele for [Tanya](http://www.maybefriday.com)—and more recently another for [Nicole](http://nicoleaptekar.com)—and I figured I'd write about them in part because I think it went well but also because they were inspired by some other cool projects that deserve some cred.
 
