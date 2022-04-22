@@ -80,7 +80,7 @@ __attribute__((__unused__, \
 )) = 
 ```
 
-Update: as one might have predicted, [Peter Steinberger and Matej Bukovinski beat me to it](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/). They factored out the tokenpaste macro, which was probably a good idea.
+Update: predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33).
 
 [^mmap]: as appealing as its promise is, `mmap` is bad and you should never use it unless you truly need garbage collected shared memory between processes, in which case your life already sucks and I'm sorry. `pread` and `pwrite` will set `errno` instead of crashing your process and are not nearly as slow as you think; you should stick with them until you can measure otherwise, at which point you should investigate doing your own paging because as I just said `mmap` is dangerous and bad.
 [^mincore]: If you have a problem with wild pointers then you _also_ have much bigger problems that you should solve first. If you're just hacking away on code that will never run on someone else's computer you should try [`mincore`](https://man7.org/linux/man-pages/man2/mincore.2.html) or [`mach_vm_read`](https://developer.apple.com/documentation/kernel/1402405-mach_vm_read).
