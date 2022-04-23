@@ -6,6 +6,7 @@ package = "netlify-plugin-checklinks"
   skipPatterns = [
     "main.css",
     "_site/feed.xml", # externality: https://github.com/jekyll/jekyll-feed
+    "https://twitter.com/bmn/status/371070320251125760", # apparently ancient tweets don't quite work? whatever, the blockquote will carry us through if it dies.
   ]
   todoPatterns = [
     "content-type-missing", # I would like this to error local links and warn external, but here we are
