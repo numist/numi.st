@@ -7,7 +7,7 @@ image: "/post/2013/square-tweetwriter/BSZHo-HCcAASmtw.jpeg"
 ---
 In 2010 I [turned a typewriter into a serial teletype for fun](http://numist.net/post/2010/project-typewriter.html) but it has collected dust ever since, just one more thing to pack whenever I've moved. Each quarter, Square sets aside a full week for everyone in the company to build something self-directed and this time seemed like a good opportunity to dust it off and do something fun.
 
-At Square our office is littered with inforads, or "information radiators". They're mostly column-mounted televisions displaying web pages that show things like a world map annotated with transactions as they happen, or <abbr title="Gross Payment Volume">GPV</abbr> graphs, or whatever. Omnipresent dispensaries of interesting business information. An automated typewriter seemed like a natural kind of inforad, but what would it print?
+At Square our office is littered with [inforads, or "information radiators"](https://developer.squareup.com/blog/inside-a-square-inforad/). They're mostly column-mounted televisions displaying web pages that show things like a world map annotated with transactions as they happen, or <abbr title="Gross Payment Volume">GPV</abbr> graphs, or whatever. Omnipresent dispensaries of interesting business information. An automated typewriter seemed like a natural kind of inforad, but what would it print?
 
 Well, tweets of course. Specifically, anything that mentioned the @Square account.
 
