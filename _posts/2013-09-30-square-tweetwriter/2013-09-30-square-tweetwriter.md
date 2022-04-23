@@ -17,9 +17,13 @@ People had a lot of fun with it from the start, tweeting funny messages and then
 
 ![Jerry Lin tweets: "@square all work and no play makes jack a dull boy. all work and no play makes jack a dull boy. all work and no play makes jack a dull boy."](IMG_0932.jpeg)
 
-[Once it went public](https://twitter.com/thefriley/status/371062788489113600), people out in the world seemed to enjoy sending their messages directly into the office (extra thanks to Ben Novakovic for the ["best hack week project" nomination](https://twitter.com/bmn/status/371070320251125760)!):
+Once it went public, people out in the world seemed to enjoy sending their messages directly into the office:
 
 ![@Levertis_Menter tweets: "@square I'm only writing this so it prints out on that typewriter"](IMG_0935.jpeg)
+
+Extra thanks to Ben Novakovic for the "best hack week project" nomination:
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/thefriley?ref_src=twsrc%5Etfw">@thefriley</a> <a href="https://twitter.com/Square?ref_src=twsrc%5Etfw">@square</a> <a href="https://twitter.com/jack?ref_src=twsrc%5Etfw">@jack</a> This is possibly the best hack week project I&#39;ve ever seen.</p>&mdash; Ben Novakovic (@bmn) <a href="https://twitter.com/bmn/status/371070320251125760?ref_src=twsrc%5Etfw">August 24, 2013</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 Like any idea with a week's worth of effort, it had a couple shortcomings. For example if the @Square account tweeted something popular, the typewriter would faithfully—and noisily—relay every single retweet:
 
