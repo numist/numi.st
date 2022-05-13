@@ -10,7 +10,7 @@ image:
 
 ![Tanya's finished ukulele with the wood slab and CNC router with which it was cut](IMG_1232.jpeg)
 
-A while ago I made a travel ukulele for [Tanya](http://www.maybefriday.com)—and more recently another for [Nicole](http://nicoleaptekar.com)—and I figured I'd write about them in part because I think it went well but also because they were inspired by some other cool projects that deserve some cred.
+A while ago I made a travel ukulele for [Tanya](http://www.maybefriday.com)—and more recently another for [Nicole](http://www.nicoleaptekar.com)—and I figured I'd write about them in part because I think it went well but also because they were inspired by some other cool projects that deserve some cred.
 
 ## Shaper Origin demo
 
@@ -72,7 +72,7 @@ Shaping the neck was a lot of careful manual labour, but since moving across the
 
 ![Nicole's ukulele's neck, viewed from above while playing](IMG_6427.jpeg)
 
-The tuner sticks out through the back side of Tanya's ukulele. This was intentional to leave access to the tuner's button and screw cap, but it also meant that the tuner got turned on (or off) whenever her ukulele was put down. On Nicole's ukulele we nestled the tuner across the body instead:
+The tuner sticks out through the back side of Tanya's ukulele. This was intentional to leave access to the tuner's button and screw cap, but it also meant that the tuner got turned on (or off) whenever her ukulele was put down. On Nicole's ukulele we nestled it across the body instead:
 
 ![Detail of the tuner visible looking down through the strings](IMG_6419.jpeg)
 
