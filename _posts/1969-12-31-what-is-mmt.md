@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "What is Modern Monetary Theory?"
-timestamp: Tuesday January 19, 2038 03:14:07 UTC
+timestamp: Wednesday December 31, 1969 23:59:59 UTC
 tags: [💵]
-description: ""
+description: "A primer on how fiat currencies work."
 ---
 
 Modern Monetary Theory (MMT) is a framework for thinking about the relationship between the issuer of a fiat currency[^fiat] and the economy it denominates.
@@ -79,6 +79,8 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 > As long as there is plenty, poverty is evil. Government belongs wherever evil needs an adversary and there are people in distress.
 > 
 > —John F. Kennedy
+
+----
 
 [^fiat]: Money that's not backed by a commodity (like gold).
 [^hyperinflation]: The exception being periods of hyperinflation, during which locals will prefer to be paid in (or immediately trade their paycheck for) a more stable currency—usually the dollar—in the hope of preserving the buying power of a day's work. A relatively recent example of this can be found [in Venezuela](https://www.npr.org/transcripts/635519727).
