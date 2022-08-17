@@ -8,7 +8,7 @@ description: "What gives fiat currencies value, and what can we do with them?"
 
 Modern Monetary Theory (MMT) is a framework for thinking about the relationship between the issuer of a [fiat currency](https://en.wikipedia.org/wiki/Fiat_money) and the economy it denominates.
 
-MMT has two basic premises:
+It has two basic premises:
 
 ## 1: People need money
 
@@ -26,11 +26,11 @@ This calculus also provides a concrete answer to why the dollar is more valuable
 
 Dollars are created and destroyed by the government; the amount (and manner) in which they are distributed or recovered is the government's most important economic (and social) policy tool.
 
-A key point here is that _governments don't have bank accounts_. The central bank settles debts by creating money. Likewise, money collected by the government is magicked out of existence. A currency issuer's purpose is not to _have_ money, it's to _manage_ the economy by exerting control over its currency.
+A key point here is that _governments don't have bank accounts_. The central bank settles debts by creating money. Likewise, money collected by the government is magicked out of existence. A currency issuer's purpose is not to _have_ money, it's to manage the economy by _exerting control_ over its currency.
 
 This turns common budgeting sense on its head—a household's financial health may be determined by its bank account's balance, but a currency issuer's financial health is measured by its economy, which it can influence by adding or removing money.
 
-The government has many options for increasing the money supply, including spending, forgiving debt, or mailing everyone a check. It mostly decreases the dollar supply by raising taxes, which—as with spending—can be used to accomplish social goals; in the same way that spending money on single-payer insurance adds dollars to the market while also benefitting public health, a wealth tax takes dollars out of the market while also reducing inequality.
+The government has many options for increasing the money supply, including spending, forgiving debt, or mailing everyone a check. It mostly decreases the dollar supply by raising taxes, which—as with spending—can be used to accomplish social goals; in the same way that spending money on single-payer insurance adds dollars to the market in service of public health, a wealth tax takes dollars out of the market while reducing inequality.
 
 <!--
 > We can, and must, tax the rich. But not because we can't afford to do anything without them. We shoudl tax billionaires to rebalance the distribution of wealth and income and to protect the health of our democracy.
@@ -50,7 +50,7 @@ In an otherwise static system, we can view inflation as the result of a governme
 
 Inflation isn't necessarily bad when it's well-controlled. A small and consistent amount[^twopercent] gradually reduces the real cost of long term debt and gently incentivizes people to maintain the economy's velocity by moving their idle cash into investments or durable goods.
 
-That said, the economy isn't a static system. Oversimplifying, the economy "likes" a stable velocity of money, but transactions that don't involve the government can vary wildly for reasons as capricious as the people involved. In aggregate, these transactions form trends that manifest as oscillations in the market.
+That said, the economy isn't a static system. Oversimplifying, the economy "likes" a stable velocity of money, but transactions that don't involve the government can vary wildly for reasons as capricious as the parties involved. In aggregate, these transactions form trends—oscillations in the market.
 
 Through the lens of MMT, these booms and busts are opportunities for a savvy government to improve life for their citizens by spending into downturns and levelling the playing field during booms. One MMT-derived policy that accomplishes this naturally is a federal job guarantee.
 
@@ -60,15 +60,15 @@ Through the lens of MMT, these booms and busts are opportunities for a savvy gov
 
 ### Automatic budgeting
 
-Instead of becoming unemployed, workers could take a job with the government during a recession, their new salary naturally causing an increase in government spending. During a healthy market, private companies would reduce the cost of the program by poaching people from public employment.
+Instead of becoming unemployed, workers could take a job with the government during a recession, their new salary naturally causing an increase in government spending. During a healthy market, private companies would reduce the cost of the program by poaching people from public employment with more lucrative offers.
 
 ### Stabilize the economy
 
-Obviously being employed is strictly better than needing work for the humans involved, but for the economy at large a job guarantee puts money directly where it's needed most: stabilizing people's income stabilizes their spending, which in turn stabilizes inflation.
+Obviously being employed is good for the worker, but for the economy at large a job guarantee puts money directly where it's needed most: stabilizing people's income stabilizes their spending, which in turn stabilizes inflation.
 
 ### Minimum wage and conditions
 
-Because the government participates in the same labour market as private industry, a public job guarantee effectively sets the minimum wage and working conditions for its citizens. This helps eliminate "bad jobs"—unsustainable, exploitative work—from the market without harming workers.
+Because the government participates in the same labour market as private industry, a public job guarantee effectively sets the minimum wage and working conditions for its citizens. This helps eliminate "bad jobs"—unsafe, exploitative work—from the market without harming workers.
 
 ## Anyway
 
