@@ -16,7 +16,8 @@ gem "jekyll", "~> 4.2.2"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
-  gem "jekyll-seo-tag", "~> 2.8"
+  # gem "jekyll-seo-tag", "~> 2.8" 
+  gem "jekyll-seo-tag", :git => 'https://github.com/numist/jekyll-seo-tag.git', :branch => 'issue/461'
   gem "jekyll-postfiles", "~> 3.1"
   gem "jekyll-mermaid", "~> 1.0.0"
 end

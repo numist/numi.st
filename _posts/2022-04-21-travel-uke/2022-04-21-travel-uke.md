@@ -4,7 +4,7 @@ title: "Travel Ukuleles"
 tags: [🎹, 🛠]
 description: "I go overboard making concert scale travel ukuleles"
 image:
-  path: /post/2022/travel-uke/IMG_1232.jpeg
+  path: IMG_1232.jpeg
   alt: Tanya's finished ukulele with the wood slab and CNC router with which it was cut
 ---
 
