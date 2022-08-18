@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Reviving a Yamaha PSS-A50"
-timestamp: Wednesday April 06, 2022 20:55:32 PDT
+date: Wednesday April 06, 2022 20:55:32 PDT
 tags: [🎹, 🛠]
 description: "We got a Yamaha PSS-A50 for our kiddo. The next day it wouldn't turn on."
 image: "IMG_7584.jpeg"
