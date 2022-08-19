@@ -80,8 +80,6 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 > 
 > —John F. Kennedy
 
-----
-
 [^hyperinflation]: The exception being periods of hyperinflation, during which locals will prefer to be paid in (or immediately trade their paycheck for) a more stable currency—usually the dollar—in the hope of preserving the buying power of a day's work. A relatively recent example of this can be found [in Venezuela](https://www.npr.org/transcripts/635519727).
 [^ransom]: So far: paying ransoms.
 [^tradecurrency]: Dollars _are_ worth something to Europeans because of the dollar's role as an international trade currency. The [story of how that came to be](https://www.npr.org/transcripts/526051566) is pretty bonkers. According to MMT, this props up the value of the US dollar even further.
