@@ -135,7 +135,7 @@ blockquote {
 
 blockquote blockquote {
   border-left: 3px solid lighten(green, 40%);
-  float: none;
+  float: none; // Cancel out the `float: right;` of the parent so the <cite> will locate correctly
 }
 
 blockquote blockquote blockquote {
