@@ -144,11 +144,10 @@ blockquote blockquote blockquote {
 
 blockquote {
   color: $grey-color;
-  padding-left: $spacing-unit / 2;
+  padding: 0px $spacing-unit / 2;
   letter-spacing: -0.4px;
 
   float: left;
-  padding-right: 3em;
 
   > :last-child {
     margin-bottom: 0;
