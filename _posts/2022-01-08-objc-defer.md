@@ -69,16 +69,16 @@ static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
 
 /* Declare a local block variable that contains the cleanup code.
  * It has three attributes:
- *   __unused__: because you should NEVER touch this local yourself
- *   __deprecated__: because you should NEVER touch this local yourself
- *   __cleanup__: to get its pointer passed to __defer_cleanup (above)
+ *   unused: because you should NEVER touch this local yourself
+ *   deprecated: because you should NEVER touch this local yourself
+ *   cleanup: to get its pointer passed to __defer_cleanup (above)
  *                when the scope ends
  */
 #define defer \
 void (^ __defer_blockname(__LINE__))(void) \
-__attribute__((__unused__, \
+__attribute__((unused, \
                deprecated("hands off!"), \
-               __cleanup__(__defer_cleanup) \
+               cleanup(__defer_cleanup) \
 )) = 
 ```
 
