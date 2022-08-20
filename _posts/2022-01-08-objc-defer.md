@@ -6,6 +6,8 @@ tags: [💻]
 description: Reducing code duplication and improving locality in Objective-C with macros.
 ---
 
+_UPDATE: predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33)._
+
 This all started because I was complaining about some uninitialized pointer value causing me grief[^mmap] and someone (explicitly trolling) said they always check pointers using:
 
 ``` c
@@ -43,7 +45,7 @@ This reduces duplication, but has worse locality. I don't love it, but I feel li
 
 Really what I want is something like [Swift's `defer`](https://docs.swift.org/swift-book/ReferenceManual/Statements.html#ID532):
 
-``` c
+``` objective_c
 int fds[2] = { -1, -1}; 
 pipe(fds);
 defer ^{
@@ -60,27 +62,25 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 
 Turned out it's not too heinous to hack together. Here it is:
 
-``` c
+``` objective_c
 static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
 #define __defer_tokenpaste(prefix, suffix) prefix ## suffix
 #define __defer_blockname(nonce) __defer_tokenpaste(__defer_, nonce)
 
 /* Declare a local block variable that contains the cleanup code.
  * It has three attributes:
- *   __unused__: because you should NEVER touch this local yourself
- *   __deprecated__: because you should NEVER touch this local yourself
- *   __cleanup__: to get its pointer passed to __defer_cleanup (above)
+ *   unused: because you should NEVER touch this local yourself
+ *   deprecated: because you should NEVER touch this local yourself
+ *   cleanup: to get its pointer passed to __defer_cleanup (above)
  *                when the scope ends
  */
 #define defer \
 void (^ __defer_blockname(__LINE__))(void) \
-__attribute__((__unused__, \
+__attribute__((unused, \
                deprecated("hands off!"), \
-               __cleanup__(__defer_cleanup) \
+               cleanup(__defer_cleanup) \
 )) = 
 ```
-
-Update: predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33).
 
 [^mmap]: as appealing as its promise is, `mmap` is bad and you should never use it unless you truly need garbage collected shared memory between processes, in which case your life already sucks and I'm sorry. `pread` and `pwrite` will set `errno` instead of crashing your process and are not nearly as slow as you think; you should stick with them until you can measure otherwise, at which point you should investigate doing your own paging because as I just said `mmap` is dangerous and bad.
 [^mincore]: If you have a problem with wild pointers then you _also_ have much bigger problems that you should solve first. If you're just hacking away on code that will never run on someone else's computer you should try [`mincore`](https://man7.org/linux/man-pages/man2/mincore.2.html) or [`mach_vm_read`](https://developer.apple.com/documentation/kernel/1402405-mach_vm_read).

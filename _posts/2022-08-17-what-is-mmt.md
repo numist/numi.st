@@ -6,7 +6,7 @@ tags: [💵]
 description: "What gives fiat currencies value, and what can we do with them?"
 ---
 
-Modern Monetary Theory (MMT) is a framework for thinking about the relationship between the issuer of a [fiat currency](https://en.wikipedia.org/wiki/Fiat_money) and the economy it denominates.
+Modern Monetary Theory (MMT) is a framework for thinking about the relationship between the issuer of a fiat currency and the economy it denominates.
 
 It has two basic premises:
 
@@ -14,9 +14,10 @@ It has two basic premises:
 
 More formally, _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._
 
-Within the United States, support for the dollar also extends to debts thanks to §31 U.S.C. 5103:
+Within the United States, support for the dollar also extends to debts:
 
 > United States coins and currency [including Federal Reserve notes and circulating notes of Federal Reserve Banks and national banks] are legal tender for all debts, public charges, taxes, and dues.
+> <cite>– §31 U.S.C. 5103</cite>
 
 In normal conditions[^hyperinflation] this creates a virtuous cycle for the currency issuer; since everyone needs dollars for their debts and taxes, employers are incentivised to pay their workers in dollars, which in turn encourages them to accept dollars for their goods and services. The ubiquity of the dollar in the economy—or, put another way, people's faith that it will be useful for settling transactions—is what gives it value beyond the baseline set by taxes.
 
@@ -35,7 +36,7 @@ The government has many options for increasing the money supply, including spend
 <!--
 > We can, and must, tax the rich. But not because we can't afford to do anything without them. We shoudl tax billionaires to rebalance the distribution of wealth and income and to protect the health of our democracy.
 > 
-> —The Deficit Myth, p12
+> — The Deficit Myth, p12
 -->
 
 This premise puts the lie to the most common complaint against public spending: "how will you pay for it?" Through the lens of MMT, the government's budget _doesn't need to balance_. Running a deficit is not the same as overspending unless it sparks… 
@@ -43,8 +44,7 @@ This premise puts the lie to the most common complaint against public spending: 
 ## Inflation
 
 > At its core, MMT is about replacing an artificial (revenue) constraint with a real (inflation) constraint
-
-— [<cite>The Deficit Myth</cite>](https://stephaniekelton.com/book/), p72
+> <cite>– [The Deficit Myth](https://stephaniekelton.com/book/), p72</cite>
 
 In an otherwise static system, we can view inflation as the result of a government spending more than it collects in taxes. From the perspective of a "dollar market", excess spending by the government creates a glut on the supply side, diluting the currency's value.
 
@@ -77,8 +77,7 @@ This post is mostly written in terms of US dollars, but the framework applies ju
 If you found this interesting, check out [this talk by Stephanie Kelton](https://www.youtube.com/watch?v=FATQ0Yf0Fhc). She also wrote [The Deficit Myth](https://stephaniekelton.com/book/), which includes this closing quote:
 
 > As long as there is plenty, poverty is evil. Government belongs wherever evil needs an adversary and there are people in distress.
-> 
-> —John F. Kennedy
+> <cite>– John F. Kennedy</cite>
 
 [^hyperinflation]: The exception being periods of hyperinflation, during which locals will prefer to be paid in (or immediately trade their paycheck for) a more stable currency—usually the dollar—in the hope of preserving the buying power of a day's work. A relatively recent example of this can be found [in Venezuela](https://www.npr.org/transcripts/635519727).
 [^ransom]: So far: paying ransoms.
