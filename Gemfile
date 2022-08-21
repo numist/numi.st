@@ -22,6 +22,13 @@ group :jekyll_plugins do
   gem "jekyll-mermaid", "~> 1.0.0"
 end
 
+group :development do
+  gem "puma", "~> 5.6"
+  gem "rack-jekyll", github: "adaoraul/rack-jekyll"
+  gem "rack-livereload", "~> 0.3.17"
+  gem "webrick", "~> 1.7"
+end
+
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
 platforms :mingw, :x64_mingw, :mswin, :jruby do
@@ -31,5 +38,3 @@ end
 
 # Performance-booster for watching directories on Windows
 gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
-
-gem "webrick", "~> 1.7"

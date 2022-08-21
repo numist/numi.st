@@ -1,0 +1,4 @@
+source /opt/homebrew/share/chruby/chruby.sh
+chruby $(cat .ruby-version)
+
+export RUBYOPT="-KU -E utf-8:utf-8"
