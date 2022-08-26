@@ -5,7 +5,9 @@
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   <link rel="shortcut icon" type="image/png" href="{{ "/favicon.png" | relative_url }}">
-  {%- feed_meta -%}
+  {% if page.name == "index.md" %}
+  <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="numist log">
+  {% endif %}
 
   <script src="/assets/js/newsfoot.js" defer></script>
   <link rel="stylesheet" href="/assets/css/newsfoot.css">

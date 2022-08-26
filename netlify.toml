@@ -5,7 +5,6 @@ package = "netlify-plugin-checklinks"
   # checkExternal = true
   skipPatterns = [
     "main.css",
-    "_site/feed.xml", # externality: https://github.com/jekyll/jekyll-feed
   ]
   todoPatterns = [
     "https://github.com/numist/numi.st/blob/main/", # posts link to themselves on github, but those links point to `main` which doesn't work for pull requests
