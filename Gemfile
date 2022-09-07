@@ -3,7 +3,6 @@ source "https://rubygems.org"
 gem "jekyll", "~> 4.2.2"
 
 group :jekyll_plugins do
-  gem "jekyll-feed", "~> 0.12"
   gem "jekyll-mermaid", "~> 1.0.0"
   gem "jekyll-postfiles", "~> 3.1"
   gem "jekyll-seo-tag", :git => 'https://github.com/numist/jekyll-seo-tag.git', :branch => 'issue/461'
