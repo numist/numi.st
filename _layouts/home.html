@@ -18,9 +18,9 @@ layout: default
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <a class="post-link" href="{{ post.link | default: post.url | relative_url }}">
+        <h3 class="post-link"><a class="post-link" target="_self" href="{{ post.link | default: post.url | relative_url }}">
           {{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}
-        </a>
+        </a></h3>
         {%- if site.show_excerpts -%}
           {{ post.description | default: post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}
         {%- endif -%}
