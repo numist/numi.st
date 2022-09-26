@@ -9,7 +9,7 @@ image: "IMG_9571.jpeg"
 
 I've been using a secondhand Clipper Creek HCS-40P to charge my motorcycles for the last four years. Occasionally it would throw a fault, but it would (nearly) always work again after cycling the circuit breaker. But in the last year the faults have been getting more frequent and I've been wanting more reliability now that I've been using charging schedules (because our house has solar now).
 
-I called tech support[^techsupport] and it turns out the Power Fault and Charging Fault lights blink an error code together; two blinks mean there's unacceptable resistance across the contactor. Basically, it's worn out. [As is tradition](https://numi.st/post/2022/reviving-a-yamaha-pss-a50/), it's time to look inside!
+I called tech support[^techsupport] and it turns out the Power Fault and Charging Fault lights blink an error code together; two blinks mean there's unacceptable resistance across the contactor. Basically, it's worn out. [As is tradition](https://numi.st/post/2022/reviving-a-yamaha-pss-a50/index.html), it's time to look inside!
 
 ![The guts of a Clipper Creek HCS-40](IMG_9571.jpeg)
 
