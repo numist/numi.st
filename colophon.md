@@ -23,6 +23,8 @@ Discrete things I've written (or at least adapted) in the making of this site in
 
 # Future
 
+* [x] Card-based blog index
+  * [ ] Paginate years in the LHS margin
 * [ ] I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
 * [ ] I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html)
 * [ ] [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites?
