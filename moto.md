@@ -1,5 +1,6 @@
 ---
 layout: page
+date: Nov  4 10:34:05 2022
 ---
 When we started dating, Tanya asked one her her coworkers (who had previously worked with me at Square) his impressions of me and he answered: "well, he's pretty smart… and he _really_ likes his motorcycles". Fair enough! If I'm on my deathbed, you could probably squeeze another couple hours out of my mortal coil by just putting it on a bike.
 

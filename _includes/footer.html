@@ -1,3 +1,8 @@
+{%- assign date_format = "%b %-d, %Y" -%}
+{% unless page.date %}
+    {{ "page.date not set" | raise_error }}
+{% endunless %}
+
 <footer class="site-footer h-card">
   <data class="u-url" href="{{ "/" | relative_url }}"></data>
 
@@ -7,13 +12,22 @@
 
     <div class="footer-col-wrapper">
       <div class="footer-col">
-          Comments are welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/main/{{ page.path }}" target="_self">GitHub</a>
+        Page created
+        <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+          {{ page.date | date: date_format }}</time>{%- if page.last_modified_at && page.last_modified_at | date: date_format != page.date | date: date_format -%}, last modified
+          <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+            {{ page.last_modified_at | date: date_format }}
+          </time>
+        {%- endif -%}
+        <br />
+
+        Comments are welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/main/{{ page.path }}" target="_self">GitHub</a>
       </div>
       <div class="footer-col" style="float: right;">
         <a href="/license">
-          <img style="width: 1em; height: auto;" src="/assets/img/cc.svg" alt="Non-Commerical">
-          <img style="width: 1em; height: auto;" src="/assets/img/attribution.svg" alt="Non-Commerical">
-          <img style="width: 1em; height: auto;" src="/assets/img/nc.svg" alt="Non-Commerical">
+          <svg class="cc-icon" alt="Creative Commons"><use xlink:href="{{ '/assets/img/icons.svg#cc' | relative_url }}"></use></svg>
+          <svg class="cc-icon" alt="Attribution"><use xlink:href="{{ '/assets/img/icons.svg#cc-attribution' | relative_url }}"></use></svg>
+          <svg class="cc-icon" alt="Non-Commercial"><use xlink:href="{{ '/assets/img/icons.svg#cc-nc' | relative_url }}"></use></svg>
         </a>
       </div>
   </div>

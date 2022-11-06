@@ -115,22 +115,14 @@ a {
     text-decoration: underline;
   }
 
-  .social-media-list &:hover {
-    text-decoration: none;
-
-    .username {
-      text-decoration: underline;
-    }
+  &.external {
+    background-image: url("/assets/img/icons8-external-link.svg");
+    background-position-x: right;
+    background-position-y: center;
+    background-size: 0.9em;
+    padding-right: 0.95em;
+    background-repeat: no-repeat;
   }
-}
-
-a.external {
-  background-image: url("/assets/img/icons8-external-link.svg");
-  background-position-x: right;
-  background-position-y: center;
-  background-size: 0.9em;
-  padding-right: 0.95em;
-  background-repeat: no-repeat;
 }
 
 /**
@@ -276,12 +268,18 @@ pre tt {
  * Icons
  */
 
-.svg-icon {
+.cc-icon {
+    width: 1em;
+    height: 1em;
+    fill: #{$grey-color};
+    display: inline-block;
+}
+
+.social-svg-icon {
     width: 16px;
     height: 16px;
     display: inline-block;
     fill: #{$grey-color};
-    padding-right: 5px;
     vertical-align: text-top;
 }
 
