@@ -23,6 +23,9 @@ date: Jan 10 20:40:12 2022
                   {{ post.description | default: post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}
                 </p>
               {%- endif -%}
+              <div class="post-meta">
+                {{ post.date | date: "%b %-d, %Y" }}
+              </div>
             </div>
           </div>
         </div>
