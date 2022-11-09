@@ -4,23 +4,17 @@
 {% endunless %}
 
 <footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
-
   <div class="wrapper">
-
-    <!-- <h2 class="footer-heading">{{ site.title | markdownify | remove: '<p>' | remove: '</p>' }}</h2> -->
-
     <div class="footer-col-wrapper">
       <div class="footer-col">
         Page created
         <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-          {{ page.date | date: date_format }}</time>{%- if page.last_modified_at && page.last_modified_at | date: date_format != page.date | date: date_format -%}, last modified
+          {{ page.date | date: date_format }}</time>{%- if page.modified_at && page.modified_at | date: date_format != page.date | date: date_format -%}, last modified
           <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
             {{ page.modified_at | date: date_format }}
           </time>
         {%- endif -%}
         <br />
-
         Comments welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/main/{{ page.path }}" target="_self">GitHub</a>
       </div>
       <div class="footer-col" style="float: right;">
@@ -31,5 +25,4 @@
         </a>
       </div>
   </div>
-
 </footer>

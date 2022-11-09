@@ -30,13 +30,7 @@ baseurl: ""
 url: "https://numi.st"
 timezone: “Etc/UTC”
 
-twitter_username: numist
-github_username:  numist
-facebook_username: numist
-flickr_username: numist
-instagram_username: numist
-linkedin_username: numist
-youtube_username: numistscp
+markdown: kramdown
 
 show_excerpts: true
 

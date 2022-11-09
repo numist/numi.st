@@ -1,23 +1,18 @@
 module UndatedPosts
-  # class UndatedPostGenerator < Jekyll::Generator
-  #   safe true
-  #
-  #   def generate(site)
-  #     unmatched_post_paths.each do |path|
-  #       site.posts << Jekyll::Document.new(path)
-  #     end
-  #   end
-  # end
-
   # Add dates to everything
   class Date
-    def self.inject_dates
-      proc { |page|
-        # detect when we've got undated document injection working
-        raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
-        page.data['date'] = "1969-12-31" if page.data['date'].nil?
-        page.data['modified_at'] = Time.now()
-      }
+    class << self
+      attr_writer :git
+      
+      def inject_dates
+        proc { |page|
+          @@git ||= Git.new(page.site)
+          # detect when we've got undated document injection working
+          raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
+          page.data['date'] = @@git.files[page.path]&[:last_created_at] || "1969-12-31" if page.data['date'].nil?
+          page.data['modified_at'] = @@git.files[page.path]&[:last_modified_at] || Time.now()
+        }
+      end
     end
 
     def initialize(payload)
@@ -30,7 +25,35 @@ module UndatedPosts
       @payload
     end
   end
+  
+  class Git
+    attr_reader :files
+    
+    def initialize(site)
+      @site_path = site.source
+      @files = {}
+      # raise "#{@site_path}"
+    end
+  end
 
+  # class UndatedPostGenerator < Jekyll::Generator
+  #   safe true
+  #
+  #   def generate(site)
+  #     unmatched_post_paths.each do |path|
+  #       site.posts << Jekyll::Document.new(path)
+  #     end
+  #   end
+  # end
+
+  #
+  # Hook registrations:
+  #
+
+  # Inject dates into all pages and documents
   Jekyll::Hooks.register :pages, :post_init, &Date.inject_dates
   Jekyll::Hooks.register :documents, :pre_render, &Date.inject_dates
+  Jekyll::Hooks.register :site, :after_reset do |site|
+    Date.git = nil
+  end
 end
