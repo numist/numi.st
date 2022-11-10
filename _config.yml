@@ -32,8 +32,6 @@ timezone: “Etc/UTC”
 
 markdown: kramdown
 
-show_excerpts: true
-
 permalink: /post/:year/:title/
 
 header_pages:

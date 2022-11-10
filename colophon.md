@@ -27,17 +27,16 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * [ ] I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
 * [ ] I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html)
 * [ ] [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites?
-* [ ] old style numbers for post-meta?
-  * [ ] adopt Fira Sans sitewide? https://github.com/mozilla/Fira
-  * [ ] adopt Fira Code as well? https://github.com/tonsky/FiraCode
+* [ ] adopt Fira Sans sitewide? https://github.com/mozilla/Fira
+* [ ] adopt Fira Code as well? https://github.com/tonsky/FiraCode
 * [ ] clicking on title from index should browse to about (which should exist)
-* [ ] delete social.html
+* [x] delete social.html
 * [ ] [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
 * [ ] [jekyll-timeago](https://github.com/markets/jekyll-timeago)
 * [ ] [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
 * [ ] [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html)
 * [ ] Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))?
-* [ ] Make `show_excerpts: true` redundant
+* [x] Make `show_excerpts: true` redundant
 
 
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.
