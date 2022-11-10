@@ -15,16 +15,6 @@ module UndatedPosts
         page.data['modified_at'] = @@git.files.dig(page.path, :last_modified_at) || Time.now()
       end
     end
-
-    def initialize(payload)
-      # called at time of page/document init
-      @payload = payload
-    end
-
-    def to_liquid
-      # called at time of use
-      @payload
-    end
   end
   
   class Git
