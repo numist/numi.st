@@ -2,11 +2,12 @@ module UndatedPosts
   # Add dates to everything
   class Date
     class << self
-      attr_writer :git
+      def git_init(site)
+        @@git = Git.new(site)
+      end
       
       def inject_dates
         proc { |page|
-          @@git ||= Git.new(page.site)
           # detect when we've got undated document injection working
           raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
           page.data['date'] = @@git.files[page.path]&[:last_created_at] || "1969-12-31" if page.data['date'].nil?
@@ -30,6 +31,7 @@ module UndatedPosts
     attr_reader :files
     
     def initialize(site)
+      Jekyll.logger.debug "jekyll-times: Initializing git cache"
       @site_path = site.source
       @files = {}
       # raise "#{@site_path}"
@@ -54,6 +56,6 @@ module UndatedPosts
   Jekyll::Hooks.register :pages, :post_init, &Date.inject_dates
   Jekyll::Hooks.register :documents, :pre_render, &Date.inject_dates
   Jekyll::Hooks.register :site, :after_reset do |site|
-    Date.git = nil
+    Date.git_init(site)
   end
 end
