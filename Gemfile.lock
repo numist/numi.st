@@ -65,6 +65,7 @@ GEM
     nio4r (2.5.8)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
+    posix-spawn (0.3.15)
     public_suffix (5.0.0)
     puma (5.6.5)
       nio4r (~> 2.0)
@@ -93,6 +94,7 @@ DEPENDENCIES
   jekyll-mermaid (~> 1.0.0)
   jekyll-postfiles (~> 3.1)
   jekyll-seo-tag!
+  posix-spawn (~> 0.3.9)
   puma (~> 5.6)
   rack-jekyll!
   rack-livereload (~> 0.3.17)
