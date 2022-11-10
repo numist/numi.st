@@ -14,9 +14,21 @@ module GitMetadata
   def self.inject_dates(page)
     # detect when we've got undated document injection working
     raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
-    page.data['date'] = Git.files.dig(page.path, :last_created_at) || ctime(page.path) || Time.now if page.data['date'].nil?
-    page.data['modified_at'] = Git.files.dig(page.path, :last_modified_at) || mtime(page.path) || Time.now
-    page.data['commit'] = Git.files.dig(page.path, :commit)
+
+    # Sometimes page.path is an absolute path, sometimes it's relative.
+    # Need it to always be relative for hash lookup.
+    relative_path = if page.path.start_with?('/')
+      Pathname.new(page.path)
+        .relative_path_from(
+          Pathname.new(File.dirname(Git.top_level_directory))
+        ).to_s
+    else
+      page.path
+    end
+
+    page.data['date'] = Git.files.dig(relative_path, :last_created_at) || ctime(relative_path) || Time.now if page.data['date'].nil?
+    page.data['modified_at'] = Git.files.dig(relative_path, :last_modified_at) || mtime(relative_path) || Time.now
+    page.data['commit'] = Git.files.dig(relative_path, :commit)
   end
 
   class Git
