@@ -1,4 +1,6 @@
 {%- assign date_format = "%b %-d, %Y" -%}
+{%- assign ctime = page.date | date: date_format -%}
+{%- assign mtime = page.modified_at | date: date_format -%}
 {% unless page.date %}
     {{ "page.date not set" | raise_error }}
 {% endunless %}
@@ -9,10 +11,8 @@
       <div class="footer-col">
         Page created
         <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-          {{ page.date | date: date_format }}</time>{%- if page.modified_at && page.modified_at | date: date_format != page.date | date: date_format -%}, last modified
-          <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-            {{ page.modified_at | date: date_format }}
-          </time>
+          {{ ctime }}</time>{%- if ctime != mtime -%}, last modified
+          <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ mtime }}</time>
         {%- endif -%}
         <br />
         Comments welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/{{ page.path }}" target="_self">GitHub</a>
