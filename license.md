@@ -1,6 +1,5 @@
 ---
 layout: page
-date: Nov  5 12:20:27 2022
 ---
 
 Unless specified otherwise, original content is © Scott Perry and released under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) ([backup](/LICENSES/by-nc-sa%204.0%20full.webarchive))

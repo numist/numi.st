@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "What is Modern Monetary Theory?"
-date: Wednesday August 17, 2022 14:18:37 PDT
 tags: [💵]
 description: "What gives fiat currencies value, and what can we do with them?"
 ---

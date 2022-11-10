@@ -1,6 +1,5 @@
 ---
 layout: page
-date: Nov  3 21:19:04 2022
 ---
 
 I made up the name "numist" in 1996 with the hope that it would serve as a unique, pronounceable name with no existing meaning on a growing internet[^xkcd]. I was twelve, so it was only later that I learned of numismatics but otherwise the name accomplished my original goals and represents me on the myriad platforms[^socials] out there. As a general rule I'm most attentive to the ones that will take my money, because they are the most incentivised to value my time.

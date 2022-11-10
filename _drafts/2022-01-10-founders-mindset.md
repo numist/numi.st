@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Founders' Mindset
-date: 2022-01-10 19:20:51 -0800
 tags: [📰]
 ---
 

@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Do It for the Love (of Humanity)"
-date: Wednesday September 28, 2022 22:22:13 PDT
 tags: [📖]
 excerpt: "(of humanity)"
 ---

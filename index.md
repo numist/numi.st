@@ -1,6 +1,5 @@
 ---
 layout: page
-date: Jan 10 20:40:12 2022
 ---
 
 Hi! I'm [Scott Perry](about), and this is my [website](colophon).

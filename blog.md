@@ -1,6 +1,5 @@
 ---
 layout: default
-date: Jan 10 20:40:12 2022
 ---
 
 <div class="home">
