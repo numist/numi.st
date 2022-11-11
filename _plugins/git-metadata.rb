@@ -1,16 +1,17 @@
 require 'posix/spawn'
 
 # XXX: Should this ever become a package, it'll need tests. Things like:
-# * singly-committed test file has ctime == mtime and sha
-# * renamed test file has expected ctime and mtime and sha
-# * untracked test file has unix ctime and mtime no sha
+# * singly-committed test file has birthtime == mtime and sha
+# * renamed test file has expected birthtime and mtime and sha
+# * untracked test file has unix birthtime and mtime no sha
 # * ENOENT file has Time.now for both no sha
-# * test file that was previously deleted and recreated has last ctime
+# * test file that was previously deleted and recreated has last birthtime
+# * test untracked file that was touched after creation has a birthtime that is later than its mtime?
 
 module GitMetadata
-  def self.ctime(path)
+  def self.birthtime(path)
     return nil unless File.exist?(path)
-    File.ctime(path)
+    File.birthtime(path)
   end
   
   def self.mtime(path)
@@ -33,7 +34,7 @@ module GitMetadata
       page.path
     end
 
-    page.data['date'] = Git.files.dig(relative_path, :last_created_at) || ctime(relative_path) || Time.now if page.data['date'].nil?
+    page.data['date'] = Git.files.dig(relative_path, :last_created_at) || birthtime(relative_path) || Time.now if page.data['date'].nil?
     page.data['modified_at'] = Git.files.dig(relative_path, :last_modified_at) || mtime(relative_path) || Time.now
     page.data['commit'] = Git.files.dig(relative_path, :commit)
   end

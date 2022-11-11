@@ -3,7 +3,7 @@ layout: page
 ---
 When we started dating, Tanya asked one her her coworkers (who had previously worked with me at Square) his impressions of me and he answered: "well, he's pretty smart… and he _really_ likes his motorcycles". Fair enough! If I'm on my deathbed, you could probably squeeze another couple hours out of my mortal coil by just putting it on a bike.
 
-Quick rides are good for resetting a mood, longer journeys give me space to organize thoughts and ideas, working on motorcycles (along with woodworking) helps me feel connected with the physical world, and customizing them can be a nice outlet for creativity.
+Quick rides are good for resetting a mood, longer journeys give me space to organize thoughts and ideas, working on motorcycles (along with woodworking) helps me feel connected with the physical world, and customizing them is a nice outlet for creativity.
 
 Over the years our stable has housed:
 
