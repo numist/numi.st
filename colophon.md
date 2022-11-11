@@ -19,27 +19,26 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * Footnote popovers powered by [newsfoot](https://gist.github.com/brehaut/567947031a477c89a7f89d96e38a908c)[^newsfoot]
 * Labels on [external links](external-links)
 * [Repository](https://github.com/numist/highlight-css) of CSS files for syntax highlighting
-* [Plugin](https://github.com/numist/numi.st/blob/main/_plugins/git-metadata.rb) for making git metadata available to liquid
+* Plugin for making git metadata available to liquid (not quite ready to share yet)<!-- TODO: It really needs to get fixed up before I share it though -->
 
-<!-- In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as accelerationism wins the day[^accelerationism].-->
+In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.
 
 # Future
 
-* [x] Card-based blog index
-  * [ ] Paginate years in the LHS margin
-* [ ] I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
-* [ ] I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html)
-* [ ] [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites?
-* [ ] adopt Fira Sans sitewide? https://github.com/mozilla/Fira
-* [ ] adopt Fira Code as well? https://github.com/tonsky/FiraCode
-* [ ] clicking on title from index should browse to about (which should exist)
-* [x] delete social.html
-* [ ] [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
-* [ ] [jekyll-timeago](https://github.com/markets/jekyll-timeago)
-* [ ] [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
-* [ ] [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html)
-* [ ] Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))?
-* [x] Make `show_excerpts: true` redundant
+Oh no, a TODO: list
+
+* Paginate years in the LHS margin
+* I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
+* I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html)
+* [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites?
+* adopt Fira Sans sitewide? https://github.com/mozilla/Fira
+* adopt Fira Code as well? https://github.com/tonsky/FiraCode
+* clicking on title from index should browse to about (which should exist)
+* [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
+* [jekyll-timeago](https://github.com/markets/jekyll-timeago)
+* [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
+* [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html)
+* Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))?
 
 
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.

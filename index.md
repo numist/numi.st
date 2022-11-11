@@ -4,7 +4,7 @@ layout: page
 
 Hi! I'm [Scott Perry](about), and this is my [website](colophon).
 
-It includes a [blog](blog)[^latest]—which has a [feed](/feed.xml)—and one might charitably call the rest a digital garden.[^garden] I like [motorcycles](/moto), and enjoy making stuff<!-- TODO: make a page that links to stuff—start using collections for this? -->.
+It includes a [blog](blog)[^latest]—which has a [feed](/feed.xml)—and one might charitably call the rest a digital garden.[^garden] I like [motorcycles](/moto), and enjoy making stuff<!-- TODO: make a page that links to stuff—start using collections for this? tags? -->.
 
 
 <a rel="me" style="display: none" href="https://xoxo.zone/@numist" />
