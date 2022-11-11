@@ -1,5 +1,12 @@
 require 'posix/spawn'
 
+# XXX: Should this ever become a package, it'll need tests. Things like:
+# * singly-committed test file has ctime == mtime and sha
+# * renamed test file has expected ctime and mtime and sha
+# * untracked test file has unix ctime and mtime no sha
+# * ENOENT file has Time.now for both no sha
+# * test file that was previously deleted and recreated has last ctime
+
 module GitMetadata
   def self.ctime(path)
     return nil unless File.exist?(path)
@@ -64,19 +71,44 @@ module GitMetadata
           '--git-dir',
           top_level_directory,
           'log',
-          '--name-only',
+          '--no-merges',
+          '--reverse',
+          '--name-status',
           '--date=unix',
           '--pretty=%%these-files-modified-at:%ct%n%%commit:%H'
         ).split("\n").each do |line|
+          # Each commit is printed from oldest to newest in the format:
+          #
+          # %these-files-modified-at:1667711586
+          # %commit:d2c2079f8b3d5b8056b4736849ac3b2d580a2827
+          #
+          # M       404.html
+          # D       README.md
+          # A       _plugins/raise_eror.rb
+          # R92     foo bar.test    bar foo.test
+          #
+          # XXX: Note that none of this works properly if any of the filenames contain spaces!
+          # Top level files with space-prefixed names are right out!
+          # Another reason why this isn't ready for general consumption as a package!
+          #
+          # Probably what I need to do is rewrite this using https://github.com/libgit2/rugged
           case
-          when line.empty? # skip
           when line.start_with?('%these-files-modified-at:')
             timestamp = line.split(':')[1]
           when line.start_with?('%commit:')
             commit =  line.split(':')[1]
-          else
-            @@files[line] = { last_modified_at: timestamp, commit: commit } unless @@files.key?(line)
-            @@files[line][:last_created_at] = timestamp
+          when line.start_with?('A')
+            # Added
+            @@files[line.split[1]] = { last_created_at: timestamp, last_modified_at: timestamp, commit: commit }
+          when line.start_with?('D')
+            # Deleted
+            @@files.delete(line.split[1])
+          when line.start_with?('M')
+            # Modified
+            @@files[line.split[1]].merge!({ last_modified_at: timestamp, commit: commit })
+          when line.start_with?('R')
+            # Renamed
+            @@files[line.split[2]] = @@files.delete(line.split[1]).merge!({ last_modified_at: timestamp, commit: commit })
           end
         end
 
