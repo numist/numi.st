@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Reviving a Clipper Creek HCS-40"
-date: Sunday September 25, 2022 19:42:58 PDT
 tags: [🛠]
 description: "Turns out contactors are a wear part?"
 image: "IMG_9571.jpeg"

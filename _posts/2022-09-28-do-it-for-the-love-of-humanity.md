@@ -1,12 +1,10 @@
 ---
 layout: post
 title:  "Do It for the Love (of Humanity)"
-date: Wednesday September 28, 2022 22:22:13 PDT
 tags: [📖]
-excerpt: ""
+excerpt: "(of humanity)"
 ---
+<!-- ([previously](http://numist.net/post/2014/do-it-for-the-love.html)) -->
 
 <div class="defs" style="margin-bottom: 1em"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-east-asian: normal; font-variant-position: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; border-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-stroke-width: 0px; --noir-inline-color: #e8e6e3;" data-noir-inline-color=""><!-- wordid: 58224--><div class="def" style="margin-top: 1em; "><span class="def" style="font-family: Baskerville; "><span class="hwGrp" d:priority="2" style="font-weight: normal; "><span class="hw" d:priority="2" d:dhw="1" style="font-size: 24px; ">phi<span class="hsb" style="font-size: 75%; ">•</span>lan<span class="hsb" style="font-size: 75%; ">•</span>thro<span class="hsb" style="font-size: 75%; ">•</span>py</span><span class="pronGrp" d:priority="2" style="font-weight: normal; "><span class="pr" d:pr="US" type="US" style="font-family: HiraMinPro-W3; display: none; "> |fəˈlanθrəpē|</span><span class="pr" d:pr="US_IPA" type="US_IPA" style="font-family: HiraMinPro-W3; "> |fəˌlønθrəpi|</span><span class="pr" d:pr="UK_IPA" type="UK_IPA" style="font-family: HiraMinPro-W3; display: none; "> |fɪˌlanθrəpi|</span></span></span><span class="SB" style="display: block; margin-left: 1em; text-indent: -1em; "><span class="prelim"><span class="ps" d:ps="1" style="font-weight: normal; "> noun </span></span></span><span class="etymBlock" d:priority="2" style="display: block; margin-top: 1em; text-indent: 0px; "><span class="lbl" style="font-size: 14px; ">ORIGIN  </span><span class="date" style="font-weight: normal; ">mid 18th cent.</span>: from<span class="lang" style="font-weight: normal; "> Greek </span><span class="ff" style="font-weight: 600; font-style: italic; "> philanthrōpos</span>, from<span class="ff" style="font-weight: 600; font-style: italic; "> philein </span><span class="trans" style="font-weight: 600; font-style: italic; "> ‘to love’ </span>+<span class="ff" style="font-weight: 600; font-style: italic; "> anthrōpos </span><span class="trans" style="font-weight: 600; font-style: italic; "> ‘human being.’ </span></span>
 </span></div></span></div>
-
-([previously](http://numist.net/post/2014/do-it-for-the-love.html))

@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 4.3.1"
+gem "jekyll", "~> 4.2.2"
+gem "posix-spawn", "~> 0.3.9"
 
 group :jekyll_plugins do
   gem "jekyll-mermaid", "~> 1.0.0"

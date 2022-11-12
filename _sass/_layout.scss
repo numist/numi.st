@@ -107,7 +107,7 @@
  */
 .site-footer {
   border-top: 1px solid $grey-color-light;
-  padding: $spacing-unit 0;
+  padding: $spacing-unit/3 0;
 }
 
 .footer-heading {
@@ -130,7 +130,6 @@
 
 .footer-col {
   float: left;
-  margin-bottom: $spacing-unit / 2;
   padding-left: $spacing-unit / 2;
 }
 
@@ -176,7 +175,7 @@
  * Page content
  */
 .page-content {
-  padding: $spacing-unit 0;
+  padding: $spacing-unit/2 0;
   flex: 1;
 }
 
@@ -198,8 +197,14 @@
 }
 
 .post-meta {
+  font-variant-numeric: oldstyle-nums;
+  -moz-font-feature-settings: "onum";
+  -webkit-font-feature-settings: "onum";
+  font-feature-settings: "onum";
   font-size: $small-font-size;
   color: $grey-color;
+  text-align: right;
+  margin-bottom: 0;
 }
 
 .post-link {
@@ -227,7 +232,7 @@
 }
 
 .post-content {
-  margin-bottom: $spacing-unit;
+  margin-bottom: $spacing-unit/2;
 
   h2 {
     @include relative-font-size(2);

@@ -3,9 +3,7 @@ layout: post
 title: "Travel Ukuleles"
 tags: [🎹, 🛠]
 description: "I go overboard making concert scale travel ukuleles"
-image:
-  path: IMG_1232.jpeg
-  alt: Tanya's finished ukulele with the wood slab and CNC router with which it was cut
+image: IMG_1232.jpeg
 ---
 
 ![Tanya's finished ukulele with the wood slab and CNC router with which it was cut](IMG_1232.jpeg)

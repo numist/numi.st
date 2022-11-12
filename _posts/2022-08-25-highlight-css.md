@@ -1,8 +1,6 @@
 ---
 layout: post
 title: "Syntax highlighting stylesheets for Jekyll"
-date: Tuesday September 6, 2022 20:53:19
-tz: PDT
 tags: [💻]
 link: https://numist.github.io/highlight-css/
 ---

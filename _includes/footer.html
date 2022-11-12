@@ -1,21 +1,30 @@
+{%- assign date_format = "%b %-d, %Y" -%}
+{%- assign ctime = page.date | date: date_format -%}
+{%- assign mtime = page.modified_at | date: date_format -%}
+{% unless page.date %}
+    {{ "page.date not set" | raise_error }}
+{% endunless %}
+
 <footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
-
   <div class="wrapper">
-
-    <!-- <h2 class="footer-heading">{{ site.title | markdownify | remove: '<p>' | remove: '</p>' }}</h2> -->
-
     <div class="footer-col-wrapper">
       <div class="footer-col">
-        {%- if layout.name == "post" -%}
-          Comments are welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/main/{{ page.path }}" target="_self">GitHub</a>
-        {%- else -%}
-          You are browsing the public memory bank of Scott Perry, corrections welcome on <a href="https://github.com/numist/numi.st/blob/main/{{ page.path }}" target="_self">GitHub</a>
+        Page created
+        <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+          {{ ctime }}</time>{%- if ctime != mtime -%}, last modified
+          <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ mtime }}</time>
         {%- endif -%}
+        <br />
+        Comments welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/{{ page.path }}" target="_self">GitHub</a>
       </div>
-      <!-- <div class="footer-col">
-        {%- include social.html -%}
-      </div> -->
+      <div class="footer-col" style="float: right;">
+        <a href="/license" title="Copyright/Licensing" style="text-decoration: none;">
+          <svg class="cc-icon" alt="Creative Commons"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc' | relative_url }}"></use></svg>
+          <svg class="cc-icon" alt="Attribution"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc-attribution' | relative_url }}"></use></svg>
+          <svg class="cc-icon" alt="Non-Commercial"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc-nc' | relative_url }}"></use></svg>
+        </a>
+        <br />
+        <a style="background-image: none; padding: 0;" rel="me" title="GitHub" href="https://github.com/numist"><svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#github' | relative_url }}"></use></svg></a> <a style="background-image: none; padding: 0;" rel="me" title="Mastodon" href="https://xoxo.zone/@numist"><svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#mastodon' | relative_url }}"></use></svg></a> <a style="background-image: none; padding: 0;" rel="me" title="Reddit" href="https://reddit.com/u/numist"><svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#reddit' | relative_url }}"></use></svg></a>
+      </div>
   </div>
-
 </footer>

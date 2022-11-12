@@ -16,19 +16,14 @@ layout: default
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        {%- assign date_format = "%B %-d, %Y" -%}
+        <span class="post-meta" style="float: right">{{ post.date | date: date_format }}</span>
         <h3 class="post-link"><a class="post-link" target="_self" href="{{ post.link | default: post.url | relative_url }}">
           {{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}
         </a></h3>
-        {%- if site.show_excerpts -%}
-          {{ post.description | default: post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}
-        {%- endif -%}
+        {{ post.description | default: post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}
       </li>
       {%- endfor -%}
     </ul>
-
-    <!-- <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p> -->
   {%- endif -%}
-
 </div>
