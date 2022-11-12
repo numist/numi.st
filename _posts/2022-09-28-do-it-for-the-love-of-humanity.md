@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Do It for the Love (of Humanity)"
+title:  "For the Love of Humanity"
+showtitle: false
 tags: [📖]
-excerpt: "(of humanity)"
+excerpt: ""
 ---
 <!-- ([previously](http://numist.net/post/2014/do-it-for-the-love.html)) -->
 
