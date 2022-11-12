@@ -13,7 +13,7 @@ layout: none
   <id>{{ page.url | absolute_url | xml_escape }}</id>
 
   {% assign title = site.title | default: site.name %}
-  {% if page.collection != "posts" %}
+  {% if page.collection and page.collection != "posts" %}
     {% assign collection = page.collection | capitalize %}
     {% assign title = title | append: " | " | append: collection %}
   {% endif %}
