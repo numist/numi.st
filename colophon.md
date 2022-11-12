@@ -38,7 +38,7 @@ Oh no, a TODO: list
 * [jekyll-timeago](https://github.com/markets/jekyll-timeago)
 * [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
 * [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html)
-* Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))?
+* Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))? Or should that be tags?
 
 
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.
