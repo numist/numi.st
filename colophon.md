@@ -23,24 +23,6 @@ Discrete things I've written (or at least adapted) in the making of this site in
 
 In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.
 
-# Future
-
-Oh no, a TODO: list
-
-* Paginate years in the LHS margin
-* I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
-* I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html)
-* [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites?
-* adopt Fira Sans sitewide? https://github.com/mozilla/Fira
-* adopt Fira Code as well? https://github.com/tonsky/FiraCode
-* clicking on title from index should browse to about (which should exist)
-* [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
-* [jekyll-timeago](https://github.com/markets/jekyll-timeago)
-* [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
-* [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html)
-* Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))? Or should that be tags?
-
-
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.
 [^pagination]: Basically, pages infinite-scrolled by <abbr title="XMLHttpRequest">XHR</abbr>ing the next page and appending its `<article>`s to the current page. More importantly, it _updated the browser's address bar_ so reloading the page would cause all the currently visible content to be part of the first request, preserving the reader's scroll location.
 [^newsfoot]: Under the assumption that it's available under the MIT license, based on its inclusion in [NetNewsWire's source code](https://github.com/Ranchero-Software/NetNewsWire/blob/57815f04960f08a78b0fe9972b6a9d8993103e61/Shared/Article%20Rendering/newsfoot.js).

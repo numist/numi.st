@@ -4,7 +4,7 @@ layout: page
 
 Hi! I'm [Scott Perry](about), and this is my [website](colophon).
 
-It includes a [blog](blog)[^latest]—which has a [feed](/feed.xml)—and one might charitably call the rest a digital garden[^garden]. I like [motorcycles](/moto), and enjoy making stuff<!-- TODO: make a page that links to stuff—start using collections for this? tags? -->.
+It includes a [blog](blog)[^latest]—which has a [feed](/feed.xml)—and one might charitably call the rest a digital garden[^garden]. I like [motorcycles](/moto), and enjoy making stuff<!-- TODO: make a page that links to stuff—start using collections for this? tags? -->. I'll be making more stuff here as time goes on.
 
 
 [^latest]: the latest post is: <a href="{{ site.posts.first.link | default: site.posts.first.url | relative_url }}">{{ site.posts.first.title | markdownify | remove: '<p>' | remove: '</p>' | strip }}</a>
