@@ -2,6 +2,8 @@
 layout: page
 ---
 
+This is the fourth incarnation of a pretty simple idea: make it easy to write things that I might want to refer to later.
+
 # Past
 
 My previous website used a publishing engine that I wrote myself, driven by a dissatisfaction with the state of the art at the time[^wordpress]. My favourite conceit, which I miss terribly, was that post timestamps used the time zone from which I was writing, which was great for travelogs.

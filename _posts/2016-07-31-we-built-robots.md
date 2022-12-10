@@ -1,6 +1,7 @@
 ---
 layout: post
 excerpt: "*gosh* but like we spent hundreds of years looking up at the stars and wondering “is there anybody out there”"
+showtitle: false
 ---
 
 > *gosh* but like we spent hundreds of years looking up at the stars and wondering “is there anybody out there” and hoping and guessing and imagining
