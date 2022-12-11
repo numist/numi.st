@@ -43,4 +43,4 @@ extension View {
 }
 ```
 
-[^ish]: quick*ish*—the interface isn't displayed unless ⌥ is held for around ¼s[^delay], to minimize visual impact during quick switches
+[^ish]: quick*ish*—the interface isn't displayed unless ⌥ is held for around ¼s, to minimize visual impact during quick switches
