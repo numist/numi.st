@@ -23,6 +23,6 @@ showtitle: false
 > the robots can say, _when they made us, they called us discovery; they called us curiosity; they called us explorer; they called us spirit. they must have thought that was important._
 > 
 > _and they told us to tell you hello._
-> <cite>[swanjolras](http://swanjolras.tumblr.com/post/102498776997)</cite>
+> <cite>– [swanjolras](http://swanjolras.tumblr.com/post/102498776997)</cite>
 
 *\*weeps\**

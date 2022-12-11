@@ -23,4 +23,4 @@ showtitle: false
 > "Yes, but people have got to believe that, or what's the point—"
 > 
 > MY POINT EXACTLY.”
-> <cite>Terry Pratchett, [Hogfather](https://bookshop.org/p/books/hogfather-terry-pratchett/6432864)</cite>
+> <cite>– Terry Pratchett, [Hogfather](https://bookshop.org/p/books/hogfather-terry-pratchett/6432864)</cite>
