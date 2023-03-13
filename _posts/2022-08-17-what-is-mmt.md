@@ -26,7 +26,7 @@ This calculus also provides a concrete answer to why the dollar is more valuable
 
 Dollars are created and destroyed by the government; the amount (and manner) in which they are distributed or recovered is the government's most important economic (and social) policy tool.
 
-A key point here is that _governments don't have bank accounts_. The central bank settles debts by creating money. Likewise, money collected by the government is magicked out of existence. A currency issuer's purpose is not to _have_ money, it's to manage the economy by _exerting control_ over its currency.
+A key point here is that _governments don't have bank accounts_. The central bank settles debts by creating money. Likewise, money collected by the government is magicked out of existence. A currency issuer's purpose is not to _have_ money, it's to manage the economy by _exerting control_ over money.
 
 This turns common budgeting sense on its head—a household's financial health may be determined by its bank account's balance, but a currency issuer's financial health is measured by its economy, which it can influence by adding or removing money.
 
