@@ -4,7 +4,7 @@ layout: post
 excerpt: A less eager `.onHover` for SwiftUI
 ---
 
-[Switch](https://github.com/numist/Switch) supports changing the window selection by moving your cursor, but it can't use hover state to accomplish this because its views sometimes get _created underneath the cursor_, which can result in a quick[^ish] ⌥⇥ raising a long-forgotten window instead of the next one in line.
+[Switch](https://github.com/numist/Switch)<!-- (TODO) --> supports changing the window selection by moving your cursor, but it can't use hover state to accomplish this because its views sometimes get _created underneath the cursor_, which can result in a quick[^ish] ⌥⇥ raising a long-forgotten window instead of the next one in line.
 
 In the legacy codebase I'd resolved this using an Event Tap that updated the selection state whenever the cursor moved. I'm trying to do better in the rewrite, and my procrastination paid off with the introduction of [`.onContinuousHover`](https://developer.apple.com/documentation/swiftui/view/oncontinuoushover(coordinatespace:perform:)) in macOS Ventura. Combining it with some `@State` variables allows us to create a view modifier that only invokes its action when the cursor actually travels into/out of the view:
 
