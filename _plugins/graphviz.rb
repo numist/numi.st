@@ -1,3 +1,4 @@
+require 'digest/md5'
 require 'ruby-graphviz'
 
 module Jekyll
@@ -8,28 +9,27 @@ module Jekyll
     end
 
     def render(context)
-      graph_src = super
+      graph = GraphViz.parse_string(super)
+      raise "\"error in graph #{super.lines.first.chomp}\"" unless graph
 
-      # Parse the Graphviz DOT input
-      # raise "#{@tag}" unless @tag.empty?
-      # raise "#{@options}" unless @options.nil?
-      graph = GraphViz.parse_string(graph_src)
-      raise "\"#{graph_src.lines.first.chomp}\" is not a valid graph definition" unless graph
-      raise "graph is not named?" unless graph.id
-
-      # Render the graph as SVG output and add a unique ID to the <svg> element
-      svg_output = graph.output(:svg => String).sub(/^.*<svg/m, "<svg id=\"graphviz-#{ graph.id }\"")
+      graph_id = @tag unless @tag.empty?
+      graph_id ||= graph.id if graph.id.match?(/^[a-zA-Z0-9]+$/)
+      graph_id ||= Digest::MD5.hexdigest(super)
       
-      # Wrap the SVG in a <div> element with a class of "graphviz"
-      "<div class=\"graphviz\">#{svg_output.to_s}</div>"
+<<-EOS
+<div class=\"graphviz\" id=\"#{ graph_id }\">
+<!-- #{super} -->
+#{graph.output(:svg => String).sub(/^.*<svg/m, "<svg")}
+</div>
+EOS
     end
   end
 end
 
 # Example usage:
 #
-# {% graphviz %}
-# digraph {
+# {% graphviz optionalPreferredGraphname %}
+# digraph defaultGraphNameIfSet {
 #   A -> B -> C;
 # }
 # {% endgraphviz %}

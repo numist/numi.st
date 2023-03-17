@@ -248,6 +248,13 @@ cite {
 	font-style: italic;
 }
 
+div.graphviz svg {
+  margin-bottom: $spacing-unit / 2;
+  padding: 16px;
+  overflow: auto;
+  border-radius: 6px;
+  border: 1px solid $grey-color-light;
+}
 
 /**
  * Code formatting
@@ -279,7 +286,8 @@ pre code {
 }
 
 .highlight {
-  margin-bottom: 16px;
+  margin-bottom: $spacing-unit / 2;
+  max-height: 80vh;
 }
 
 .highlight pre {
@@ -293,7 +301,7 @@ pre {
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  border-radius: 6px;
+  border-radius: .5em;
   
   >code {
     padding: 0;
