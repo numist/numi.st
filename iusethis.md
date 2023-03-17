@@ -4,13 +4,13 @@ layout: page
 
 ## Everyday Carry
 
-Minimally, I keep an iPhone 13 Mini with a MagSafe wallet containing my license and a credit card. My keychain is either a [hook](TODO) (pocket) or a [clip](TODO) (belt loop) with at least two [locking S-biners](TODO) attached (one carrying house keys, the other a ROAD iD dog tag and USB stick). Other S-biners include bike lock keys, car key, or destination keys. S-biners are awesome.
+Minimally, I keep an iPhone 13 Mini with a MagSafe wallet containing my license and a credit card. My keychain is either a [hook](https://www.amazon.com/gp/product/B016V4V84U) (pocket) or a [clip](https://www.amazon.com/gp/product/B08KW5YG5X) (belt loop) with at least two [locking S-biners](https://www.amazon.com/gp/product/B08BX4RCW8) attached (one carrying house keys, the other a ROAD iD dog tag and USB stick). Other S-biners include bike lock keys, car key, or destination keys. S-biners are awesome.
 
-I always have earplugs (custom-fitted with Etymōtic cartridges) or AirPods Pro nearby. This used to be a habit from being around motorcycles a lot (plus some spontaneous concert-going) but they've become even more essential now that I have kids. I usually carry a [Kershaw Scallion](TODO), which I love. <!-- "Why do you need to carry a knife? What are you cutting?" Obviously packages and mail, but I also find myself using it a lot for prying, poking, scraping… I definitely use it often enough to have developed Opinions about it. -->
+I always have earplugs (custom-fitted with Etymōtic cartridges) or AirPods Pro nearby. This used to be a habit from being around motorcycles a lot (plus some spontaneous concert-going) but they've become even more essential now that I have kids. I usually carry a [Kershaw Scallion](https://kershaw.kaiusa.com/scallion-knives.html), which I love. <!-- TODO "Why do you need to carry a knife? What are you cutting?" Obviously packages and mail, but I also find myself using it a lot for prying, poking, scraping… I definitely use it often enough to have developed Opinions about it. -->
 
 ## Computology
 
-I'm writing this on a [Keyboardio Model 100](TODO), which along with a Pro Display XDR is attached to a M2 MacBook Air via an OWC Thunderbolt Dock. I've also got a Logitech MX Ergo, but I feel like it could be better[^mxmaster]. Mounted atop the display is a BenQ ScreenBar[^screenbar] (controlled by a [homemade pomodoro timer](TODO)) with an Opal C1[^c1] perched haphazardly on top. I have an Uplift Desk[^uplift] with a reclaimed wood top[^reclaimed] and sit on a Humanscale Freedom.
+I'm writing this on a [Keyboardio Model 100](https://shop.keyboard.io/products/model-100), which along with a Pro Display XDR is attached to a M2 MacBook Air via an OWC Thunderbolt Dock. I've also got a Logitech MX Ergo, but I feel like it could be better[^mxmaster]. Mounted atop the display is a BenQ ScreenBar[^screenbar] (controlled by a homemade pomodoro timer<!-- TODO -->) with an Opal C1[^c1] perched haphazardly on top. I have an Uplift Desk[^uplift] with a reclaimed wood top[^reclaimed] and sit on a Humanscale Freedom.
 
 Our house came wired with CAT6A in every room and those wires converge at a rack so I've gone full #homelab and embraced the Ubiquiti life[^g3instant]. Sonic rolled out fiber in our neighbourhood shortly after we moved in, now with a 10Gbe OWC adapter at my desk and appropriate infra between it and the modem I can download stuff from work faster than I can in the office. A Synology RS1221+ provides the house's storage and compute, including a Scrypted container that manages the house's many IP cameras[^dpo] and sundry. Tailscale keeps everything accessible, even when I'm away.
 
@@ -24,9 +24,9 @@ Most of the time I carry a Nikon 50mm ƒ/1.2 AiS on a Fotodiox adapter, though I
 
 ## Getting Around
 
-I put most of my commute miles on a Zero SR/S (love it), my [group miles](TODO) on a BMW R1200R LC (great), and occasionally Tanya lets me take her Street Triple R([R](TODO)) into the hills (perfection).
+I put most of my commute miles on a Zero SR/S (love it), my group miles<!-- TODO --> on a BMW R1200R LC (great), and occasionally Tanya lets me take her Street Triple R(R<!-- TODO -->) into the hills (perfection).
 
-I put a fraction of my commute miles [on a bicycle](TODO) frame made by [NTP](TODO), around town I ride a fixed Mission Bicycles Sutro, and I take passengers (and more [lumber](TODO) than our car can carry) on a Riese & Müller Load 75. My best advice to anyone who puts a lot of urban miles on an acoustic[^ebike] bicycle is to get a hub dynamo and lights and never worry about lighting again.
+I put a fraction of my commute miles [on a bicycle](https://www.strava.com/activities/8018303622) frame made by [NTP](http://ntpbikes.com), around town I ride a fixed Mission Bicycles Sutro, and I take passengers (and [more lumber than our car can carry](/bicycle/lumber.jpeg)) on a Riese & Müller Load 75. My best advice to anyone who puts a lot of urban miles on an acoustic[^ebike] bicycle is to get a hub dynamo and lights and never worry about lighting again.
 
 We have an Audi Q3 for road trips and while it's a better compromise for us than anything else available at the time[^audi], we're looking forward to the availability of an electric minivan that we can take camping.
 

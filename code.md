@@ -2,10 +2,15 @@
 layout: page
 ---
 
-Gist is nice, but I prefer self-hosting since it allows me to tell a story alongside the code, which makes for good [blog](/blog) content. Here are all the snippets I've posted to the site, broken down by language:
+Gists are nice, but I prefer self-hosting since it allows me to tell a story alongside the code.
 
 * this unordered seed list will be replaced by toc as unordered list
 {:toc}
+
+## Jekyll
+
+* A plugin providing support for [Graphviz]({% post_url 2023-03-17-graphviz %})
+* A [page](https://numist.github.io/highlight-css/) hosting various code highlighting themes[^highlight]
 
 ## Objective-C
 
@@ -14,3 +19,9 @@ Gist is nice, but I prefer self-hosting since it allows me to tell a story along
 ## Swift
 
 * [`.onLazyHover`]({% post_url 2022-12-10-onLazyHover %}), for when [`.onHover`](https://developer.apple.com/documentation/swiftui/view/onhover(perform:)) is too eager
+
+## Web
+
+* Some [CSS and JS for decorating external links](/colophon/external-links) on a page.
+
+[^highlight]: This site uses a variation of [tomorrow](https://numist.github.io/highlight-css/#other-tomorrow)
