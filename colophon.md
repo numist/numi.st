@@ -40,8 +40,6 @@ Oh no, a TODO list
 
 * I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
 * Decorate h tags with a `#` or something that links to its id (like [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) does)
-* adopt [Fira Sans](https://github.com/mozilla/Fira) sitewide?
-* adopt [Fira Code](https://github.com/tonsky/FiraCode) as well?
 
 ## Jekyll plugins to consider
 
