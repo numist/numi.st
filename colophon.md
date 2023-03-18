@@ -29,6 +29,8 @@ In this new world of dependencies, I want to stay on top of updates without adop
 
 Oh no, a TODO list
 
+The more immediate things I'd like to get done are tracked in the [GitHub Issues for this site's repo](https://github.com/numist/numi.st/issues), but broadly there are some other things I'd like to explore as time allows:
+
 ## Features
 
 * I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html) but it would be _really_ interesting to make a carbon footprint calculator that takes into account the cost of producing and transporting fuel
