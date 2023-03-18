@@ -17,7 +17,7 @@ Having a sewing machine is like owning a welder. When Tanya wanted to make her w
 
 # Software
 
-There's a [whole page dedicated to smaller bits of code](code), but I also have some larger ongoing projects that I either help out with or am responsible for, like [feedyour.email](2022-02-17-feedyour.email) (which turns newsletters into RSS feeds) and  [Switch](switch) (a window-based context switcher for macOS). Also, obviously, [this website](/colophon).
+There's a [whole page dedicated to smaller bits of code](/code), but I also have some larger ongoing projects that I either help out with or am responsible for, like [feedyour.email]({% post_url 2022-02-17-feedyour.email %}) (which turns newsletters into RSS feeds) and  [Switch](switch) (a window-based context switcher for macOS). Also, obviously, [this website](/colophon).
 
 # Woodworking
 

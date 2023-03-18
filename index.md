@@ -15,4 +15,4 @@ I mostly write about:
 * [stuff I use](iusethis) that makes me happy (or not) in the hopes that it'll make you happy too
 
 [^social]: In contrast to social media, where I write things that are forgettable
-[^blog]: You can browse it [here](/blog) if you're bored/a webcrawler
+[^blog]: You can browse it [here](blog) if you're bored/a webcrawler
