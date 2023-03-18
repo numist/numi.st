@@ -21,9 +21,33 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * Footnote popovers powered by [newsfoot](https://gist.github.com/brehaut/567947031a477c89a7f89d96e38a908c)[^newsfoot]
 * Labels on [external links](external-links)
 * [Repository](https://github.com/numist/highlight-css) of CSS files for syntax highlighting
-* Plugin for making git metadata available to liquid (not quite ready to share yet)<!-- TODO: It really needs to get fixed up before I share it though -->
+* Plugin for making git metadata available to liquid (not quite ready to share yet)
 
 In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.
+
+# Future
+
+Oh no, a TODO list
+
+## Features
+
+* I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html) but it would be _really_ interesting to make a carbon footprint calculator that takes into account the cost of producing and transporting fuel
+* [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites? The cool kids seem to be moving in an ActivityPub direction.
+* Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))? Or should that be tags? Does any of it really matter if we're gardening?
+* [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html) support
+
+## Design
+
+* I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
+* Decorate h tags with a `#` or something that links to its id (like [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) does)
+* adopt [Fira Sans](https://github.com/mozilla/Fira) sitewide?
+* adopt [Fira Code](https://github.com/tonsky/FiraCode) as well?
+
+## Jekyll plugins to consider
+
+* [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
+* [jekyll-timeago](https://github.com/markets/jekyll-timeago)
+* [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
 
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.
 [^pagination]: Basically, pages infinite-scrolled by <abbr title="XMLHttpRequest">XHR</abbr>ing the next page and appending its `<article>`s to the current page. More importantly, it _updated the browser's address bar_ so reloading the page would cause all the currently visible content to be part of the first request, preserving the reader's scroll location.

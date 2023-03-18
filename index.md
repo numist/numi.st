@@ -2,9 +2,17 @@
 layout: page
 ---
 
-Hi! I'm [Scott Perry](about), and this is my [website](colophon).
+Hi! I'm [Scott Perry](about), and this is where I write things that I might want to refer to later[^social]. One might charitably call this a digital garden, but it's really just an evolution of my `notes/` folder. Markup mixes media and styled text, documents can refer to one another, and web hosting gets it from my computer to your browser, but at the end of the day it's a working repository of my larks and snarks.
 
-It includes a [blog](blog)[^latest]—which has a [feed](/feed.xml)—and one might charitably call the rest a digital garden[^garden]. I like [motorcycles](/moto), and enjoy making stuff<!-- TODO: make a page that links to stuff—start using collections for this? tags? -->. I work in software, but I also [do it for the love]({% post_url 2014-09-11-do-it-for-the-love %}) and [write about it](/code).
+The article I reach for the most is [What is Modern Monetary Theory?]({% post_url 2022-08-17-what-is-mmt %}) <!--The most popular page in terms of all-time traffic is [Project Typewriter](TODO).--> You should subscribe to the [feed](/feed.xml) if you'd like to keep up with changes as they happen[^blog].
 
-[^latest]: the latest post is: <a href="{{ site.posts.first.link | default: site.posts.first.url | relative_url }}">{{ site.posts.first.title | markdownify | remove: '<p>' | remove: '</p>' | strip }}</a>
-[^garden]: It's really just an evolution of my home folder. Markup allows media to live inline with styled text, documents can refer to one another, and web hosting gets it off my computer and in front of your eyes, but at the end of the day it's a working repository of my larks and snarks
+I mostly write about:
+
+* [ideas](ideas)
+* [stories](stories), including travel
+* [code](code) to share solutions to problems I've had and ideas that have struck me
+* [projects](projects) throughout their lifecycle
+* [stuff I use](iusethis) that makes me happy (or not) in the hopes that it'll make you happy too
+
+[^social]: In contrast to social media, where I write things that are forgettable
+[^blog]: You can browse it [here](blog) if you're bored/a webcrawler
