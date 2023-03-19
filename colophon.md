@@ -29,6 +29,8 @@ In this new world of dependencies, I want to stay on top of updates without adop
 
 Oh no, a TODO list
 
+The more immediate things I'd like to get done are tracked in the [GitHub Issues for this site's repo](https://github.com/numist/numi.st/issues), but broadly there are some other things I'd like to explore as time allows:
+
 ## Features
 
 * I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html) but it would be _really_ interesting to make a carbon footprint calculator that takes into account the cost of producing and transporting fuel
@@ -40,8 +42,6 @@ Oh no, a TODO list
 
 * I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
 * Decorate h tags with a `#` or something that links to its id (like [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) does)
-* adopt [Fira Sans](https://github.com/mozilla/Fira) sitewide?
-* adopt [Fira Code](https://github.com/tonsky/FiraCode) as well?
 
 ## Jekyll plugins to consider
 

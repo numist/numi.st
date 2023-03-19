@@ -40,3 +40,5 @@ header_pages:
 
 mermaid:
   src: '/assets/js/mermaid.min.js'
+
+host: 0.0.0.0
