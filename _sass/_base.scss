@@ -15,6 +15,7 @@ dl, dd, ol, ul, figure {
  */
 body {
   font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
+  font-variant-numeric: oldstyle-nums;
   color: $text-color;
   background-color: $background-color;
   -webkit-text-size-adjust: 100%;
@@ -26,6 +27,9 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+}
+.ordinal {
+  font-variant-numeric: ordinal;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -139,6 +143,7 @@ h1, h2, h3, h4, h5, h6 {
  * Tables
  */
 table {
+  font-variant-numeric: tabular-nums slashed-zero;
   margin-bottom: $spacing-unit;
   width: 100%;
   text-align: $table-text-align;
