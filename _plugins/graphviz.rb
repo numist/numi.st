@@ -10,16 +10,19 @@ module Jekyll
 
     def render(context)
       graph = GraphViz.parse_string(super)
-      raise "\"error in #{super.trim.lines.first.chomp}\"" unless graph
 
       graph_id = @tag unless @tag.empty?
       graph_id ||= graph.id if graph.id.match?(/^[a-zA-Z0-9]+$/)
       graph_id ||= Digest::MD5.hexdigest(super)
       
       svg = graph.output(:svg => String).
-        sub(/^.*<svg/m, "<svg class=\"graphviz\" id=\"#{ graph_id }\"")
+        sub(/^.*<svg/m, "<svg class=\"graphviz\" id=\"#{ graph_id }\"").
+        gsub(' font-family="Times,serif"', ' font-family="Museo"').
+        gsub(' font-family="Courier,monospace"', ' font-family="Fira Code"').
+        gsub(' font-family="Helvetica,sans-Serif"', ' font-family="Fira Sans"').
+        gsub(/<!--.*?-->/m, '')
 
-      "<!--#{super}-->\n#{svg}"
+      "#{svg}"
     end
   end
 end
