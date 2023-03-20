@@ -17,7 +17,7 @@ def print_edge(from, to, comment)
   puts "  \"#{from}\" -> \"#{to}\" [id=\"#{from}to#{to}\"] /* \"#{comment}\" */"
 end
 
-def print_char_pairs(str1, str2, style)
+def print_char_pairs(str1, str2)
   # Labels
   str1.each_char.with_index do |char1, i|
     print_x_label(i, char1)
@@ -61,14 +61,17 @@ def print_char_pairs(str1, str2, style)
   end
 end
 
+str1 = ARGV[0] || "ABCABBA"
+str2 = ARGV[1] || "CBABAC"
+
 puts <<-EOS
 digraph {
   layout="neato"
   edge [constraint=false, arrowhead=open, color="#BBBBBB"]
   node [shape=plaintext]
 
-  "progress" [shape=plaintext,pos="-0.15,0.15!",label="x/yy"]
+  "progress" [shape=plaintext,id="progress",pos="-0.15,0.15!",label="0/#{str1.length * str2.length}"]
 
 EOS
-print_char_pairs(ARGV[0] || "ABCABBA", ARGV[1] || "CBABAC", ARGV[2] || "dynamic")
+print_char_pairs(str1, str2)
 puts "}"
