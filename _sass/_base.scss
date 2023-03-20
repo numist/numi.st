@@ -257,6 +257,7 @@ cite {
 }
 
 svg.graphviz {
+  font-variant-numeric: tabular-nums slashed-zero;
   margin-bottom: $spacing-unit / 2;
   padding: 16px;
   overflow: auto;
