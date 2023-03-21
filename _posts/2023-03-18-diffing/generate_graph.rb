@@ -30,7 +30,7 @@ def print_char_pairs(str1, str2)
   puts "\n"
   
   # Nodes
-  puts "  node [shape=point, fixedsize=true, width=0, height=0, style=invis]\n\n"
+  puts "  node [shape=point,fixedsize=true]\n\n"
   str1.each_char.with_index do |char1, i|
     str2.each_char.with_index do |char2, j|
       print_node(i, j)
@@ -65,13 +65,14 @@ str1 = ARGV[0] || "ABCABBA"
 str2 = ARGV[1] || "CBABAC"
 
 puts <<-EOS
-digraph {
+digraph #{"\"#{ARGV[2]}\""||""} {
   layout="neato"
-  edge [constraint=false, arrowhead=open, color="#BBBBBB"]
+  edge [constraint=false, arrowhead=none, color="#DDDDDD"]
   node [shape=plaintext]
 
-  "progress" [shape=plaintext,id="progress",pos="-0.15,0.15!",label="0/#{str1.length * str2.length}"]
+  "progress" [id="progress",pos="-0.15,0.15!",label="0/#{str1.length * str2.length}"]
 
 EOS
+puts "  \"algorithm\" [pos=\"#{(-0.15+(str1.length.to_f*@scale))/2.0},0.5!\",label=\"#{ARGV[2]}\"]" if ARGV[2]
 print_char_pairs(str1, str2)
 puts "}"
