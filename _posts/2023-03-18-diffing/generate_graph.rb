@@ -14,7 +14,7 @@ def print_node(x, y)
 end
 
 def print_edge(from, to, comment)
-  puts "  \"#{from}\" -> \"#{to}\" [id=\"#{from}to#{to}\"] /* \"#{comment}\" */"
+  puts "  \"#{from}\" -> \"#{to}\" [id=\"edge_#{from}to#{to}\"] /* \"#{comment}\" */"
 end
 
 def print_char_pairs(str1, str2)
