@@ -11,7 +11,7 @@ group :jekyll_plugins do
 end
 
 group :development do
-  gem "puma", "~> 6.0"
+  gem "puma", "~> 6.2"
   gem "rack-jekyll", github: "adaoraul/rack-jekyll"
   gem "rack-livereload", "~> 0.3.17"
   gem "webrick", "~> 1.8"
