@@ -1,0 +1,238 @@
+---
+layout: page
+---
+
+# TODO:
+
+* Forks/controls
+	* [ ] new radiator mounts (resolve fork interference)
+	    * [ ] weld or tap steering stops onto lower triple
+	* [ ] Switchgear reach
+	* Front brake situation
+		* [ ] Rotors
+		* [ ] Pads
+		* [ ] M/C from RC51 (consider RC51 clutch cyl to match? *oh the vanity*)
+* [ ] new air filter waiting at mgti
+* Electrics
+	* [ ] new battery
+		* rear light situation
+			* [ ] mounts
+			* [ ] wiring/connectors (3c for tail, 2x2c for turn?)
+		* front light situation
+			* [ ] James to send [headlights](https://www.speedmotoco.com/Motorcycle-Projector-Headlight-Stacked-streetfight-p/projector-fya.htm) (or similar)
+			* [ ] mounts
+			* [ ] wiring/connectors (2x3c)
+		* [ ] [instruments](#Gauges)
+
+
+
+# Forks
+
+[These people do low friction coatings](https://www.konflictmotorsports.com/suspension-store/ti-nitride-coating), in case that's useful someday.
+
+I got a complete '01 RC51 SP1 front end. Only wrinkle is the fork offsets are different, so the VFR will have more trail than it started with. The rake on the RC51 was 24.5° ([source](https://www.motorcyclespecs.co.za/model/Honda/honda_rc51_sp2_06.html)) while the VFR is 26° ([source](https://www.motorcyclespecs.co.za/model/Honda/honda_vfr750f_90.html)), so keep that in mind while fettling. Probably the handlebar conversion will provide enough extra leverage that it won't matter.
+
+In case steering stops (or trail changes) are too annoying:
+
+> VFR1200 triple clamps (35mm offset vs 30mm offset for SP1)…on my 3rd gen the fork tubes hit these bosses on the frame without additional steering stops
+> 
+> There's no need to use a different lower bearing.  They use the same upper and lower bearings as the RC36, so no need to use a 3mm spacer (which is required to fit the CBR/RC51 SP1 lower yoke into the RC36 headstock.
+
+And in case it's easier to buy than paint:
+
+> The 929, 954 and RC51 all use the same front fender
+
+There's also further [upgrade potential](https://www.rc51forums.com/threads/a-guide-to-ohlins-forks-front-suspension-for-the-rc51.39641/):
+
+> The 30mm NIX cartridge kit is the most current Ohlins R&T front suspension option. However, for those who don't know, it is not a full Ohlins fork. It is a drop in kit for forks on current sportbikes. This kit replaces all of the internals on the OEM RC51 Showa forks. Amongst other internal changes (the kit is a full cartridge change), it uses 30mm Ohlins valving in place of the original 20mm Showa valves. Compression damping is found on the left fork leg while the right leg controls rebound damping. The main advantage of this setup is the ease of and speed in which spring changes can be made as well as other internal suspension tuning. Spring changes can literally take 8 minutes, which is very valuable in a racing environment. The compression adjusters on the bottom of the RC51 fork leg remain but are no longer used. Technically, Ohlins does not make this kit specifically for the RC51 as they don't normally provide new product for older bike platforms. However, Kyle USA has developed a custom kit that retrofits the Ohlins 30mm NIX cartridge kits into the OEM RC51 Showa forks. In order to retrofit the kit, custom extended fork caps are made by Kyle USA and used. That is why you see large black caps on the forks in pictures of this kit for the RC51.
+> 
+> The Ohlins 30mm NIX cartridge front suspension kit is generally considered to be the best option for people who want the ultimate performance, which is often on the track and in racing. Their performance in a racing environment is generally considered slightly better than even upgraded Ohlins FG832 and 322 forks. The aesthetics of the 30mm NIX upgrade are not as appealing to most people compared to the Ohlins FG832 and FG322 forks.
+
+### Bars
+
+The RC51 has pretty aggressive clip-ons, [Woodcraft makes some less aggressive risers](https://woodcraft-cfm.com/collections/clipon-risers/products/75mm-side-mount-adjustable-angle-clipon-risers-with-standard-bars), but probably the best plan is superbike bars using either a custom top triple ([LSL used to make one](https://lsl.eu/en/product-category/self-service-kit_en/superbike-handlebar-kits_en/)!) or [some other CNC parts](https://www.etsy.com/listing/1293452675/honda-rc51-street-fighter-bar-riser-moto?variation0=2840927139)
+
+# Shock
+
+[Jamie Daugherty does shock upgrades](http://daughertymotorsports.com/Backup/) and [sounds like he knows what's up](https://vfrworld.com/threads/vfr-750-1992-rear-shock-upgrade.40731/#post-385082). His best is a (re)built 929 shock. Phone is [+1 (260) 710-4049](tel:1-260-710-4049)
+
+<!--
+[Source](https://www.vfrdiscussion.com/index.php?/forums/topic/53891-1992-750-fork-swap/):
+
+> A lot of the Hondas from your vintage onwards have interchangeable parts - CBR600s, VFRs and CBR900+ have the same steeringhead dimensions so you can swap the tripleclamps around, and that means that whatever fork dimensions the tripleclamps are suited to are also interchangeable
+
+  - Most CBR600s have 41mm forks, same as 3rd/4th/5th Gen VFRs and also VTR1000s.
+  - 6th Gen VFRs and CBR1100XX (Superblackbird) have 43mm forks, as do later CBR600s (F4 onwards I think) so you can swap them around too.
+
+## Direct swaps
+
+  - CBR600 F3 and F4. The F4 would be better as the 43mm forks are stiffer and give better feel.
+  - Any VFR Gen from 3rd to 6th (if 6th Gen, you need to mod the brakes to remove the linked brake plumbing).
+  - CBR1100XX SuperBlackbird (see linked brake reference above). Three spoke wheel.
+  - VTR1000 - three spoke wheel.
+      But the VFR800 front wheel can be substituted without modification
+
+  If you want to go with more serious kit - upside down forks, powerful brakes etc. there are further options, but a bit more work is needed to address issues of steering lock, body and component clearance. Depending on what you go for you may also need spacers, aftermarket riser bars, longer brake lines and so on. Most of the ins and outs can be found documented on this site.
+
+## CBR929/954
+
+a fair bit shorter than VFR so you lose some groundclearance, doesn't seem to bother those who've done it
+
+And you can mount an RC51 front wheel (get the SP2/5-spoke, it's lighter):
+
+> Here's what you have to do fit an RC51 SP1 or SP2 front wheel on a 954:
+>
+> You'll need a distance (center) collar from a 954rr or 1000rr and cut it to match the length from the RC51, 109mm. Dremel to 'cut' the raised portion inside the RC wheel so the collar slides in snuggly. Fit 954 front wheel bearings, dust seals, and collars on left and right. You'll then need two 1mm thick spacers fit the 954 axle. These spacers will be installed on both sides of the axle, between the left/right collars and the fork legs. Tighten everything to spec, and you are done.
+
+## More
+
+  - RC51 SP1/2 - probably the best swap overall but pricey. The length of these forks is almost right for the VFR.
+	  - might have better luck on the [rc51 forums](https://www.rc51forums.com/forums/for-sale.41/) than on ebay
+	  - Öhlins made an R/T fork for the RC51
+	  - [Kyle Racing will mod a NIX30 into them for $1849](https://shop.kyleusa.com/RC51-Fork-Rework-Options-RC51-Fork-Rework.htm)
+  - R1 (any) forks fitted into CBR929/954 or SP1 (not SP2) tripleclamps. Spacers required for calipers and/or discs, depending on what year you go for. Slightly shorter than Sp1, longer than CBR929/954.
+  - ZX-10R from 2004 onwards is a maybe - again using the Honda 50/54mm triples, the overall length should be ok but I haven't researched spacers for this. The Honda triples space the forks at 214mm, R1 forks are spaced at 210mm (up to the 2007 model) which is why spacers are needed. I haven't yet determined ZX-10R fork spacing.
+
+  - 04-07 CBR1000R ﻿triples are identical to the 929/954﻿ setups﻿﻿, and [Kyle Racing will mod an Öhlins cartridge into them for $1778](https://shop.kyleusa.com/04-07-CBR1000RR-30mm-NIX-Retrofit-Kit-0407NIX.htm)
+
+	* [ebay has(had?) a front end minus calipers & axle for $500](https://www.ebay.com/itm/134147147636?hash=item1f3bcb0774:g:45gAAOSwCbNiqSwT)
+	* [deadboy519 on ebay has a set of fresh white powdercoated RC51 wheels and offers adapters for CBR1k](https://www.ebay.com/itm/194783579466?hash=item2d5a018d4a:g:BGYAAOS*wUf5hnaCT):
+		
+		> If you want these to fit your 04-07 cbr1000rr, let me know and I will include the spacer and collar needed to fit. You can use your OEM 04-07 rotors and axle. I had these refreshed and made spacers and modified collars to fit these on sc57 04-07 1000rr. I intended to use these on some projects but I changed directions.
+
+You have to get RC51 front wheel bearings because the RC51 axle is 22mm diameter whereas the VFR is 20mm. The 47x22x12 (check, is it 14?) bearing used in the RC51 is special and only available﻿ from Honda﻿﻿﻿﻿﻿﻿﻿﻿
+-->
+
+# Gauges
+
+* Trail Tech Vapor (cheap)
+* [Daytona DEVA01](https://purposebuiltmoto.com/product/daytona-deva01-multifunction-cockpit/)
+* [Koso TNT-04](https://kosonorthamerica.com/product/tnt-04-multifunction-meter/) (peaks at 10k )
+* "Universal speedometer" chinesium stuff https://www.amazon.com/DKMOTORK-Motorcycle-Speedometer-Tachometer-Multi-function/dp/B07WW3L3Y8
+homemade per IMG_4476 to IMG_4484
+
+* CBR1000RR gauges can be made to work, and the bikes have the same redline (11.5)~
+
+    > JACKPOT! Guys I did write it down. :wheel: Seeing gazman's schematic finally trigger one of my last functioning brain cells :beer: which let me recall that I enlarged the schematic and printed it in the hopes of reading it better. Anyway, I found that print out and I did label things. Starting from left to right on the above connector of the cbr1000rr gauge harness:
+    > 
+    > * CBR wire colors=function
+    > * P= Speedometer (1)
+    > * Br/W = Instrument lighting (switched)
+    > * R/G= Instrument power (non-switched for clock, etc)
+    > * Gr/Y= Not used (cbr steering damper)
+    > * G= Ground
+    > * Gr/R= Water temp
+    > * Y/G= Tachometer
+    > * Bu/R= Oil
+    > * W/Bu= Not used (FI light)
+    > * Br/W= Speedometer (2)
+    > * Br/Bl= Fuel Reserve
+    > * Lg/Bl= Neutral
+    > * Lb= Right Turn
+    > * Bl/Bu= High Beam
+    > * O= Left Turn
+    > * G/Bl= Speedometer (3)
+    > * For the three speedometer sensor connections:
+    > * CBR=VFR color wire
+    > * Speedo (1)= Pink
+    > * Speedo (2)= B/Br
+    > * Speedo (3)= G/B
+    > * Pink is the actual signal wire and the other two are power & ground.
+    >
+    > HTH and, oh yeah, disconnect battery before surgery! :wheel: Good luck :beer:
+
+
+# Controls
+
+Need RC51 clutch and front brake cylinders/levers
+
+TSR clutch slave cylinder from a CBR1000 for lighter feel?
+
+RC51 RHS switchgear pls, CBR1000 throttle might be good too.
+
+[Renard has combo perch(M/C) & switchgear](https://www.renardspeedshop.com/shop/motorcycle-parts/renard-beringer-switch-gear-full-set/)
+
+The Zero's LHS switchgear is actually pretty nice? Shared with Dorsoduro and probably the Shiver.
+
+[2008 HYPERMOTARD 1100S Genuine Knuckle Guard Set Mirror & LED Turn Signal](https://www.aliexpress.com/item/2251832705199667.html?gatewayAdapt=4itemAdapt)
+
+# Muffler
+
+* [Tyga makes a full system!](http://tyga-performance.com/index.php?cPath=72_1036_1947_1949)
+
+* Akra CBR600 undertail
+* behind/below engine:
+   * [Ex-Box Series](https://www.qdexhaust.it/en/catalog-qd-exhaust/ducati-en/monster-s4-en/ducati-monster-s4-ex-box-series-stainless-steel-exhaust-system/)
+   * [Leo Vince UNDERBODY](https://www.leovince.com/en-us/line/leovince-underbody-stainless-steel) is [available as a slip-on](https://www.leovince.com/en-us/product/1811-2786-underbody-ktm-690-duke-lc4-2008-2011-2) for the 690
+
+Reading: https://www.motorcyclistonline.com/high-performance-motorcycle-exhaust-systems-explained-motorcyclist-magazine-tech/
+
+# Bodywork and such
+
+Untitled Motorcycle Company [did a VFR750](https://www.untitledmotorcycles.com/umc024-gambler) relatively early in their lives and it looks pretty damn sweet (they also [did a Zero](https://www.untitledmotorcycles.com/umc063-zero-xp-experimental) 😱). If I get to loose ends it might be worth asking them for help.
+
+Not that I want any, but the tail will need… something? Airtech has a "[2VFR4
+Honda VFR 750 Supersport tail section](https://www.airtech-streamlining.com/honda-fairings-seats-fenders-parts/VFR7501990-93.htm)" that I bet would be nice with the turn signal bulges lopped off.
+
+## The fins are ugly
+
+They could probably get cut off (set aside some waste material to weld back on as a gusset for reinforcing the shock tower). Someone chopped cymike's and it's rough but seems promising?
+
+![](AMWts8CFYTOLeRbduscKbgWoxcLHFia2kdQ0SyMP30o2_aVv9KDNqeOTzy0X-0_33IvGBFboxoNzJrZck7_xBEZ6icQSiso3MBUCaWB48EeOR8zZUQHzVKsWvD4WHFL_VW2eFnfB1Z5xDMgqjGxK7lz0D8V_EQ=w2238-h1678-no.jpg)
+
+Compare to the 4th gen:
+
+![](-1465162027935661910.jpg)
+
+Alternately this bike stuck a number plate over the transition and it looks… okay? (I dig the underbelly mufflers)
+
+![](Vfr 750 Scrambler,Vmtsolution.com.jpg)
+
+# Misc
+
+the CBR900RR rearsets are the only direct bolt on replacement for the 4th gen that I know of
+
+[gas cap](https://www.vortexracing.com/product/gc210/)? [tang bag ring](https://sw-motech.us/products/luggage/tank+bags/EVO+tank+ring/4052572027516.htm).
+
+# Engine
+
+[Factory Pro - Pro Shift Kit](http://www.factorypro.com/Prod_Pages/prodh20.html)
+
+## Oil cooler
+
+I dunno why but I don't like the oil:air cooler. Wish it was oil:water like modern bikes. Apparently [the RC30 was this way?](http://www.rc30.info/rc30brochures.html):
+
+> Two radiators are used, both are upgradable to HRC parts but only the larger upper radiator is really necessary. Water circulates through an oil cooler between the block and the oil filter, usually referred to as the 'oil heater' and discarded.
+> 
+> ![](brochure-rc30-rads.jpg)
+
+Begs the questions: does it have a different water pump with an extra oil cooler circuit? How were the [oil cooler lines dealt with](Sync%20Day.jpg) (can they just be capped)? What part is the pancake and will it fit? [This guy](https://rc30.yolasite.com/project.php) appears to have built an RC30 from parts he found and would probably know. evl_twin has two RC30s and would also know.
+
+## De-California
+
+Compared to the 49-state, [the California spec RC36 makes about 8hp and about 3.5lb/ft torque less across the whole rev range](https://vfrworld.com/threads/more-power-from-a-neutered-california-3rd-gen.33650/).
+
+## CDI
+
+How does spark work anyway
+
+>  The DENSO corp stick coils that Honda used on the CBR600RR were perfect for my projects
+
+  uneven timing implies pre-existing cam wheel? or wasted spark?
+
+## EFI
+
+Squirt? 'duino?
+
+  modify carbs, or find compatible servo-controlled bodies? v4 intake side packaging is tight
+
+<!--
+https://danstengineering.co.uk/GSXR-Individual-Throttle-Body-Spacing-Kit-to-suit-Ford-Zetec-CVH-92mm-Port-Spacing
+Simpler to use GSXR TB's, they are seperate units on the late 90's ones, mounted like carbs on a rail, so would be better suited to fitting as replacements.
+Probably a better option would be to use those from a CBR900RRY (929). They are similarly separate units, 40mm and also from Honda :-)
+First of all I discovered that the 929 FireBlade seems to have 2 pairs, just like all the other Hondas and not the 4 separate units as I have seen stated and as I mentioned in a previous post in response to Mohawk. So whoever wrote that is simply wrong.
+https://www.vfrdiscussion.com/index.php?/forums/topic/86822-rc362-4th-gen-fuel-injection-discussion/&do=findComment&comment=1075040
+Aha, I've been thinking along those lines too, using the VFR750's carbs and I believe an early Kawasaki 900/1000 (I forget which) had a similar injector rail with suitable injectors. I've not discounted it and will be looking into that and the MicroSquirt for a similar project to inject a CBX1000 (6 cylinder), but that's further down the line. For this VFR750 I kinda want to make it as Honda as possible, so priority will be to see if I can use the 800 parts. If I can't use those TBs, I'll look for alternative TBs and if that fails, then it's modify carb time and a different ECU.
+A guy in Germany has developed a build-it-yourself, advanced Multiple-MAP-sensor unit that uses an Arduino Nano to monitor four MAP sensors (one for each cylinder on his ZX-7R).  The code loaded into the Arduino Nano looks at all four MAP sensor signals and determines which is pulling the most vacuum at any given microsecond.  Then the Nano forwards that signal to a Digital-to-Analog converter which is wired into the MicroSquirt's main MAP sensor input.  Also, the Nano knows which of the four MAP sensors is connected to cylinder #1, so whenever it sees that particular MAP sensor pull its highest vacuum it (the Nano) generates another digital output that mimics a camshaft position sensor (again out of the Nano as a digital signal, then through a DAC and on to the input on the MicroSquirt for camshaft position).
+Maybe triumph 675 throttle bodies?
+-->
