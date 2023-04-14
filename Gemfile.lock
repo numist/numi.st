@@ -72,8 +72,8 @@ GEM
     public_suffix (5.0.1)
     puma (6.2.1)
       nio4r (~> 2.0)
-    rack (3.0.6.1)
-    rack-livereload (0.3.17)
+    rack (3.0.7)
+    rack-livereload (0.5.1)
       rack
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
@@ -104,7 +104,7 @@ DEPENDENCIES
   posix-spawn (~> 0.3.9)
   puma (~> 6.2)
   rack-jekyll!
-  rack-livereload (~> 0.3.17)
+  rack-livereload (~> 0.5.1)
   ruby-graphviz
   webrick (~> 1.8)
 
