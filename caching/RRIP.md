@@ -35,18 +35,18 @@ Managing a counter per slot in software would be pretty heinous, but the concept
   <span class="c1">// ease of implementation. The larger the value, the more likely the item</span>
   <span class="c1">// is expected to be reused.</span>
   <span class="kd">enum</span> <span class="kt">RRPV</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="n">unspecified</span><span class="p">,</span> <span class="n">nearImmediate</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">distant</span><span class="p">,</span> <span class="nf">raw</span><span class="p">(</span><span class="nv">cold</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">hot</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nv">unspecified</span><span class="p">,</span> <span class="nv">nearImmediate</span><span class="p">,</span> <span class="nv">long</span><span class="p">,</span> <span class="nv">distant</span><span class="p">,</span> <span class="nv">raw</span><span class="p">(</span><span class="nv">cold</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">hot</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
 
     <span class="kd">func</span> <span class="nf">rawValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">hit</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
       <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">nearImmediate</span><span class="p">:</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">// RingBuffer allows negative indexing</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">long</span><span class="p">:</span> <span class="k">return</span> <span class="mi">2</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">distant</span><span class="p">:</span> <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">case</span> <span class="o">.</span><span class="n">nearImmediate</span><span class="p">:</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">// RingBuffer allows negative indexing</span>
+        <span class="k">case</span> <span class="o">.</span><span class="n">long</span><span class="p">:</span> <span class="k">return</span> <span class="mi">2</span>
+        <span class="k">case</span> <span class="o">.</span><span class="n">distant</span><span class="p">:</span> <span class="k">return</span> <span class="mi">1</span>
         <span class="c1">// Default behaviour is Hit Priority (RRIP-HP)</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">unspecified</span><span class="p">:</span> <span class="k">return</span> <span class="nv">hit</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
+        <span class="k">case</span> <span class="o">.</span><span class="n">unspecified</span><span class="p">:</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
         <span class="c1">// Note: Index 0 should not be used; inserting into the drain prevents</span>
         <span class="c1">// aging of elements with nearer RRPVs</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nf">raw</span><span class="p">(</span><span class="k">let</span> <span class="nv">cold</span><span class="p">,</span> <span class="k">let</span> <span class="nv">hot</span><span class="p">):</span> <span class="k">return</span> <span class="nv">hit</span> <span class="p">?</span> <span class="nv">hot</span> <span class="p">:</span> <span class="nv">cold</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">raw</span><span class="p">(</span><span class="k">let</span> <span class="nv">cold</span><span class="p">,</span> <span class="k">let</span> <span class="nv">hot</span><span class="p">):</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="n">hot</span> <span class="p">:</span> <span class="n">cold</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -58,10 +58,10 @@ Managing a counter per slot in software would be pretty heinous, but the concept
   <span class="k">var</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="n">dict</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span>
 
   <span class="nf">init</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">predictionIntervals</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nf">precondition</span><span class="p">(</span><span class="n">predictionIntervals</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="nf">precondition</span><span class="p">(</span><span class="n">capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">ring</span> <span class="o">=</span> <span class="kt">RingBuffer</span><span class="p">(</span><span class="nv">repeating</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span> <span class="nv">count</span><span class="p">:</span> <span class="n">predictionIntervals</span><span class="p">)</span>
+    <span class="nf">precondition</span><span class="p">(</span><span class="nv">predictionIntervals</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="nf">precondition</span><span class="p">(</span><span class="nv">capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="nv">capacity</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">ring</span> <span class="o">=</span> <span class="kt"><a href="RingBuffer">RingBuffer</a></span><span class="p">(</span><span class="nv">repeating</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span> <span class="nv">count</span><span class="p">:</span> <span class="n">predictionIntervals</span><span class="p">)</span>
   <span class="p">}</span>
 
   <span class="kd">func</span> <span class="nf">fetch</span><span class="p">(</span>
@@ -81,7 +81,7 @@ Managing a counter per slot in software would be pretty heinous, but the concept
 
     <span class="n">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ring</span><span class="p">[</span><span class="n">rrpv</span><span class="o">.</span><span class="nf">rawValue</span><span class="p">(</span><span class="n">hit</span><span class="p">)]</span><span class="o">.</span><span class="nf">enqueue</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
-    <span class="k">while</span> <span class="n">dict</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">capacity</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">capacity</span> <span class="p">{</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">evicted</span> <span class="o">=</span> <span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nf">dequeue</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">dict</span><span class="o">.</span><span class="nf">removeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">evicted</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="n">ring</span><span class="o">.</span><span class="nf">rotate</span><span class="p">()</span> <span class="p">}</span>
