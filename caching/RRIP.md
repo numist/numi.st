@@ -20,79 +20,83 @@ TODO: some graphviz stuff here that people can interact with
 
 ## Making Better Predictions
 
-The <abbr title="Re-Reference Interval Prediction">RRIP</abbr> paper posits: what if caches made reuse predictions more nuanced than "immediately" and "probably never"? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those 2-bit counters are how they do it.
+The <abbr title="Re-Reference Interval Prediction">RRIP</abbr> paper asks: what if caches made reuse predictions more nuanced than "immediately" and "never"? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those 2-bit counters are how they do it.
 
-Based on this concept, their new eviction policy predicts values are not likely to be reused again _unless they have been reused in the past_, accomplishing this by inserting new values near the front of the list and promoting them towards the end when they're hit. Another variation adds some randomization to new entries' insertion position in an effort to provide scan resistance.
+Based on this concept, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that predicts entries are not very likely to be re-referenced _unless they have been reused in the past_, accomplishing this by inserting new values near the front of the list and promoting them towards the end when they're hit. Another variation adds some randomization to the insertion position of new values in an effort to provide thrash resistance.
 
 ## In Software
 
-Of course caches are commonly found in software, too. Some things are costly to compute on demand, but the system's memory can't store the result of every computation. As a twist, sometimes software has domain-specific knowledge that helps it make better-informed re-reference interval predictions. A great example of this is binary trees—_every_ operation uses the root node, but a random leaf's probability of participating in a search is ¹⁄ₙ—a perfect application for an RRIP cache!
+Of course caches are commonly found in software, too. Some things are costly to compute on demand, but the system's memory can't store the result of every computation. As a twist, sometimes software has domain-specific knowledge that helps it make better-informed re-reference interval predictions. One example of this is a tree: _every_ operation uses the root node, but a random leaf's probability of participating in a search is ¹⁄ₙ—a perfect application for an RRIP cache!
 
-Managing a counter per slot in software would be pretty heinous, but the concept can be expressed pretty directly by using a ring buffer:
+Managing a counter per slot in software would be pretty heinous, but the same concept can be expressed by using a ring buffer of linked lists:
 
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">RRIP</span><span class="o">&lt;</span><span class="kt">Key</span><span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="kd">enum</span> <span class="kt">RRPV</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="nv">unspecified</span><span class="p">,</span> <span class="nv">nearImmediate</span><span class="p">,</span> <span class="nv">long</span><span class="p">,</span> <span class="nv">distant</span><span class="p">,</span> <span class="nv">raw</span><span class="p">(</span><span class="nv">cold</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">hot</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+``` swift
+class RRIP<Key: Hashable, Value> {
+  enum RRP {
+    case immediate, long, never, p(Double)
 
-    <span class="kd">func</span> <span class="nf">rawValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">hit</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
-      <span class="c1">// Note: The Re-Reference Prediction Values are inverted from the paper</span>
-      <span class="c1">// for ease of implementation. The larger the value, the sooner the</span>
-      <span class="c1">// item is expected to be re-referenced.</span>
-      <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
-        <span class="k">case</span> <span class="o">.</span><span class="n">nearImmediate</span><span class="p">:</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">// RingBuffer allows negative indexing</span>
-        <span class="k">case</span> <span class="o">.</span><span class="n">long</span><span class="p">:</span> <span class="k">return</span> <span class="mi">2</span>
-        <span class="k">case</span> <span class="o">.</span><span class="n">distant</span><span class="p">:</span> <span class="k">return</span> <span class="mi">1</span>
-        <span class="c1">// Default behaviour is Hit Priority (RRIP-HP)</span>
-        <span class="k">case</span> <span class="o">.</span><span class="n">unspecified</span><span class="p">:</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
-        <span class="c1">// Note: Index 0 should not be used; inserting into the drain prevents</span>
-        <span class="c1">// aging of elements with nearer RRPVs</span>
-        <span class="k">case</span> <span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="k">let</span> <span class="nv">cold</span><span class="p">,</span> <span class="k">let</span> <span class="nv">hot</span><span class="p">):</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="n">hot</span> <span class="p">:</span> <span class="n">cold</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    func quantized(to count: Int) -> Int {
+      switch self {
+      // The Re-Reference Prediction Values are inverted from the paper
+      // for ease of implementation. Larger values are expected to be
+      // re-referenced sooner.
+      case .immediate: return count - 1
+      case .long: return 1
+      case .never: return 0
+      // Probabilities are rounded up so only `0.0` will map to `.never`
+      case .p(let p):
+        precondition(0.0 <= p && p <= 1.0)
+        return Int((p * Double(count - 1)).rounded(.up))
+      }
+    }
+  }
 
-  <span class="kd">typealias</span> <span class="kt">KeyValue</span> <span class="o">=</span> <span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">Key</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Value</span><span class="p">)</span>
-  <span class="kd">private</span> <span class="k">var</span> <span class="nv">ring</span><span class="p">:</span> <span class="kt"><a href="RingBuffer">RingBuffer</a></span><span class="o">&lt;</span><span class="kt"><a href="LinkedList">LinkedList</a></span><span class="o">&lt;</span><span class="kt">KeyValue</span><span class="o">&gt;&gt;</span>
-  <span class="kd">private</span> <span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Key</span><span class="p">:</span> <span class="kt"><a href="LinkedList">LinkedList</a></span><span class="o">&lt;</span><span class="kt">KeyValue</span><span class="o">&gt;.</span><span class="kt">Node</span><span class="p">]()</span>
-  <span class="kd">private</span> <span class="k">let</span> <span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span>
-  <span class="k">var</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="n">dict</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span>
+  typealias KeyValue = (key: Key, value: Value)
+  private var ring: RingBuffer<LinkedList<KeyValue>>
+  private var dict = [Key: LinkedList<KeyValue>.Node]()
+  private let capacity: Int
+  var count: Int { dict.count }
 
-  <span class="nf">init</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">predictionIntervals</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nf">precondition</span><span class="p">(</span><span class="nv">predictionIntervals</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="nf">precondition</span><span class="p">(</span><span class="nv">capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="nv">capacity</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">ring</span> <span class="o">=</span> <span class="kt"><a href="RingBuffer">RingBuffer</a></span><span class="p">(</span><span class="nv">repeating</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span> <span class="nv">count</span><span class="p">:</span> <span class="n">predictionIntervals</span><span class="p">)</span>
-  <span class="p">}</span>
+  init(capacity: Int, predictionIntervals: Int = 4) {
+    precondition(predictionIntervals >= 4)
+    precondition(capacity > 0)
+    self.capacity = capacity
+    self.ring = RingBuffer(repeating: .init(), count: predictionIntervals)
+  }
 
-  <span class="kd">func</span> <span class="nf">fetch</span><span class="p">(</span>
-    <span class="nv">key</span><span class="p">:</span> <span class="kt">Key</span><span class="p">,</span>
-    <span class="k">default</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
-    <span class="nv">rrpv</span><span class="p">:</span> <span class="kt">RRPV</span> <span class="o">=</span> <span class="o">.</span><span class="n">unspecified</span>
-  <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Value</span>
-    <span class="k">let</span> <span class="nv">hit</span><span class="p">:</span> <span class="kt">Bool</span>
-    <span class="k">if</span> <span class="k">let</span> <span class="nv">node</span> <span class="o">=</span> <span class="n">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="p">{</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">list</span><span class="o">!.</span><span class="nf">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-      <span class="n">hit</span> <span class="o">=</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="nf">defaultValue</span><span class="p">()</span>
-      <span class="n">hit</span> <span class="o">=</span> <span class="kc">false</span>
-    <span class="p">}</span>
+  func fetch(
+    _ key: Key,
+    default defaultValue: @autoclosure () -> Value,
+    onMiss: RRP = .long, onHit: RRP? = .immediate
+  ) -> Value {
+    let value: Value
+    let rrp: RRP
+    if let node = dict[key] {
+      guard let onHit else { return node.payload.value }
+      value = node.list!.remove(node).value
+      rrp = onHit
+    } else {
+      value = defaultValue()
+      rrp = onMiss
+    }
 
-    <span class="n">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ring</span><span class="p">[</span><span class="n">rrpv</span><span class="o">.</span><span class="nf">rawValue</span><span class="p">(</span><span class="n">hit</span><span class="p">)]</span><span class="o">.</span><span class="nf">enqueue</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    dict[key] = ring[rrp.quantized(to: ring.count)].enqueue((key, value))
 
-    <span class="k">while</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">capacity</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="k">let</span> <span class="nv">evicted</span> <span class="o">=</span> <span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nf">dequeue</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">dict</span><span class="o">.</span><span class="nf">removeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">evicted</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="n">ring</span><span class="o">.</span><span class="nf">rotate</span><span class="p">()</span> <span class="p">}</span>
-    <span class="p">}</span>
+    while count > capacity {
+      if let evicted = ring[0].dequeue() {
+        dict.removeValue(forKey: evicted.key)
+      } else { ring.rotate() }
+    }
 
-    <span class="k">return</span> <span class="n">value</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+    return value
+  }
+}
+```
 
-Note that references to custom types in the code above link to their implementation.
+TODO: References to custom types in the code above link to their implementation.
+
+Note that `.never` inserts entries _directly into the drain_, preventing the occasional rotation of the ring buffer that "ages out" cache entries with shorter RRPVs. This behaviour can be useful when the cache is being used by an operation known to scan or thrash: using `fetch(key, default: foo(), onMiss: .never, onHit: nil)` causes the cache to maintain pre-existent entries[^nodrain] and their RRPVs.
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU with an instruction so complex the theoretical maximum clock speed would have been just north of 4MHz.
-[^middle]: In the paper, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache<!--. They may not be evenly spaced, but all entries are guaranteed to make progress towards eviction as long as you don't insert into the 2<sup>m</sup>-1º (where the evictions happen)-->
+[^middle]: In the paper, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache.
+[^nodrain]: Everything with an RRPV sooner than `.never`.
