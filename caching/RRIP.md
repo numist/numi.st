@@ -31,13 +31,13 @@ Of course caches are commonly found in software, too. Some things are costly to 
 Managing a counter per slot in software would be pretty heinous, but the concept can be expressed pretty directly by using a ring buffer:
 
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">RRIP</span><span class="o">&lt;</span><span class="kt">Key</span><span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span> <span class="p">{</span>
-  <span class="c1">// Note: The Re-Reference Prediction Values are inverted from the paper for</span>
-  <span class="c1">// ease of implementation. The larger the value, the more likely the item</span>
-  <span class="c1">// is expected to be reused.</span>
   <span class="kd">enum</span> <span class="kt">RRPV</span> <span class="p">{</span>
     <span class="k">case</span> <span class="nv">unspecified</span><span class="p">,</span> <span class="nv">nearImmediate</span><span class="p">,</span> <span class="nv">long</span><span class="p">,</span> <span class="nv">distant</span><span class="p">,</span> <span class="nv">raw</span><span class="p">(</span><span class="nv">cold</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">hot</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
 
     <span class="kd">func</span> <span class="nf">rawValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">hit</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+      <span class="c1">// Note: The Re-Reference Prediction Values are inverted from the paper</span>
+      <span class="c1">// for ease of implementation. The larger the value, the sooner the</span>
+      <span class="c1">// item is expected to be re-referenced.</span>
       <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
         <span class="k">case</span> <span class="o">.</span><span class="n">nearImmediate</span><span class="p">:</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">// RingBuffer allows negative indexing</span>
         <span class="k">case</span> <span class="o">.</span><span class="n">long</span><span class="p">:</span> <span class="k">return</span> <span class="mi">2</span>
@@ -46,7 +46,7 @@ Managing a counter per slot in software would be pretty heinous, but the concept
         <span class="k">case</span> <span class="o">.</span><span class="n">unspecified</span><span class="p">:</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
         <span class="c1">// Note: Index 0 should not be used; inserting into the drain prevents</span>
         <span class="c1">// aging of elements with nearer RRPVs</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nf">raw</span><span class="p">(</span><span class="k">let</span> <span class="nv">cold</span><span class="p">,</span> <span class="k">let</span> <span class="nv">hot</span><span class="p">):</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="n">hot</span> <span class="p">:</span> <span class="n">cold</span>
+        <span class="k">case</span> <span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="k">let</span> <span class="nv">cold</span><span class="p">,</span> <span class="k">let</span> <span class="nv">hot</span><span class="p">):</span> <span class="k">return</span> <span class="n">hit</span> <span class="p">?</span> <span class="n">hot</span> <span class="p">:</span> <span class="n">cold</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
