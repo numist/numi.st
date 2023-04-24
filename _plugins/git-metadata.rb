@@ -109,7 +109,10 @@ module GitMetadata
             @@files[line.split[1]].merge!({ last_modified_at: timestamp, commit: commit })
           when line.start_with?('R')
             # Renamed
-            @@files[line.split[2]] = @@files.delete(line.split[1]).merge!({ last_modified_at: timestamp, commit: commit })
+            old = @@files.delete(line.split[1])
+            unless old.nil?
+              @@files[line.split[2]] = old.merge!({ last_modified_at: timestamp, commit: commit })
+            end
           end
         end
 
