@@ -11,16 +11,16 @@ It has two basic premises:
 
 ## 1: People need money
 
-More formally, _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._
+More formally: _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._
 
 Within the United States, support for the dollar also extends to debts:
 
 > United States coins and currency [including Federal Reserve notes and circulating notes of Federal Reserve Banks and national banks] are legal tender for all debts, public charges, taxes, and dues.
 > <cite>– §31 U.S.C. 5103</cite>
 
-In normal conditions[^hyperinflation] this creates a virtuous cycle for the currency issuer; since everyone needs dollars for their debts and taxes, employers are incentivised to pay their workers in dollars, which in turn encourages them to accept dollars for their goods and services. The ubiquity of the dollar in the economy—or, put another way, people's faith that it will be useful for settling transactions—is what gives it value beyond the baseline set by taxes.
+In normal conditions this creates a virtuous cycle for the currency issuer; since everyone needs dollars to pay their debts and taxes, employees are likely to demand dollars from their employers, who in turn are pressured to accept dollars[^denom] for goods and services. People's faith that the dollar is useful is what gives it value beyond the baseline set by taxes, and its ubiquity earns that faith.
 
-This calculus also provides a concrete answer to why the dollar is more valuable to an American than a decentralized currency—a cryptocurrency's fundamental value can be calculated in terms of the payments for which it is the only option[^ransom], which is vanishingly small compared to the dollar. It also explains why the euro isn't worth very much to most Americans[^tradecurrency].
+This provides a concrete answer to why the dollar is more valuable to an American than a decentralized currency—a cryptocurrency's fundamental value can be calculated in terms of the payments for which it is the only option, which for most people is more or less nothing[^ransom]. Same reason the Euro isn't worth very much to most Americans when they're at home[^tradecurrency].
 
 ## 2: Money is a tool, not an asset
 
@@ -30,7 +30,7 @@ A key point here is that _governments don't have bank accounts_. The central ban
 
 This turns common budgeting sense on its head—a household's financial health may be determined by its bank account's balance, but a currency issuer's financial health is measured by its economy, which it can influence by adding or removing money.
 
-The government has many options for increasing the money supply, including spending, forgiving debt, or mailing everyone a check. It mostly decreases the dollar supply by raising taxes, which—as with spending—can be used to accomplish social goals; in the same way that spending money on single-payer insurance adds dollars to the market in service of public health, a wealth tax takes dollars out of the market while reducing inequality.
+The government has many options for increasing the money supply, including spending, forgiving debt, or mailing everyone a check. It mostly decreases the dollar supply by taxation, which—as with spending—can be used to accomplish social goals; in the same way that spending money on single-payer insurance adds dollars to the market in service of public health, a wealth tax takes dollars out of the market while reducing inequality.
 
 <!--
 > We can, and must, tax the rich. But not because we can't afford to do anything without them. We shoudl tax billionaires to rebalance the distribution of wealth and income and to protect the health of our democracy.
@@ -78,7 +78,7 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 > As long as there is plenty, poverty is evil. Government belongs wherever evil needs an adversary and there are people in distress.
 > <cite>– John F. Kennedy</cite>
 
-[^hyperinflation]: The exception being periods of hyperinflation, during which locals will prefer to be paid in (or immediately trade their paycheck for) a more stable currency—usually the dollar—in the hope of preserving the buying power of a day's work. A relatively recent example of this can be found [in Venezuela](https://www.npr.org/transcripts/635519727).
-[^ransom]: So far: paying ransoms.
-[^tradecurrency]: Dollars _are_ worth something to Europeans because of the dollar's role as an international trade currency. The [story of how that came to be](https://www.npr.org/transcripts/526051566) is pretty bonkers. According to MMT, this props up the value of the US dollar even further.
+[^denom]: Or dollar-denominated payment methods, like a credit card.
+[^ransom]: In 2012 cryptocurrency was a favoured method for buying hard drugs and paying ransoms, though a decade later it seems like [having an immutable public record of your crimes has turned out to be a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), leaving cryptocurrencies in competition with the dollar for solving forex problems like [remittances to countries whose economies are actively imploding](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/).
+[^tradecurrency]: Though the dollar _is_ worth something to Europeans because of its role as an international trade currency. The [story of how that came to be](https://www.npr.org/transcripts/526051566) is pretty bonkers. Accordingly, this further props up the value of the US dollar.
 [^twopercent]: Much like the concept of [full employment](https://www.investopedia.com/terms/f/fullemployment.asp) including some non-zero percentage of unemployment, the "ideal" inflation value of 2% is simultaneously broadly accepted and completely made up. Personally, I suspect the ideal rates for both inflation and unemployment depend on the circumstances of the day.

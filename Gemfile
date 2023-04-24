@@ -13,6 +13,6 @@ end
 group :development do
   gem "puma", "~> 6.2"
   gem "rack-jekyll", github: "adaoraul/rack-jekyll"
-  gem "rack-livereload", "~> 0.3.17"
+  gem "rack-livereload", "~> 0.5.1"
   gem "webrick", "~> 1.8"
 end
