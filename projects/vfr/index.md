@@ -14,7 +14,7 @@ The immediate goal is to get this thing road-legal again so it can be ridden.
 		* [ ] Rotors
 		* [ ] Pads
 		* [ ] M/C from RC51 (consider RC51 clutch cyl to match? *oh the vanity*)
-    * [ ] Resolve oil cooler interference (move to 2<sup>nd</sup> gen SV position? [Oil:water](#oil-cooler)?)
+    * [ ] Resolve oil cooler interference ([notes](#oil-cooler))
 * [ ] New air filter waiting at mgti
 * [ ] Oil
 * [ ] Coolant
@@ -35,6 +35,8 @@ The immediate goal is to get this thing road-legal again so it can be ridden.
 			* [ ] mounts
 			* [ ] wiring/connectors (2x3c)
 		* [ ] [instruments](#gauges)
+
+Sections below are ordered rougly in order of operation, starting with the stuff that needs to get done _now_, followed by roughly two projects: improve aesthetics and improve power.
 
 ----
 
@@ -66,7 +68,7 @@ There's also further [upgrade potential](https://www.rc51forums.com/threads/a-gu
 
 # Gauges
 
-* Trail Tech Vapor (cheap)
+* [Trail Tech Vapor](https://www.trailtech.net/en-us/shop/accessories/digital-gauges/vapor-tachometer/) (cheap)
 * [Daytona DEVA01](https://purposebuiltmoto.com/product/daytona-deva01-multifunction-cockpit/)
 * [Koso TNT-04](https://kosonorthamerica.com/product/tnt-04-multifunction-meter/) (peaks at 10k )
 * "Universal speedometer" chinesium stuff https://www.amazon.com/DKMOTORK-Motorcycle-Speedometer-Tachometer-Multi-function/dp/B07WW3L3Y8
@@ -113,15 +115,14 @@ RC51 RHS switchgear pls, would also need throttle (CBR1000 ist good)
 
 [2008 HYPERMOTARD 1100S Genuine Knuckle Guard Set Mirror & LED Turn Signal](https://www.aliexpress.com/item/2251832705199667.html?gatewayAdapt=4itemAdapt)
 
-# Muffler
+----
 
-* [Tyga makes a full system!](http://tyga-performance.com/index.php?cPath=72_1036_1947_1949)
-* Akra CBR600 undertail
-* behind/below engine:
-   * [Ex-Box Series](https://www.qdexhaust.it/en/catalog-qd-exhaust/ducati-en/monster-s4-en/ducati-monster-s4-ex-box-series-stainless-steel-exhaust-system/)
-   * [Leo Vince UNDERBODY](https://www.leovince.com/en-us/line/leovince-underbody-stainless-steel) is [available as a slip-on](https://www.leovince.com/en-us/product/1811-2786-underbody-ktm-690-duke-lc4-2008-2011-2) for the 690
+# Misc
 
-Reading: https://www.motorcyclistonline.com/high-performance-motorcycle-exhaust-systems-explained-motorcyclist-magazine-tech/
+> the CBR900RR rearsets are the only direct bolt on replacement for the 4th gen that I know of
+
+* [gas cap](https://www.vortexracing.com/product/gc210/)?
+* [tank bag ring](https://sw-motech.us/products/luggage/tank+bags/EVO+tank+ring/4052572027516.htm)
 
 # Bodywork and such
 
@@ -144,25 +145,38 @@ Alternately this bike stuck a number plate over the transition and it looks… o
 
 ![](Vfr 750 Scrambler,Vmtsolution.com.jpg)
 
-# Misc
+Speaking of…
 
-the CBR900RR rearsets are the only direct bolt on replacement for the 4th gen that I know of
+# Muffler
 
-[gas cap](https://www.vortexracing.com/product/gc210/)? [tang bag ring](https://sw-motech.us/products/luggage/tank+bags/EVO+tank+ring/4052572027516.htm).
+I would love to show off that rear wheel.
+
+* [Tyga makes a full system!](http://tyga-performance.com/index.php?cPath=72_1036_1947_1949)
+* undertail? (Akra CBR600? something that I can hide and pipe out between two headlights? or out the top?)
+    * one extremely funny (though also pretty compromised) manifestation of this idea could involve extremely unequal length headers where the front cylinders' exhaust would come up the back of the engine following the path that the rear cylinders used to use to get down
+* behind/below engine? ([Ex-Box](https://www.qdexhaust.it/en/catalog-qd-exhaust/ducati-en/monster-s4-en/ducati-monster-s4-ex-box-series-stainless-steel-exhaust-system/), [Leo Vince UNDERBODY](https://www.leovince.com/en-us/product/1811-2786-underbody-ktm-690-duke-lc4-2008-2011-2))
+
+----
 
 # Engine
 
-[Factory Pro - Pro Shift Kit](http://www.factorypro.com/Prod_Pages/prodh20.html)
+Other than the [oil cooler](#oil-cooler), probably all this stuff should wait for a spare engine that can be built up and swapped in so the bike can remain rideable in the meantime. In brief, I want to get a 49 state build and fuel inject it.
+
+* [Factory Pro - Pro Shift Kit](http://www.factorypro.com/Prod_Pages/prodh20.html)
 
 ## Oil cooler
 
-I dunno why but I don't like the oil:air cooler. Wish it was oil:water like modern bikes. Apparently [the RC30 was this way?](http://www.rc30.info/rc30brochures.html):
+~~I dunno why but I don't like the oil:air cooler. Wish it was oil:water like modern bikes. Apparently [the RC30 was this way?](http://www.rc30.info/rc30brochures.html):~~
 
 > Two radiators are used, both are upgradable to HRC parts but only the larger upper radiator is really necessary. Water circulates through an oil cooler between the block and the oil filter, usually referred to as the 'oil heater' and discarded.
 > 
 > ![](brochure-rc30-rads.jpg)
 
-Begs the questions: does it have a different water pump with an extra oil cooler circuit? How were the [oil cooler lines dealt with](Sync%20Day.jpg) (can they just be capped)? What part is the pancake and will it fit? [This guy](https://rc30.yolasite.com/project.php) appears to have built an RC30 from parts he found and would probably know. evl_twin has two RC30s and would also know.
+~~Begs the questions: does it have a different water pump with an extra oil cooler circuit? How were the [oil cooler lines dealt with](Sync%20Day.jpg) (can they just be capped)? What part is the pancake and will it fit? [This guy](https://rc30.yolasite.com/project.php) appears to have built an RC30 from parts he found and would probably know. evl_twin has two RC30s and would also know.~~
+
+Seems like RC30 oil:water cooler parts are basically impossible to source so even if it would work it's probably cheaper (and definitely) easier to relocate the cooler, even if that means some fabrication.
+
+I used [Pankey's Radiator Repair](https://pankeysradiator.com) to repair the Lightning's radiator and they were great; they do custom work, I should call them up and see if this is something they're interested in.
 
 ## De-California
 
@@ -170,11 +184,11 @@ Compared to the 49-state, [the California spec RC36 makes about 8hp and about 3.
 
 ## CDI
 
-How does spark work anyway
+How does spark work anyway?
 
 >  The DENSO corp stick coils that Honda used on the CBR600RR were perfect for my projects
 
-  uneven timing implies pre-existing cam wheel? or wasted spark?
+Is there room to go <abbr title="Coil-On-Plug">COP</abbr>?
 
 ## EFI
 
