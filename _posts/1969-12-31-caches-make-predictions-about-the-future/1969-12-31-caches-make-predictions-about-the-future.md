@@ -84,14 +84,14 @@ public func fetch(
     if let e = self.ring[3].head {
       e.remove()
       self.count -= 1
-    } else { self.ring.rotate() }
+    } else { self.ring.rotate(by: -1) }
   }
 
   return value
 }
 ```
 
-The above is simplified for purpose of illustration, though incorporating a hash table (so `node(for:)` can run in sub-linear time) would make it production-ready. But RRIPs in software have potential beyond naïve cache performance improvements—computer hardware is general purpose, but software specializes.
+The above is simplified for purpose of illustration, though incorporating a hash table[^lookup-time] would make it production-ready. But RRIPs in software have potential beyond naïve cache performance improvements—computer hardware is general purpose, but software specializes.
 
 ## Domain-Specific Optimization
 
@@ -106,8 +106,9 @@ I wrote a working cache implementation while writing this post, and it's pretty 
 -->
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU with an instruction so complex the theoretical maximum clock speed would have been just north of 4MHz.
-[^bits]: Well, they're probably using 3-bit counters.
+[^bits]: Except they're probably using 3-bit counters.
 [^middle]: Specifically, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache.
 [^priority]: SRRIP has two distinct behaviours here: _hit priority_ (which is analogous to LRU) and _frequency priority_ (LFU)
 [^drain-insertion]: The behaviour of inserting directly into the drain differs significantly between the hardware and software implementations; each linked list is a mini-LRU but Intel's LLC will "search for first ‘3’ from left", overwriting the same slot repeatedly even when the cache has empty slots. Hence, "RRIP always inserts new blocks with a _long_ re-reference interval".
 [^nodrain]: Everything with an age-adjusted RRPV sooner than _distant_, anyway.
+[^lookup-time]: So `node(for:)` can run in sub-linear time.
