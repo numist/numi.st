@@ -263,6 +263,10 @@ svg.graphviz {
   overflow: auto;
   border-radius: 6px;
   border: 1px solid $grey-color-light;
+  background-color: white;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /**
@@ -339,4 +343,44 @@ pre tt {
   word-wrap: normal;
   background-color: transparent;
   border: 0;
+}
+
+/*
+ * Footnotes
+ */
+
+.footnote-container {
+  font-size: 0.75em;
+  position: sticky;
+  top: 0;
+  color: $grey-color;
+}
+
+.footnote {
+  text-decoration: none;
+}
+
+.reversefootnote {
+  visibility: hidden;
+  text-decoration: none;
+}
+
+.popover {
+  font: inherit;
+  font-size: 0.9em;
+}
+
+.popover-body p {
+  margin-bottom: 0;
+}
+
+/*
+ * Abbreviations
+ */
+abbr[data-content] {
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+  cursor: help;
+  -webkit-text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
 }

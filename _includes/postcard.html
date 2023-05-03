@@ -1,5 +1,5 @@
 {% assign checkArray = post.image | split:'/' %}
-        <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-4">
           <div class="card">
             {%- if post.image -%}
             <img style="width: 100%; height: 156px; object-fit: cover;" src="{% if checkArray[0] == "" %}{{ post.image }}{% else %}{{ post.url | append: post.image }}{% endif %}" class="card-img-top" alt="...">
