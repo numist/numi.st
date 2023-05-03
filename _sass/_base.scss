@@ -369,3 +369,14 @@ pre tt {
 .popover-body p {
   margin-bottom: 0;
 }
+
+/*
+ * Abbreviations
+ */
+abbr[data-content] {
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+  cursor: help;
+  -webkit-text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
+}
