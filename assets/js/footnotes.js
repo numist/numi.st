@@ -3,9 +3,12 @@ function escapeSelector(str) {
 }
 
 $(document).ready(function () {
+    // The following DOM reshuffling is the result of Jekyll rendering
+    // footnotes in one way and my layout decisions wanting them another.
+
     // Move the ol tag within div.footnotes into aside.footnote-container
     $('aside.footnote-container').append($('div.footnotes ol'));
-    // And delete the now empty div.footnotes
+    // Delete the (now empty) div.footnotes
     $('div.footnotes').remove();
     // Hide the reversefootnote links
     $('a.reversefootnote').hide();
@@ -14,6 +17,13 @@ $(document).ready(function () {
 
     $(window).resize(function () {
         configureFootnotes();
+    });
+
+    // Hide popovers when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.footnote').length) {
+            $('.footnote').popover('hide');
+        }
     });
 });
 
@@ -28,7 +38,7 @@ function configureFootnotes() {
 
             $(this).popover({
                 content: footnoteContent,
-                trigger: 'hover',
+                trigger: 'click',
                 placement: 'auto',
                 html: true
             });
