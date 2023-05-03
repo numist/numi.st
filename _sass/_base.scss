@@ -340,3 +340,24 @@ pre tt {
   background-color: transparent;
   border: 0;
 }
+
+/*
+ * Footnotes
+ */
+
+.footnote-container {
+  font-size: 0.9em;
+  position: sticky;
+  top: 0;
+}
+
+.footnote {
+  text-decoration: none;
+  // vertical-align: super;
+  // font-size: 0.7em;
+}
+
+.footnote-return {
+  visibility: hidden;
+  text-decoration: none;
+}
