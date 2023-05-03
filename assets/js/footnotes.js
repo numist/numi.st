@@ -17,6 +17,8 @@ $(document).ready(function () {
     });
 });
 
+window.onload = configureFootnotes;
+
 function configureFootnotes() {
     if ($(window).width() < 992) {
         $('.footnote').each(function () {
