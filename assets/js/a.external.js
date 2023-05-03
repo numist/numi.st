@@ -1,5 +1,4 @@
-window.onload = function ()
-{
+window.addEventListener('load', function () {
   var re = /^(https?:\/\/[^\/]+).*$/;
   var currentHref = window.location.href.replace(re, '$1');
   var reLocal = new RegExp('^' + currentHref.replace(/\./, '\\.'));
@@ -24,4 +23,4 @@ window.onload = function ()
       links[i].title = 'Outside link';
     }
   }
-}
+});

@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
 });
 
-window.onload = configureFootnotes;
+window.addEventListener('load', configureFootnotes);
 
 function configureFootnotes() {
     if ($(window).width() < 992) {
