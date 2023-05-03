@@ -2,11 +2,10 @@
 layout: page
 ---
 
-This website labels external links by executing some javascript at `window.onload`:
+This website labels external links by executing some javascript when the window loads:
 
 ``` javascript
-window.onload = function ()
-{
+window.addEventListener('load', function () {
   var re = /^(https?:\/\/[^\/]+).*$/;
   var currentHref = window.location.href.replace(re, '$1');
   var reLocal = new RegExp('^' + currentHref.replace(/\./, '\\.'));
@@ -31,7 +30,7 @@ window.onload = function ()
       links[i].title = 'Outside link';
     }
   }
-}
+});
 ```
 
 CSS adds some padding and specifies a background image to draw within that space.
