@@ -51,14 +51,14 @@ function configureFootnotes() {
 
 
 function alignFootnotes() {
-    var previousFootnoteBottom = 0;
+    var previousFootnoteBottom = $('.container').offset().top;
 
     $('.footnote').each(function () {
-        var referenceTop = $(this).offset().top - $('.container').offset().top;
         var footnoteID = $(this).attr('href');
         var escapedFootnoteID = escapeSelector(footnoteID);
         var footnote = $(escapedFootnoteID);
 
+        var referenceTop = $(this).offset().top - ($('.container').offset().top + (footnote.outerHeight() / 2) - 20);
         if (referenceTop < previousFootnoteBottom) {
             referenceTop = previousFootnoteBottom;
         }
