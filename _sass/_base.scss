@@ -349,15 +349,23 @@ pre tt {
   font-size: 0.9em;
   position: sticky;
   top: 0;
+  color: $grey-color;
 }
 
 .footnote {
   text-decoration: none;
-  // vertical-align: super;
-  // font-size: 0.7em;
 }
 
-.footnote-return {
+.reversefootnote {
   visibility: hidden;
   text-decoration: none;
+}
+
+.popover {
+  font: inherit;
+  font-size: 0.9em;
+}
+
+.popover-body p {
+  margin-bottom: 0;
 }

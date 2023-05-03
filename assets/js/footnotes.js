@@ -36,18 +36,21 @@ function configureFootnotes() {
     }
 }
 
+
 function alignFootnotes() {
     var previousFootnoteBottom = 0;
 
     $('.footnote').each(function () {
-        var referenceTop = this.getBoundingClientRect().top + $(window)['scrollTop']();
-        // var referenceTop = $(this).offset().top;
+        var referenceTop = $(this).offset().top - $('.container').offset().top;
         var footnoteID = $(this).attr('href');
         var escapedFootnoteID = escapeSelector(footnoteID);
         var footnote = $(escapedFootnoteID);
 
+        if (referenceTop < previousFootnoteBottom) {
+            referenceTop = previousFootnoteBottom;
+        }
         footnote.css('position', 'absolute');
-        footnote.css('top', referenceTop < previousFootnoteBottom ? previousFootnoteBottom : referenceTop);
-        previousFootnoteBottom = footnote.offset().top + footnote.outerHeight(true);
+        footnote.css('top', referenceTop);
+        previousFootnoteBottom = referenceTop + footnote.outerHeight(true);
     });
 }
