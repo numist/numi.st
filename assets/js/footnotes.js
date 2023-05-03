@@ -11,6 +11,7 @@ $(document).ready(function () {
     $('a.reversefootnote').hide();
 
     configureFootnotes();
+
     $(window).resize(function () {
         configureFootnotes();
     });
