@@ -370,8 +370,13 @@ pre tt {
   font-size: 0.9em;
 }
 
-.popover-body p {
-  margin-bottom: 0;
+.popover-body {
+  color: $grey-color-dark;
+  padding: 12px;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 /*
