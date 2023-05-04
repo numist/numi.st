@@ -6,7 +6,7 @@ Hi! I'm [Scott Perry](about), and this is where I write things that I might want
 
 The article I reach for the most is [What is Modern Monetary Theory?]({% post_url 2022-08-17-what-is-mmt %}) <!--The most popular page in terms of all-time traffic is [Project Typewriter](TODO).--> You should subscribe to the [feed](/feed.xml) if you'd like to keep up with changes as they happen[^blog].
 
-I mostly write about:
+Broadly categorized, I enjoy writing about:
 
 * [ideas](ideas)
 * [stories](stories), including travel
