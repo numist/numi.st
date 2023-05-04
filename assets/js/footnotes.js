@@ -15,15 +15,42 @@ window.addEventListener('load', function () {
 
     configureFootnotes();
 
-    $(window).resize(function () {
-        configureFootnotes();
-    });
+    // Check if a footnote is linked in the URL and present it if so
+    var hash = window.location.hash;
+    if (hash) {
+        var footnoteReference = $('a.footnote[href="' + escapeSelector(hash) + '"]');
+        if (footnoteReference.length > 0) {
+            footnoteReference.popover('show');
+        }
+    }
 
     // Hide popovers when clicking outside
     $(document).on('click', function (e) {
         if (!$(e.target).closest('.footnote').length) {
             $('.footnote').popover('hide');
         }
+    });
+
+    // Prevent the default behavior of footnote links,
+    // update the address bar, and
+    // dismiss any other popovers
+    $('a.footnote').click(function (e) {
+        e.preventDefault();
+        $('.footnote').filter(function () {
+            return $(this).attr('href') !== $(e.target).attr('href');
+        }).popover('hide');
+        history.replaceState(null, null, $(this).attr('href'));
+    });
+
+    // When a popover is dismissed, update the address bar if necessary
+    $('.footnote').on('hidden.bs.popover', function () {
+        if (window.location.hash === $(this).attr('href')) {
+            history.replaceState(null, null, ' ');
+        }
+    });
+
+    $(window).resize(function () {
+        configureFootnotes();
     });
 });
 
@@ -43,7 +70,17 @@ function configureFootnotes() {
             });
         });
     } else {
+        // Dismiss any open popovers
         $('.footnote').popover('dispose');
+
+        // Clear the hash if it matches a footnote
+        if ($('.footnote').filter(function () {
+            return window.location.hash === $(this).attr('href');
+        }).length > 0) {
+            history.replaceState(null, null, ' ');
+        }
+
+        // Position the footnotes in the sidebar
         alignFootnotes();
     }
 }
