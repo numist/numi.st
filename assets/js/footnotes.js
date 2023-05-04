@@ -2,7 +2,7 @@ function escapeSelector(str) {
     return str.replace(/:/g, '\\:');
 }
 
-$(document).ready(function () {
+window.addEventListener('load', function () {
     // The following DOM reshuffling is the result of Jekyll rendering
     // footnotes in one way and my layout decisions wanting them another.
 
@@ -27,8 +27,6 @@ $(document).ready(function () {
     });
 });
 
-window.addEventListener('load', configureFootnotes);
-
 function configureFootnotes() {
     if ($(window).width() < 992) {
         $('.footnote').each(function () {
@@ -40,7 +38,8 @@ function configureFootnotes() {
                 content: footnoteContent,
                 trigger: 'click',
                 placement: 'auto',
-                html: true
+                html: true,
+                sanitize: false
             });
         });
     } else {
@@ -58,7 +57,7 @@ function alignFootnotes() {
         var escapedFootnoteID = escapeSelector(footnoteID);
         var footnote = $(escapedFootnoteID);
 
-        var referenceTop = $(this).offset().top - ($('.container').offset().top + (footnote.outerHeight() / 2) - 20);
+        var referenceTop = $(this).offset().top - ($('.container').offset().top + (footnote.outerHeight() / 2) - $(this).outerHeight());
         if (referenceTop < previousFootnoteBottom) {
             referenceTop = previousFootnoteBottom;
         }
