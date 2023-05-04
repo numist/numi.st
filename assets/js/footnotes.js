@@ -15,6 +15,16 @@ window.addEventListener('load', function () {
 
     configureFootnotes();
 
+    // Check if a footnote is linked in the URL
+    var hash = window.location.hash;
+    if (hash) {
+        var footnoteReference = $('a.footnote[href="' + escapeSelector(hash) + '"]');
+        if (footnoteReference.length > 0) {
+            console.log('Showing footnote: ' + footnoteReference.attr('href'));
+            footnoteReference.popover('show');
+        }
+    }
+
     $(window).resize(function () {
         configureFootnotes();
     });
