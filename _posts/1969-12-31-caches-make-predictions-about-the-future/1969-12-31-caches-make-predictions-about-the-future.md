@@ -32,17 +32,17 @@ digraph LRU {
 
 On a "miss" a node is evicted from the <span style="font-family: 'Museo';">head</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">tail</span>. On a "hit" the value's node is moved to the <span style="font-family: 'Museo';">tail</span>. This way the unused contents of the list always drift toward the <span style="font-family: 'Museo';">head</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">tail</span>.
 
-The two ends of the list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_ time frame while values near the <span style="font-family: 'Museo';">head</span> are more _distant_.
+Conceptually, the two ends of the list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_ time frame while values near the <span style="font-family: 'Museo';">head</span> are more _distant_.
 
 ## Supporting Better Predictions
 
 The <abbr title="Re-Reference Interval Prediction">RRIP</abbr> paper asks: what if caches supported re-reference predictions more nuanced than _near-immediate_ and _distant_? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those 2-bit counters are how they implement it in hardware.
 
-Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not actually likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">head</span> of the list and promoting them towards the <span style="font-family: 'Museo';">tail</span>[^priority] when they're hit. Another variation—<abbr title="Bimodal  RRIP">BRRIP</abbr>—assumes values will never be reused, occasionally assuming a _long_ re-reference interval to provide thrash resistance. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> ties the two together using set dueling.
+Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not actually likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">head</span> of the list and promoting them towards the <span style="font-family: 'Museo';">tail</span>[^priority] when they're hit. Another variation—<abbr title="Bimodal  RRIP">BRRIP</abbr>—assumes values will never be reused, occasionally assuming a _long_ re-reference interval to provide thrash resistance. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> pits the two against each other using set dueling.
 
 ## In Software
 
-Of course caches are common in software, too: values can be costly to generate, but the system's memory is finite. Managing per-slot counters in software would be pretty heinous, but the same idea can be expressed by a ring buffer of doubly-linked lists—the value's ring index represents its RRPV and is incremented by rotation:
+Of course caches are common in software, too; values can be costly to generate, but the system's memory is finite. Managing per-slot counters in software would be pretty heinous, but the same idea can be expressed by a ring buffer of doubly-linked lists—a value's index in the ring represents its <abbr title="Re-Reference Prediction Value">RRPV</abbr> and is incremented by rotation. A ring with four indexes provides the same cache insertion points as provided by the hardware implementation of a 2-bit counter:
 
 {% graphviz %}
 digraph RRIP {
@@ -56,6 +56,16 @@ digraph RRIP {
   ringbuffer:f2 -> "B" -> "C"
   "C" -> "B" [style="dashed"]
   ringbuffer:f0 -> "D"
+
+  "head" [shape="plain", pos="-1.5,0.65!", label="distant"]
+  "tail" [shape="plain", pos="-.5,0.95!", label="near-immediate"]
+  "head" -> ringbuffer:f3
+  "tail" -> ringbuffer:f0
+
+  "short" [shape="plain", pos=".5,0.65!", label="short"]
+  "long" [shape="plain", pos="1.5,0.65!", label="long"]
+  "short" -> ringbuffer:f1
+  "long" -> ringbuffer:f2
 }
 {% endgraphviz %}
 
