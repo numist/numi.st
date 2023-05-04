@@ -13,8 +13,6 @@ window.addEventListener('load', function () {
     // Hide the reversefootnote links
     $('a.reversefootnote').hide();
 
-    configureFootnotes();
-
     // Check if a footnote is linked in the URL and present it if so
     var hash = window.location.hash;
     if (hash) {
@@ -52,6 +50,8 @@ window.addEventListener('load', function () {
     $(window).resize(function () {
         configureFootnotes();
     });
+
+    configureFootnotes();
 });
 
 function configureFootnotes() {
