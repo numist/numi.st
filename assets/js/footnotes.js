@@ -60,7 +60,7 @@ function configureFootnotes() {
 
 
 function alignFootnotes() {
-    var previousFootnoteBottom = $('.container').offset().top;
+    var previousFootnoteBottom = 0;
 
     $('.footnote').each(function () {
         var footnoteID = $(this).attr('href');
