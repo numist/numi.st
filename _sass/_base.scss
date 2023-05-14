@@ -318,7 +318,8 @@ pre code {
 pre {
   padding: 16px;
   overflow: auto;
-  font-size: 85%;
+  font-size: 80%;
+  font-variant-numeric: slashed-zero;
   line-height: 1.45;
   border-radius: .5em;
   

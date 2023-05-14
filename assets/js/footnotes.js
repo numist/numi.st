@@ -94,7 +94,7 @@ function alignFootnotes() {
         var escapedFootnoteID = escapeSelector(footnoteID);
         var footnote = $(escapedFootnoteID);
 
-        var referenceTop = $(this).offset().top - ($('.container').offset().top + (footnote.outerHeight() / 2) - $(this).outerHeight());
+        var referenceTop = $(this).offset().top + ($(this).outerHeight() / 2) - ($('.container').offset().top + (footnote.outerHeight() / 2));
         if (referenceTop < previousFootnoteBottom) {
             referenceTop = previousFootnoteBottom;
         }
