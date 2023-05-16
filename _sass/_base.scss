@@ -286,7 +286,7 @@ code,
 tt {
   padding: .1em .2em;
   margin: 0;
-  font-size: 85%;
+  font-size: $small-font-size;
   background-color: rgba(175,184,193,0.2);
   border-radius: 0.2em;
 }
@@ -298,10 +298,6 @@ tt br {
 
 del code {
   text-decoration: inherit;
-}
-
-pre code {
-  font-size: 100%;
 }
 
 .highlight {
@@ -318,7 +314,7 @@ pre code {
 pre {
   padding: 16px;
   overflow: auto;
-  font-size: 80%;
+  font-size: $small-font-size;
   font-variant-numeric: slashed-zero;
   line-height: 1.45;
   border-radius: .5em;
@@ -351,7 +347,7 @@ pre tt {
  */
 
 .footnote-container {
-  font-size: 0.75em;
+  font-size: $small-font-size;
   position: sticky;
   top: 0;
   color: $grey-color;
