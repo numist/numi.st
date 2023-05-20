@@ -14,30 +14,30 @@ import SwiftUI
 struct LazyHover: ViewModifier {
   let action: (Bool) -> Void
   @State private var hoverLocation: CGPoint = .zero
-  @State private var actionPerformed = false
+  @State private var inFrame = false { didSet {
+    action(inFrame)
+  } }
 
   func body(content: Content) -> some View {
     content.onContinuousHover { phase in
       switch phase {
       case .active(let location):
-        if hoverLocation != .zero && !actionPerformed {
-          actionPerformed = true
-          action(true)
+        if hoverLocation != .zero && !inFrame {
+          inFrame = true
         }
         hoverLocation = location
       case .ended:
+        if inFrame { inFrame = false }
         hoverLocation = .zero
-        if actionPerformed {
-          actionPerformed = false
-          action(false)
-        }
       }
     }
   }
 }
 
 extension View {
-  func onLazyHover(_ perform: @escaping (Bool) -> Void) -> some View {
+  func onLazyHover(
+    _ perform: @escaping (Bool) -> Void
+  ) -> some View {
     modifier(LazyHover(action: perform))
   }
 }
