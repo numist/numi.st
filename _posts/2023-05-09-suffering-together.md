@@ -1,0 +1,13 @@
+---
+layout: post
+title: Suffer Together
+showtitle: false
+tags: [📖]
+excerpt: ""
+date: May 09, 2023 13:09:00 PDT
+---
+
+
+<div class="defs" style="margin: 3em; margin-top: 2em; "><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; "><!-- wordid: 15706--><div class="def" style="margin-top: 1em; "><span class="def" style="font-family: Baskerville; "><span class="hwGrp" d:priority="2" style="font-weight: normal; "><span class="hw" d:priority="2" d:dhw="1" style="font-size: 24px; ">com<span class="hsb" style="font-size: 75%; ">•</span>pat<span class="hsb" style="font-size: 75%; ">•</span>i<span class="hsb" style="font-size: 75%; ">•</span>ble</span><span class="pronGrp" d:priority="2" style="font-weight: normal; "><span class="pr" d:pr="US" type="US" style="font-family: HiraMinPro-W3; display: none; "> |kəmˈpatəbəl|</span><span class="pr" d:pr="US_IPA" type="US_IPA" style="font-family: HiraMinPro-W3; "> |kəmˌpødəbəl|</span><span class="pr" d:pr="UK_IPA" type="UK_IPA" style="font-family: HiraMinPro-W3; display: none; "> |kəmˌpatɪb(ə)l|</span></span></span><span class="etymBlock" d:priority="2" style="display: block; margin-top: 1em; text-indent: 0px; "><span class="lbl" style="font-size: 14px; ">ORIGIN  </span><span class="date" style="font-weight: normal; "><span class="lang" style="font-weight: normal; "> late Middle English </span></span>: from<span class="lang" style="font-weight: normal; "> French</span>, from<span class="lang" style="font-weight: normal; "> medieval Latin </span><span class="ff" style="font-weight: 600; font-style: italic; "> compatibilis</span>, from<span class="ff" style="font-weight: 600; font-style: italic; "> compati </span><span class="trans" style="font-weight: 600; font-style: italic; "> ‘suffer with.’ </span></span></span></div></span></div>
+
+([via](https://infosec.exchange/@0xabad1dea/110338578370807798), [also](https://infosec.exchange/@madcoder/110341697250959272))
