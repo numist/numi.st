@@ -104,7 +104,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: $base-font-weight;
 }
 
-
+.anchorjs-link {
+  transition: all .25s ease-in-out;
+}
+*:hover > .anchorjs-link {
+  margin-left: -1.375em !important;
+}
 
 /**
  * Wrapper
