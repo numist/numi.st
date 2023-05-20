@@ -1,3 +1,14 @@
+Array.prototype.last = function () {
+    return this[this.length - 1];
+};
+
+Array.prototype.contains = function ( needle ) {
+    for (i in this) {
+        if (this[i] == needle) return true;
+    }
+    return false;
+ }
+
 function escapeSelector(str) {
     return str.replace(/:/g, '\\:');
 }
@@ -103,18 +114,46 @@ function configureFootnotes() {
 
 function alignFootnotes() {
     var previousFootnoteBottom = 0;
+    // An empty hash to aggregate footnotes as they're processed
+    var footnotes = [];
 
     $('.footnote').each(function () {
         var footnoteID = $(this).attr('href');
         var escapedFootnoteID = escapeSelector(footnoteID);
         var footnote = $(escapedFootnoteID);
+        if (footnotes.contains(escapedFootnoteID)) {
+            console.log('Footnote ' + escapedFootnoteID + ' has already been processed. Skipping.');
+            return;
+        }
 
-        var referenceTop = $(this).offset().top + ($(this).outerHeight() / 2) - ($('.container').offset().top + (footnote.outerHeight(true) / 2));
+        var referenceTop = $(this).offset().top - $('.container').offset().top;
         if (referenceTop < previousFootnoteBottom) {
             referenceTop = previousFootnoteBottom;
         }
+        console.log('Positioning footnote ' + escapedFootnoteID + ' at ' + referenceTop + 'px');
         footnote.css('position', 'absolute');
         footnote.css('top', referenceTop);
         previousFootnoteBottom = referenceTop + footnote.outerHeight(true);
+        footnotes.push(escapedFootnoteID);
     });
+
+    if (footnotes.length === 0) { return; }
+
+    if ($(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true) > $('footer').offset().top) {
+        // Calculate the distance between the bottom of the last footnote and the top of the footer
+        var distance = $('footer').offset().top - ($('.container').offset().top + $(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true));
+        console.log('Footnote ' + footnotes.last() + ' needs to be shifted ' + distance + 'px to clear the footer.');
+
+        for (var index = footnotes.length - 1; index >= 1 && distance < 0; index--) {
+            var footnote = $(footnotes[index]);
+            console.log('Repositioning footnote ' + footnotes[index] + ' ' + distance + 'px');
+            footnote.css('top', footnote.offset().top + distance);
+
+            // Recalculate the distance for repositioning the previous footnote
+            distance = footnote.offset().top - ($('.container').offset().top + $(footnotes[index - 1]).offset().top + $(footnotes[index - 1]).outerHeight(true));
+            if (distance < 0) {
+                console.log('Footnote ' + footnotes[index - 1] + ' needs to be shifted ' + distance + 'px to clear the previous footnote.');
+            }
+        }
+    }
 }
