@@ -11,13 +11,14 @@ The immediate goal is to get this thing road-legal again so it can be ridden.
 	    * [ ] weld or tap steering stops onto lower triple
 	* [ ] Switchgear reach
 	* Front brake situation
-		* [ ] Rotors
+		* [ ] Rotors (solomoto order 17319 4/28)
 		* [ ] Pads
-		* [ ] M/C from RC51 (consider RC51 clutch cyl to match? *oh the vanity*)
+		* [x] M/C from RC51 (eBay ordered 4/28)
+            * [ ] consider RC51 clutch cyl to match? *oh the vanity*
     * [ ] Resolve oil cooler interference ([notes](#oil-cooler))
 * [ ] New air filter waiting at mgti
 * [ ] Oil
-* [ ] Coolant
+* [ ] Coolant replace
 * Refresh all hydraulics
     * [ ] Front brake M/C
     * [x] Front brake calipers
@@ -29,11 +30,11 @@ The immediate goal is to get this thing road-legal again so it can be ridden.
 	* [ ] new battery
 		* rear light situation
 			* [ ] mounts
-			* [ ] wiring/connectors (3c for tail, 2x2c for turn?)
+			* [x] wiring/connectors (3c for tail, 2x2c for turn?)
 		* front light situation
-			* [ ] James to send [headlights](https://www.speedmotoco.com/Motorcycle-Projector-Headlight-Stacked-streetfight-p/projector-fya.htm) (or similar)
+			* [x] James to send [headlights](https://www.speedmotoco.com/Motorcycle-Projector-Headlight-Stacked-streetfight-p/projector-fya.htm) (or similar)
 			* [ ] mounts
-			* [ ] wiring/connectors (2x3c)
+			* [x] wiring/connectors (2x3c, 2xhb3)
 		* [ ] [instruments](#gauges)
 
 Sections below are ordered rougly in order of operation, starting with the stuff that needs to get done _now_, followed by roughly two projects: improve aesthetics and improve power.
