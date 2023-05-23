@@ -30,15 +30,15 @@ digraph LRU {
 }
 {% endgraphviz %}
 
-On a "miss", a node is evicted from the <span style="font-family: 'Museo';">head</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">tail</span>. On a "hit", the value's node is moved to the <span style="font-family: 'Museo';">tail</span>. The unused contents of the list drift toward the <span style="font-family: 'Museo';">head</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">tail</span>.
+On a "miss", a node is evicted from the <span style="font-family: 'Museo';">head</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">tail</span>. On a "hit", the value's node is moved to the <span style="font-family: 'Museo';">tail</span>. Unused values drift toward the <span style="font-family: 'Museo';">head</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">tail</span>.
 
-Conceptually, the two ends of the list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values near the <span style="font-family: 'Museo';">head</span> are more _distant_.
+Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values near the <span style="font-family: 'Museo';">head</span> are more _distant_.
 
 ## Supporting Better Predictions
 
-The <abbr title="Re-Reference Interval Prediction">RRIP</abbr> paper asks: what if caches supported re-reference interval predictions more nuanced than _near-immediate_ and _distant_? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those 2-bit counters are how they implement it in hardware.
+The <abbr title="Re-Reference Interval Prediction">RRIP</abbr> paper asks: what if caches supported re-reference interval predictions more nuanced than _near-immediate_ and _distant_? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those counters are how they implement it in hardware.
 
-Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not actually likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">head</span> of the list and promoting them towards[^priority] the <span style="font-family: 'Museo';">tail</span> when they're hit. Another variation—<abbr title="Bimodal  RRIP">BRRIP</abbr>—assumes most values will _never_ be reused, occasionally inserting values with a _long_ re-reference interval to provide thrash resistance. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> pits the two against each other using set dueling[^dueling].
+Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not actually likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">head</span> of the list and promoting them towards[^priority] the <span style="font-family: 'Museo';">tail</span> when they're hit. Another variation—<abbr title="Bimodal  RRIP">BRRIP</abbr>—provides thrash resistance by assuming cold values will be reused in the _distant_ future, with the occasional random _long_ re-reference interval prediction thrown in. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> pits the two against each other using set dueling[^dueling].
 
 ## In Software
 
