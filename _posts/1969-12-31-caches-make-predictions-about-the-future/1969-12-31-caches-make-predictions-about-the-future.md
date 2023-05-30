@@ -109,9 +109,9 @@ More granular re-reference intervals are a huge opportunity for software with do
 
 Also note that a _distant_ re-reference prediction inserts entries _directly into the drain_, preventing the occasional rotation of the ring buffer that ages out cache entries with shorter RRPVs[^drain-insertion]. This behaviour can be useful for scanning or thrashing workloads, as recognized by the BRRIP policy, and software can take advantage of it in unique ways—to reuse the tree example, code implementing a <abbr title="Depth-First Search">DFS</abbr> _knows_ that it will be accessing every node in the tree. By using a _distant_ re-reference prediction for misses and abstaining from modifying non-<em>distant</em> RRPVs on hits, the traversal can preserve pre-existing entries[^nodrain] for the next operation while also warming the cache if it's not already at capacity.
 
-## Bringing it to the Real World
+## Wrap it up
 
-While writing this post I also wrote a working cache implementation in Swift and published it as a [Swift package](https://github.com/numist/swift-caches/) with the hope that people will find it useful.
+TBD
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU that included an instruction so complex that Xilinx reported the theoretical maximum clock speed would have been below 5MHz.
 [^bits]: Well, they're probably using at least 3 bits per counter.
