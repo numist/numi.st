@@ -73,7 +73,7 @@ In use:
 
 ``` swift
 public func value(
-  forKey key: Key, orInsert generator: () throws -> Value
+  forKey key: Key, orInsert generator: (Key) throws -> Value
 ) rethrows -> Value {
   let value: Value
   if let node = self.node(forKey: key) {
@@ -82,14 +82,14 @@ public func value(
     node.remove()
     self.ring[0].append(node)
   } else {
-    value = try generator()
+    value = try generator(key)
     // SRRIP: initial prediction is "long"
     self.ring[2].append(Node(key: key, value: value))
     self.count += 1
   }
 
   while self.count > self.capacity {
-    // Evict a value with "distant" RRPV, aging as needed by rotating the ring
+    // Evict a value with "distant" RRPV, rotating the ring as needed
     if let node = self.ring[3].head {
       node.remove()
       self.count -= 1
@@ -107,6 +107,11 @@ You'd want to integrate a <abbr title="Look-up Table">LUT</abbr>[^lookup-time] t
 Being able to make more granular predictions about the future is a huge opportunity for software with domain-specific knowledge. One example of this is a tree: _every_ operation uses the root node, but a random leaf's probability of participating in a random search is ¹⁄ₙ—a perfect application for RRIP!
 
 Also note that a _distant_ re-reference prediction inserts entries _directly into the drain_, preventing the occasional rotation of the ring buffer that ages out cache entries with shorter RRPVs. Software that includes thrashing operations can take advantage of this knowledge to apply a _BRRIP_-style policy to them, allowing for even better performance than set dueling.
+
+## In Short
+
+A lot of modern CPU performance has come from cache eviction policy improvements, which is just a fancy way of saying they've gotten better at predicting the future. Advancements like set dueling are vital for general purpose caches, but RRIPs are unique in that they offer flexibility that can be exploited by tasks with domain-specific knowledge. Most such tasks exist in the realm of software, so it's handy that RRIPs can be straightforwardly expressed in code.
+
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU that included an instruction so complex that Xilinx reported the theoretical maximum clock speed would have been below 5MHz.
 [^bits]: Well, they're probably using at least 3 bits per counter.
