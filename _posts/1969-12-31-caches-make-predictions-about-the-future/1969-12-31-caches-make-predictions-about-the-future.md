@@ -32,7 +32,7 @@ digraph LRU {
 
 On a "miss", a node is evicted from the <span style="font-family: 'Museo';">head</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">tail</span>. On a "hit", the value's node is moved to the <span style="font-family: 'Museo';">tail</span>. Unused values drift toward the <span style="font-family: 'Museo';">head</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">tail</span>.
 
-Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values near the <span style="font-family: 'Museo';">head</span> are more _distant_.
+Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values near the <span style="font-family: 'Museo';">head</span> will be more _distant_.
 
 ## Supporting Better Predictions
 
@@ -72,20 +72,19 @@ digraph RRIP {
 In use:
 
 ``` swift
-public func fetch(
-  _ key: Key, orInsert generator: () throws -> Value
+public func value(
+  forKey key: Key, orInsert generator: () throws -> Value
 ) rethrows -> Value {
   let value: Value
-  if let node = self.node(for: key) {
-    let slot = node.element
-    value = slot.value
+  if let node = self.node(forKey: key) {
+    value = node.value
     // Hit Priority: update prediction of hits to "near-immediate"
     node.remove()
     self.ring[0].append(node)
   } else {
     value = try generator()
     // SRRIP: initial prediction is "long"
-    self.ring[2].append(Slot(key: key, value: value))
+    self.ring[2].append(Node(key: key, value: value))
     self.count += 1
   }
 
@@ -105,20 +104,14 @@ You'd want to integrate a <abbr title="Look-up Table">LUT</abbr>[^lookup-time] t
 
 ## Domain-Specific Optimization
 
-More granular re-reference intervals are a huge opportunity for software with domain-specific knowledge. One example of this is a tree: _every_ operation uses the root node but a random leaf's probability of participating in a random search is ¹⁄ₙ, a perfect application for RRIP!
+Being able to make more granular predictions about the future is a huge opportunity for software with domain-specific knowledge. One example of this is a tree: _every_ operation uses the root node, but a random leaf's probability of participating in a random search is ¹⁄ₙ—a perfect application for RRIP!
 
-Also note that a _distant_ re-reference prediction inserts entries _directly into the drain_, preventing the occasional rotation of the ring buffer that ages out cache entries with shorter RRPVs[^drain-insertion]. This behaviour can be useful for scanning or thrashing workloads, as recognized by the BRRIP policy, and software can take advantage of it in unique ways—to reuse the tree example, code implementing a <abbr title="Depth-First Search">DFS</abbr> _knows_ that it will be accessing every node in the tree. By using a _distant_ re-reference prediction for misses and abstaining from modifying non-<em>distant</em> RRPVs on hits, the traversal can preserve pre-existing entries[^nodrain] for the next operation while also warming the cache if it's not already at capacity.
-
-## Wrap it up
-
-TBD
+Also note that a _distant_ re-reference prediction inserts entries _directly into the drain_, preventing the occasional rotation of the ring buffer that ages out cache entries with shorter RRPVs. Software that includes thrashing operations can take advantage of this knowledge to apply a _BRRIP_-style policy to them, allowing for even better performance than set dueling.
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU that included an instruction so complex that Xilinx reported the theoretical maximum clock speed would have been below 5MHz.
 [^bits]: Well, they're probably using at least 3 bits per counter.
 [^parlance]: In the parlance of the paper.
 [^middle]: Specifically, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache—_m=1_ is just LRU again.
 [^priority]: SRRIP has two distinct behaviours here, _Hit Priority_ (which is analogous to LRU) and _Frequency Priority_ (LFU).
-[^dueling]: Which Intel [_also_ had a hand in inventing](Qureshi - 2007 - Adaptive Insertion Policies for High Performance Caching.pdf).
-[^drain-insertion]: The behaviour of inserting directly into the drain differs significantly between the hardware and software implementations; each linked list is a mini-LRU but Intel's LLC will "search for first ‘3’ from left", overwriting the same slot repeatedly even when the cache has empty slots. Hence, "RRIP always inserts new blocks with a _long_ re-reference interval".
-[^nodrain]: Everything that wasn't _distant_, anyway.
+[^dueling]: Which Intel [_also_ had a hand in inventing](Qureshi - 2007 - Adaptive Insertion Policies for High Performance Caching.pdf)!
 [^lookup-time]: So `node(for:)` can run in sub-linear time.
