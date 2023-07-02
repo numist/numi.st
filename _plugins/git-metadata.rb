@@ -106,6 +106,7 @@ module GitMetadata
             @@files.delete(line.split[1])
           when line.start_with?('M')
             # Modified
+            next if @@files[line.split[1]].nil? # File name contains spaces, so we can't find it in the hash
             @@files[line.split[1]].merge!({ last_modified_at: timestamp, commit: commit })
           when line.start_with?('R')
             # Renamed
