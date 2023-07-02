@@ -100,15 +100,19 @@ module GitMetadata
             commit =  line.split(':')[1]
           when line.start_with?('A')
             # Added
+            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
             @@files[line.split[1]] = { last_created_at: timestamp, last_modified_at: timestamp, commit: commit }
           when line.start_with?('D')
             # Deleted
+            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
             @@files.delete(line.split[1])
           when line.start_with?('M')
             # Modified
+            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
             @@files[line.split[1]].merge!({ last_modified_at: timestamp, commit: commit })
           when line.start_with?('R')
             # Renamed
+            next if line.split.count > 3 # Too many whitespace-separated fields (expected 3)
             old = @@files.delete(line.split[1])
             unless old.nil?
               @@files[line.split[2]] = old.merge!({ last_modified_at: timestamp, commit: commit })
