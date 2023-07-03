@@ -12,7 +12,7 @@ This "2-bit counter per cache slot" thing isn't a random example—Intel _actual
 
 ## What's a Cache?
 
-You'll often find caches referred to by their eviction policy ("an LRU"), but that confuses behaviour with purpose. A cache is a place to store things you've used in case you need them again later. It's too small to fit everything and can't tell the future, so it uses its eviction policy in an attempt to maximize its ratio of "hits" to "misses".
+You'll often find caches referred to by their eviction policy ("an <abbr title="Least Recently Used">LRU</abbr>"), but that confuses behaviour with purpose. A cache is a place to store things you've used in case you need them again later. It's too small to fit everything and can't tell the future, so it uses its eviction policy in an attempt to maximize the ratio of "hits" to "misses".
 
 Eviction policies are bets on future access patterns, and historically they've been pretty simple. LRU is a bet on temporal locality and can be straightforwardly implemented with a doubly-linked list:
 
@@ -33,11 +33,11 @@ digraph LRU {
 
 On a "miss", a node is evicted from the <span style="font-family: 'Museo';">head</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">tail</span>. On a "hit", the reused value's node is moved to the <span style="font-family: 'Museo';">tail</span>. Unused values drift toward the <span style="font-family: 'Museo';">head</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">tail</span>.
 
-Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values near the <span style="font-family: 'Museo';">head</span> will be more _distant_.
+Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">tail</span> are expected to be reused in the _near-immediate_[^parlance] future, while values at the <span style="font-family: 'Museo';">head</span> will probably never be seen again.
 
 ## Supporting Better Predictions
 
-With this background, the paper asks: what if caches supported re-reference interval predictions (RRIP) more nuanced than _near-immediate_ and _distant_? It conceptualizes intermediate predictions as inserting a value somewhere in the middle of the list, and those counters are how they implement it in hardware[^middle].
+With this background, the paper asks: what if caches supported more nuanced re-reference interval predictions (RRIP)? It conceptualizes intermediate predictions as inserting a value somewhere in the middle[^middle] of the list, and those counters are how they implement it in hardware.
 
 Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">head</span> of the list and promoting them towards[^priority] the <span style="font-family: 'Museo';">tail</span> when they're hit. Another policy, called <abbr title="Bimodal RRIP">BRRIP</abbr>[^bip], provides thrash resistance by assuming cold values will be reused in the _distant_ future, with an occasional _long_ prediction thrown in. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> pits the two against each other using set dueling[^dueling].
 
@@ -111,14 +111,14 @@ Also note that a _distant_ re-reference prediction inserts entries into the drai
 
 ## In Short
 
-A lot of modern CPU performance has come from improvements to hardware cache eviction policies, which is just a fancy way of saying they've gotten better at predicting the future. Advancements like set dueling are important for general purpose caches, but RRIPs are unique in that they offer flexibility that can also be exploited by tasks with domain-specific knowledge. I haven't seen many examples of people actually taking advantage of this, presumably because most such tasks exist in the realm of software. Luckily, it's fairly straightforward to implement a RRIP cache in code!
+CPUs depend on the performance of their cache hierarchies, which have steadily improved as engineers have discovered ways to better predict the future. Advancements like set dueling are important for general purpose caches, but RRIPs are unique in that they offer flexibility that can also be exploited by tasks with domain-specific knowledge. I haven't seen many examples of people actually taking advantage of this, presumably because most such tasks exist in the realm of software. Luckily, it's fairly straightforward to implement a RRIP cache in code!
 
 
 [^141]: I'm being glib here, _of course_ there's a limit. In college two friends and I managed to design an application-specific CPU that included an instruction so complex that Xilinx reported the theoretical maximum clock speed would have been below 5MHz.
 [^bits]: Well, they're probably using 3 or 4 bits.
 [^parlance]: In the parlance of the paper.
-[^middle]: Specifically, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache—_m=1_ is just <abbr title="Not Recently Used">NRU</abbr>.
+[^middle]: Specifically, an _m_-bit counter gives you _2<sup>m</sup>_ distinct insertion points into the cache. _m=1_ is <abbr title="Not Recently Used">NRU</abbr> and in theory _m=0_ should be LRU, but hardware caches are not implemented as lists.
 [^priority]: SRRIP has two distinct behaviours here, _Hit Priority_ (which promotes hits all the way to the <span style="font-family: 'Museo';">tail</span>) and _Frequency Priority_ (which decrements the <abbr title="Re-Reference Prediction Value">RRPV</abbr>). These behaviours are analogous to LRU and <abbr title="Least Frequently Used">LFU</abbr>, respectively.
 [^bip]: Intentionally analogous to <abbr title="Bimodal Insertion Policy">BIP</abbr>, for anyone familiar.
 [^dueling]: Which Intel [_also_ had a hand in inventing](Qureshi - 2007 - Adaptive Insertion Policies for High Performance Caching.pdf)!
-[^lookup-time]: So `node(for:)` can run in sub-linear time.
+[^lookup-time]: So `node(forKey:)` can run in sub-linear time.
