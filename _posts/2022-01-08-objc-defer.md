@@ -59,7 +59,7 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 }
 ```
 
-Turned out it's not too heinous to hack together. Here it is:
+Turned out it's not too heinous to hack together, and [it's even exception safe](https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b)! Here it is:
 
 ``` objective_c
 static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
