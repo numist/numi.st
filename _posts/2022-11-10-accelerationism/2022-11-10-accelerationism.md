@@ -3,7 +3,7 @@ layout: post
 excerpt: "Why auto-merge dependency updates without review?"
 ---
 
-This blog uses a [GitHub Action](https://github.com/numist/numi.st/blob/main/.github/workflows/merge-dependabot.yml) to automatically merge pull requests from dependabot so long as the Netlify deploy preview check succeeds. It was a bit of a pain to get going, and always seemed like a process that GitHub could have made easier.
+This blog uses a [GitHub Action](https://github.com/numist/numi.st/blob/main/.github/workflows/merge-dependabot.yml) to automatically merge pull requests from dependabot so long as the Netlify deploy preview check succeeds. It was a bit of a pain to get going[^unreliable], and always seemed like a process that GitHub could have made easier.
 
 Of course, that was on purpose:
 
@@ -14,4 +14,5 @@ Of course, that was on purpose:
 
 While I agree with Justin that researchers are more likely to audit packages than clients and supply chain attacks are worth solving, _Accelerate_[^accel] makes a compelling case that it's better to deploy both good and bad packages faster than stall either in the meantime. Besides, security-sensitive projects already know who they are and have integration processes for auditing dependency updates promptly; automerge is for the rest of us.
 
+[^unreliable]: And it's constantly breaking.
 [^accel]: Forsgren, Nicole, et al. [_Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations._](https://itrevolution.com/product/accelerate/) IT Revolution, 2018.
