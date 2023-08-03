@@ -5,7 +5,13 @@ tags: [💻]
 description: Reducing code duplication and improving locality in Objective-C with macros.
 ---
 
-_UPDATE: predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33)._
+{% callout info %}
+<div class="date-right">August 19, 2022</div>
+
+#### Update
+
+Predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33).
+{% endcallout %}
 
 This all started because I was complaining about some uninitialized pointer value causing me grief[^mmap] and someone (explicitly trolling) said they always check pointers using:
 
@@ -59,7 +65,7 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 }
 ```
 
-Turned out it's not too heinous to hack together, and [it's even exception safe](https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b)! Here it is:
+Turned out it's not too heinous to hack together, and [it's even exception-safe](https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b)! Here it is:
 
 ``` objective_c
 static void __defer_cleanup(void (^*pBlock)(void)) { (*pBlock)(); }
