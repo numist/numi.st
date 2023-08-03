@@ -247,18 +247,23 @@ blockquote {
   padding: 0px $spacing-unit / 3;
   letter-spacing: -0.3px;
 
-  float: left;
-
   > :last-child {
     margin-bottom: 0;
   }
 }
 
 cite {
-	display: block;
+  display: inline;
   float: right;
   color: lighten($grey-color, 20%);
-	font-style: italic;
+  font-style: italic;
+}
+
+.date-right {
+  display: inline;
+  float: right;
+  color: lighten($grey-color, 20%);
+  font-style: italic;
 }
 
 svg.graphviz {

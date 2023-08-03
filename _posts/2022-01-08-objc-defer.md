@@ -6,7 +6,9 @@ description: Reducing code duplication and improving locality in Objective-C wit
 ---
 
 {% callout info %}
-#### Update:
+<div class="date-right">August 19, 2022</div>
+
+#### Update
 
 Predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://pspdfkit.com/blog/2017/even-swiftier-objective-c/), and [Justin Spahr-Summers was ahead of them](https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h#L12-L33).
 {% endcallout %}
