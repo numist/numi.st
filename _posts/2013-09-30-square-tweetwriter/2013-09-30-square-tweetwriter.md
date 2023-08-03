@@ -23,7 +23,8 @@ Once it went public, people out in the world seemed to enjoy sending their messa
 
 Extra thanks to Ben Novakovic for the "best hack week project" nomination:
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">@thefriley @square @jack This is possibly the best hack week project I&#39;ve ever seen.</p>&mdash; Ben Novakovic (@bmn) <a href="https://twitter.com/bmn/status/371070320251125760">August 24, 2013</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<!--<blockquote class="twitter-tweet"><p lang="en" dir="ltr">@thefriley @square @jack This is possibly the best hack week project I&#39;ve ever seen.</p>&mdash; Ben Novakovic (@bmn) <a href="https://twitter.com/bmn/status/371070320251125760">August 24, 2013</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
+![Tweet by Ben Novakovic (@bmn): "@thefriley @square @jack This is possibly the best hack week project I&#39;ve ever seen." in response to @thefriley: "@square @jack this could be big #hackweek" with a photo of the typewriter, loaded with continuous feed paper, printing out tweets mentioning @square with a Raspberry Pi perched on top and a sticker saying "Scott's Typewriter (Prints mentions of @Square, try it!)"](tweet-screenshot.png)
 
 Like any idea with a week's worth of effort, it had a couple shortcomings. For example if the @Square account tweeted something popular, the typewriter would faithfully—and noisily—relay every single retweet:
 
