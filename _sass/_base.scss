@@ -230,31 +230,33 @@ a {
  */
 
 blockquote {
-  border-left: 3px solid lighten(blue, 40%);
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f7f7f7;
+  border-radius: .25rem;
+  background-color: #f7f7f7;
+  color: darken($grey-color, 20%);
+  code {
+      border-radius: .25rem;
+  }
+  :last-child {
+      margin-bottom: 0;
+  }
+  border-left: .25rem solid lighten(blue, 40%);
 }
 
 blockquote blockquote {
-  border-left: 3px solid lighten(green, 40%);
-  float: none; // Cancel out the `float: right;` of the parent so the <cite> will locate correctly
+  border-left: .25rem solid lighten(green, 40%);
 }
 
 blockquote blockquote blockquote {
-  border-left: 3px solid lighten(black, 40%);
-}
-
-blockquote {
-  color: $grey-color;
-  padding: 0px $spacing-unit / 3;
-  letter-spacing: -0.3px;
-
-  > :last-child {
-    margin-bottom: 0;
-  }
+  border-left: .25rem solid lighten(black, 40%);
 }
 
 cite {
-  display: inline;
-  float: right;
+  display: block;
+  text-align: right;
   color: lighten($grey-color, 20%);
   font-style: italic;
 }

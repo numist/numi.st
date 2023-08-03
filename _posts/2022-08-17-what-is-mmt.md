@@ -42,7 +42,7 @@ This premise puts the lie to the most common complaint against public spending: 
 
 ## Inflation
 
-> At its core, MMT is about replacing an artificial (revenue) constraint with a real (inflation) constraint
+> At its core, MMT is about replacing an artificial (revenue) constraint with a real (inflation) constraint.
 > <cite>– [The Deficit Myth](https://stephaniekelton.com/book/), p72</cite>
 
 In an otherwise static system, we can view inflation as the result of a government spending more than it collects in taxes. From the perspective of a "dollar market", excess spending by the government creates a glut on the supply side, diluting the currency's value.
