@@ -233,13 +233,9 @@ blockquote {
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #f7f7f7;
   border-radius: .25rem;
   background-color: #f7f7f7;
   color: darken($grey-color, 20%);
-  code {
-      border-radius: .25rem;
-  }
   :last-child {
       margin-bottom: 0;
   }
@@ -247,11 +243,11 @@ blockquote {
 }
 
 blockquote blockquote {
-  border-left: .25rem solid lighten(green, 40%);
+  border-left-color: lighten(green, 40%);
 }
 
 blockquote blockquote blockquote {
-  border-left: .25rem solid lighten(black, 40%);
+  border-left-color: lighten(black, 40%);
 }
 
 cite {
