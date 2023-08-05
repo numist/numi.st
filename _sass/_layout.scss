@@ -47,7 +47,7 @@
   @include media-query($on-palm) {
     position: absolute;
     top: 9px;
-    right: $spacing-unit / 2;
+    right: calc($spacing-unit / 2);
     background-color: $background-color;
     border: 1px solid $grey-color-light;
     border-radius: 5px;
@@ -105,12 +105,12 @@
  */
 .site-footer {
   border-top: 1px solid $grey-color-light;
-  padding: $spacing-unit/3 0;
+  padding: calc($spacing-unit/3) 0;
 }
 
 .footer-heading {
   @include relative-font-size(1.125);
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: calc($spacing-unit / 2);
 }
 
 .contact-list,
@@ -122,13 +122,13 @@
 .footer-col-wrapper {
   @include relative-font-size(0.9375);
   color: $grey-color;
-  margin-left: -$spacing-unit / 2;
+  margin-left: calc(0px - ($spacing-unit / 2));
   @extend %clearfix;
 }
 
 .footer-col {
   float: left;
-  padding-left: $spacing-unit / 2;
+  padding-left: calc($spacing-unit / 2);
 }
 
 .footer-col-1 {
@@ -173,7 +173,7 @@
  * Page content
  */
 .page-content {
-  padding: $spacing-unit/2 0;
+  padding: calc($spacing-unit/2) 0;
   flex: 1;
 }
 
@@ -229,7 +229,7 @@
 }
 
 .post-content {
-  margin-bottom: $spacing-unit/2;
+  margin-bottom: calc($spacing-unit/2);
 
   h2 {
     @include relative-font-size(2);

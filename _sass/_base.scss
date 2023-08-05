@@ -44,7 +44,7 @@ h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: calc($spacing-unit / 2);
 }
 
 
@@ -126,8 +126,8 @@ h1, h2, h3, h4, h5, h6 {
   @include media-query($on-laptop) {
     max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
     max-width:         calc(#{$content-width} - (#{$spacing-unit}));
-    padding-right: $spacing-unit / 2;
-    padding-left: $spacing-unit / 2;
+    padding-right: calc($spacing-unit / 2);
+    padding-left: calc($spacing-unit / 2);
   }
 }
 
@@ -161,7 +161,7 @@ table {
     }
   }
   th, td {
-    padding: ($spacing-unit / 3) ($spacing-unit / 2);
+    padding: calc($spacing-unit / 3) calc($spacing-unit / 2);
   }
   th {
     background-color: lighten($grey-color-light, 3%);
@@ -266,7 +266,7 @@ cite {
 
 svg.graphviz {
   font-variant-numeric: tabular-nums slashed-zero;
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: calc($spacing-unit / 2);
   padding: 16px;
   overflow: auto;
   border-radius: 6px;
@@ -308,7 +308,7 @@ del code {
 }
 
 .highlight {
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: calc($spacing-unit / 2);
   max-height: 80vh;
 }
 
