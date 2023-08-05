@@ -4,11 +4,14 @@
     padding: 1.25rem;
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
-    border: .125rem solid #eee;
     border-radius: .375rem;
     background-color: white;
     :last-child {
         margin-bottom: 0;
+    }
+    border: .125rem solid #6c757d;
+    h4 {
+        color: #6c757d;
     }
 }
 
@@ -48,12 +51,5 @@
     border-color: #28a745;
     h4 {
         color: #28a745;
-    }
-}
-
-.bd-callout-default{
-    border-color: #6c757d;
-    h4 {
-        color: #6c757d;
     }
 }

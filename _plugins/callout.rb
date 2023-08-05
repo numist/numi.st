@@ -8,8 +8,8 @@ module Jekyll
           super
           type.strip!
           if type.empty?
-            @type = "default"
-          elsif %w(info danger warning primary success default).include?(type)
+            @type = nil
+          elsif %w(info danger warning primary success).include?(type)
             @type = type
           else
             raise "callout type \"#{type}\" not supported."
@@ -20,7 +20,11 @@ module Jekyll
           site = context.registers[:site]
           converter = site.find_converter_instance(::Jekyll::Converters::Markdown)
           output = converter.convert(super(context))
-          "<div class=\"bd-callout bd-callout-#{@type}\">#{output}</div>"
+          if @type.nil?
+            "<div class=\"bd-callout\">#{output}</div>"
+          else
+            "<div class=\"bd-callout bd-callout-#{@type}\">#{output}</div>"
+          end
         end
       end
     end
