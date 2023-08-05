@@ -7,11 +7,12 @@ module Jekyll
         def initialize(tag_name, type, tokens)
           super
           type.strip!
-          if %w(info danger warning primary success default).include?(type)
+          if type.empty?
+            @type = "default"
+          elsif %w(info danger warning primary success default).include?(type)
             @type = type
           else
-            puts "#{type} callout not supported. Defaulting to info"
-            @type = "info"
+            raise "callout type \"#{type}\" not supported."
           end
         end
   
