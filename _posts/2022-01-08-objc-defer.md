@@ -66,13 +66,13 @@ if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
 Turned out it's not too heinous to hack together, and [it's even exception-safe](https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b)! Here it is:
 
 ``` objective_c
-static void __defer_cleanup(void (^ _Nonnull * _Nonnull pBlock)(void))
-{ (*pBlock)(); }
 #define __defer_tokenpaste(prefix, suffix) prefix ## suffix
 #define __defer_blockname(nonce) __defer_tokenpaste(__defer_, nonce)
+static void __defer_cleanup(void (^ _Nonnull * _Nonnull pBlock)(void))
+{ (*pBlock)(); }
 
-/* Declare a local block variable that contains the cleanup code.
- * It has three attributes:
+/* Declare a local block variable with a unique name that contains
+ * the cleanup code. It has three attributes:
  *   unused: because you should NEVER touch this local yourself
  *   deprecated: because you should NEVER touch this local yourself
  *   cleanup: to get its pointer passed to __defer_cleanup (above)
