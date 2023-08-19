@@ -22,6 +22,7 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * <abbr title="Abbreviation">Abbr</abbr>s use popovers, [similar to footnotes](https://github.com/numist/numi.st/blob/df03820b253b22937a6b7be033e247cc13311676/assets/js/abbr.js)
 * Labels on [external links](external-links)
 * [Repository](https://github.com/numist/highlight-css) of CSS files for syntax highlighting
+* Plugin for [generating graphviz SVGs from DOT]({% post_url 2023-03-17-graphviz %})
 * Plugin for making git metadata available to liquid (not quite ready to share yet)
 
 In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.
@@ -32,23 +33,10 @@ Oh no, a TODO list
 
 The more immediate things I'd like to get done are tracked in the [GitHub Issues for this site's repo](https://github.com/numist/numi.st/issues), but broadly there are some other things I'd like to explore as time allows:
 
-## Features
-
 * I'd like to publish some pages that use [Tangle](http://worrydream.com/Tangle/). I'll probably start by onshoring some online "calculators" that I find myself visiting often, like Sheldon Brown's [gear calculator](https://www.sheldonbrown.com/gear-calc.html) but it would be _really_ interesting to make a carbon footprint calculator that takes into account the cost of producing and transporting fuel
 * [Webmentions](https://webmention.io)? Apparently [one](https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/) can get them working on static sites? The cool kids seem to be moving in an ActivityPub direction.
 * Collections (and [collection indexes](https://jekyllrb.com/docs/plugins/generators/))? Or should that be tags? Does any of it really matter if we're gardening?
 * [mathjax](http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html) support
-
-## Design
-
-* I'd like the footnotes to live next to the text when the viewport is big enough—Tanya says I can probably do this using [`<div class="d-none d-lg-block">`](https://getbootstrap.com/docs/5.2/utilities/display/)
-* Decorate h tags with a `#` or something that links to its id (like [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) does)
-
-## Jekyll plugins to consider
-
-* [jekyll-email-protect](https://github.com/vwochnik/jekyll-email-protect)
-* [jekyll-timeago](https://github.com/markets/jekyll-timeago)
-* [jekyll-toc](https://github.com/toshimaru/jekyll-toc)
 
 [^wordpress]: This was before Markdown had become ubiquitous, most blogs (including my _next oldest_) were Wordpress, and "smart" interactive editors were starting to take over.
 [^pagination]: Basically, pages infinite-scrolled by <abbr title="XMLHttpRequest">XHR</abbr>ing the next page and appending its `<article>`s to the current page. More importantly, it _updated the browser's address bar_ so reloading the page would cause all the currently visible content to be part of the first request, preserving the reader's scroll location.

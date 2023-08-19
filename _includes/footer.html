@@ -1,4 +1,4 @@
-{%- assign date_format = "%b %-d %Y" -%}
+{%- assign date_format = "%-d %B %Y" -%}
 {%- assign ctime = page.date | date: date_format -%}
 {%- assign mtime = page.modified_at | date: date_format -%}
 {% unless page.date %}
@@ -9,7 +9,7 @@
   <div class="wrapper">
     <div class="footer-col-wrapper">
       <div class="footer-col">
-        Page created
+        Published
         <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
           {{ ctime }}</time>{%- if ctime != mtime -%}, last modified
           <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ mtime }}</time>
