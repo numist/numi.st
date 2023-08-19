@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Reviving a Clipper Creek HCS-40"
 tags: [🛠]
 description: "Turns out contactors are a wear part?"

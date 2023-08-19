@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Do It For the Delight"
 showtitle: false
 tags: [📖]

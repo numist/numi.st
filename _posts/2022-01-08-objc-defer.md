@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "`defer` for Objective-C"
 tags: [💻]
 description: Reducing code duplication and improving locality in Objective-C with macros.

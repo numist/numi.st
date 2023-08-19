@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: Caches Make Predictions About the Future
 excerpt: "How a paper about CPU caches changed the way I think about software caches too"
 showtitle: false

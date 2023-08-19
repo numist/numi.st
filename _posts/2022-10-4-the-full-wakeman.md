@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: The Full Wakeman
 excerpt: "Get your fucking shit together"
 ---

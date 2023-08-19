@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "The Square Tweetwriter"
 tags: [⌨️]
 description: "The typewriter gets dusted off for hack week."

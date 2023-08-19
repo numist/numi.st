@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "The Zero Gets a Corbin Saddle"
 tags: [🏍]
 description: "Giving myself a little present now that I've been summoned back into the office."

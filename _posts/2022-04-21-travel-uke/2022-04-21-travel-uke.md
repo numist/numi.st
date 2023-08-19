@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "Travel Ukuleles"
 tags: [🎹, 🛠]
 description: "I go overboard making concert scale travel ukuleles"

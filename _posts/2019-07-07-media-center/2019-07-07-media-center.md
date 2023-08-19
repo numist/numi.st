@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "A Plywood Vinyl Media Center"
 timestamp: Wednesday July 7, 2019 22:03:46 PDT
 tags: [🛠]

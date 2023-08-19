@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "Syntax highlighting stylesheets for Jekyll"
 tags: [💻]
 link: https://numist.github.io/highlight-css/

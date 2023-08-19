@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Vinay's Memorial"
 date:   2009-11-02 15:04:12 -0800
 updated: 2009-11-04 10:18:12 -0800
