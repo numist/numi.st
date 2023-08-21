@@ -1,7 +1,8 @@
 ---
 layout: page
+title: About
+showtitle: false
 ---
-
 I made up the name "numist" in 1996 with the hope that it would serve as a unique, pronounceable name with no existing meaning on a growing internet[^xkcd]. I was twelve, so it was only later that I learned of [numismatics](http://numist.net/define/?numismatics) but the name largely accomplished its goal and represents me on myriad platforms[^socials]. As a general rule I'm most attentive to the ones that will take my money, because they are the most incentivised to serve my interests.
 
 I've worked odd jobs in software since 2000, [full time since 2009](https://www.linkedin.com/in/numist/). I've been writing code as a hobby for about as long, and tinkering with computers since I learned which end of a screwdriver to use. Shout out to my cousin Michelle for showing me how to make a website when I was visiting in 1990, I hope you don't regret it too much.
