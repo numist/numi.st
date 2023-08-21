@@ -1,10 +1,9 @@
 ---
 layout: page
+title: Everyday Carry
 ---
 
-## Everyday Carry
-
-Minimally, I keep an iPhone 13 Mini with a MagSafe wallet containing my license and a credit card. My keychain is either a [hook](https://www.amazon.com/gp/product/B016V4V84U) (pocket) or a [clip](https://www.amazon.com/gp/product/B08KW5YG5X) (belt loop) with at least two [locking S-biners](https://www.amazon.com/gp/product/B08BX4RCW8) attached (one carrying house keys, the other a ROAD iD dog tag and USB stick). Other S-biners include bike lock keys, car key, or destination keys. S-biners are awesome.
+Minimally, I carry an iPhone 13 Mini with a MagSafe wallet containing my license and a credit card. My keychain is either a [hook](https://www.amazon.com/gp/product/B016V4V84U) (pocket) or a [clip](https://www.amazon.com/gp/product/B08KW5YG5X) (belt loop) with at least two [locking S-biners](https://www.amazon.com/gp/product/B08BX4RCW8) attached (one carrying house keys[^keys], the other a ROAD iD dog tag and USB stick). Other S-biners include bike lock keys, car key, or destination keys. S-biners are awesome.
 
 I always have earplugs (custom-fitted with Etymōtic cartridges) or AirPods Pro nearby. This used to be a habit from being around motorcycles a lot (plus some spontaneous concert-going) but they've become even more essential now that I have kids. I usually carry a [Kershaw Scallion](https://kershaw.kaiusa.com/scallion-knives.html), which I love. <!-- TODO "Why do you need to carry a knife? What are you cutting?" Obviously packages and mail, but I also find myself using it a lot for prying, poking, scraping… I definitely use it often enough to have developed Opinions about it. -->
 
@@ -54,6 +53,7 @@ The lift sits under the garage door when it's raised, which made lighting diffic
 
 I am still getting off the ground here, so it's not worth writing too much about it other than I like my welder—an AHP AlphaTIG 203XI—well enough[^flexloc], especially equipped with a Furick #8 Pyrex cup and gas lens.
 
+[^keys]: Which I'd love to get rid of, but our current doors aren't compatible with any existing keypad/NFC products
 [^mxmaster]: The unfortunately-named MX Master—now three generations ahead of the MX Ergo—has a number of features that I covet but I prefer a trackball for at-desk tasks like CAD
 [^screenbar]: I've had one fail but I don't know of anything else in this space and I absolutely love it
 [^c1]: Review: overally I like having a competent monitor-attached camera that I don't have to mess with a lot but I'm having frustrating troubles with autofocus so I'm not sure I can reccomend it yet
