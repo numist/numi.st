@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Danny's Wager"
 date: Wednesday February 20, 2008 22:58:12 PST
 permalink: post/2008/pascals-wager.html

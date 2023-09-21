@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "For the Love of Humanity"
 showtitle: false
 tags: [📖]

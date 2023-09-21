@@ -30,6 +30,8 @@ baseurl: ""
 url: "https://numi.st"
 timezone: “Etc/UTC”
 
+page_excerpts: true
+
 markdown: kramdown
 
 permalink: /post/:year/:title/

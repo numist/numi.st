@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "What is Modern Monetary Theory?"
 tags: [💵]
 description: "What gives fiat currencies value, and what can we do with them?"

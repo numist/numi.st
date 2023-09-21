@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Do It For the Love"
 showtitle: false
 tags: [📖]

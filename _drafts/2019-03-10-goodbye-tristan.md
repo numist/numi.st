@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 date: 2019-03-10 10:12:25 -0800
 tags: [👤]
 ---

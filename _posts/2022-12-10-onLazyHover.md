@@ -1,6 +1,6 @@
 ---
 title: "`.onLazyHover`"
-layout: post
+layout: page
 excerpt: A less eager `.onHover` for SwiftUI
 ---
 

@@ -1,18 +1,25 @@
 {%- assign date_format = "%-d %B %Y" -%}
-{%- assign ctime = page.date | date: date_format -%}
+{%- assign ctime = page.created_at | date: date_format -%}
+{%- if page.published_at -%}
+    {%- assign ptime = page.published_at | date: date_format -%}
+{%- endif -%}
 {%- assign mtime = page.modified_at | date: date_format -%}
-{% unless page.date %}
-    {{ "page.date not set" | raise_error }}
-{% endunless %}
 
 <footer class="site-footer h-card">
   <div class="wrapper">
     <div class="footer-col-wrapper">
       <div class="footer-col">
-        Published
-        <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-          {{ ctime }}</time>{%- if ctime != mtime -%}, last modified
-          <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ mtime }}</time>
+        {%- if ptime -%}
+          Published
+          <time class="dt-published" datetime="{{ page.published_at | date_to_xmlschema }}" itemprop="datePublished">{{ ptime }}</time>
+          {%- if ptime != mtime -%}
+            , last modified <time class="dt-modified" datetime="{{ page.modified_at | date_to_xmlschema }}" itemprop="dateModified">{{ mtime }}</time>
+          {%- endif -%}
+        {%- else -%}
+          Created <time class="dt-created" datetime="{{ page.created_at | date_to_xmlschema }}" itemprop="dateCreated">{{ ctime }}</time>
+          {%- if ctime != mtime -%}
+            , last modified <time class="dt-modified" datetime="{{ page.modified_at | date_to_xmlschema }}" itemprop="dateModified">{{ mtime }}</time>
+          {%- endif -%}
         {%- endif -%}
         <br />
         Comments welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/{{ page.path }}" target="_self">GitHub</a>

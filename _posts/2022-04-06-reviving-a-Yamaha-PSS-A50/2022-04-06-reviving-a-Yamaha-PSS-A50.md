@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Reviving a Yamaha PSS-A50"
 tags: [🎹, 🛠]
 description: "We got a Yamaha PSS-A50 for our kiddo. The next day it wouldn't turn on."

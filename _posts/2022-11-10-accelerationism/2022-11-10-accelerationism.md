@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 excerpt: "Why auto-merge dependency updates without review?"
 ---
 

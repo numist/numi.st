@@ -7,10 +7,11 @@ require 'posix/spawn'
 # * ENOENT file has Time.now for both no sha
 # * test file that was previously deleted and recreated has last birthtime
 # * test untracked file that was touched after creation has a birthtime that is later than its mtime?
+# * all of the above, but with a file that has a space in its name
 
 module GitMetadata
   def self.birthtime(path)
-    return nil unless File.exist?(path)
+    raise "file #{path} does not exist" unless File.exist?(path)
     File.birthtime(path)
   end
   
@@ -22,30 +23,20 @@ module GitMetadata
   def self.inject_dates(page)
     # detect when we've got undated document injection working
     raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
+    # raise if the document is not markdown
+    return unless page.path.end_with?('.md') or page.path.end_with?('.html')
 
-    # Sometimes page.path is an absolute path, sometimes it's relative.
-    # Need it to always be relative for hash lookup.
-    relative_path = if page.path.start_with?('/')
-      Pathname.new(page.path)
-        .relative_path_from(
-          Pathname.new(File.dirname(Git.top_level_directory))
-        ).to_s
-    else
-      page.path
-    end
+    git_created_at, git_modified_at = Git.file_times(page.path) || [nil, nil]
+    created_at = git_created_at || birthtime(page.path)
+    modified_at = git_modified_at || mtime(page.path)
 
-    page.data['date'] = Git.files.dig(relative_path, :last_created_at) || birthtime(relative_path) || Time.now if page.data['date'].nil?
-    page.data['modified_at'] = Git.files.dig(relative_path, :last_modified_at) || mtime(relative_path) || Time.now
-    page.data['commit'] = Git.files.dig(relative_path, :commit)
+    page.data['created_at'] = created_at
+    page.data['date'] = created_at if page.data['date'].nil?
+    page.data['modified_at'] = modified_at
   end
 
   class Git
     class << self
-
-      def files
-        @@files ||= populate_files
-      end
-
       def branch
         @@branch ||= Executor.sh(
           "git",
@@ -59,68 +50,35 @@ module GitMetadata
         Jekyll.logger.debug "         Resetting: git cache"
         @@site_source = site.source
         @@branch = nil
-        @@files = nil
       end
 
-      def populate_files
-        @@files = {}
-        timestamp = nil
-        commit = nil
+      # this function returns the last created_at and last_modified_at times for
+      # the path given. raises an error if the path is a directory or does not exist.
+      # returns nil if the path is untracked.
+      def file_times(path)
+        raise "file #{path} does not exist" unless File.exist?(path)
+        raise "file #{path} is a directory" if File.directory?(path)
+        return nil unless git_repo?
 
-        Executor.sh(
-          'git',
-          '--git-dir',
-          top_level_directory,
-          'log',
-          '--no-merges',
-          '--reverse',
-          '--name-status',
-          '--date=unix',
-          '--pretty=%%these-files-modified-at:%ct%n%%commit:%H'
-        ).split("\n").each do |line|
-          # Each commit is printed from oldest to newest in the format:
-          #
-          # %these-files-modified-at:1667711586
-          # %commit:d2c2079f8b3d5b8056b4736849ac3b2d580a2827
-          #
-          # M       404.html
-          # D       README.md
-          # A       _plugins/raise_eror.rb
-          # R92     foo bar.test    bar foo.test
-          #
-          # XXX: Note that none of this works properly if any of the filenames contain spaces!
-          # Top level files with space-prefixed names are right out!
-          # Another reason why this isn't ready for general consumption as a package!
-          #
-          # Probably what I need to do is rewrite this using https://github.com/libgit2/rugged
-          case
-          when line.start_with?('%these-files-modified-at:')
-            timestamp = line.split(':')[1]
-          when line.start_with?('%commit:')
-            commit =  line.split(':')[1]
-          when line.start_with?('A')
-            # Added
-            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
-            @@files[line.split[1]] = { last_created_at: timestamp, last_modified_at: timestamp, commit: commit }
-          when line.start_with?('D')
-            # Deleted
-            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
-            @@files.delete(line.split[1])
-          when line.start_with?('M')
-            # Modified
-            next if line.split.count > 2 # Too many whitespace-separated fields (expected 2)
-            @@files[line.split[1]].merge!({ last_modified_at: timestamp, commit: commit })
-          when line.start_with?('R')
-            # Renamed
-            next if line.split.count > 3 # Too many whitespace-separated fields (expected 3)
-            old = @@files.delete(line.split[1])
-            unless old.nil?
-              @@files[line.split[2]] = old.merge!({ last_modified_at: timestamp, commit: commit })
-            end
-          end
-        end
+        # Use `git log --follow --format=%ad --date iso <path>` to get
+        # all the dates that `path` was modified.
+        times = Executor.sh(
+          "git",
+          "log",
+          "--follow",
+          "--format=%ad",
+          "--date", "iso",
+          path
+        ).split("\n")
 
-        @@files
+        # If `path` was never modified, `git log` will return an empty string.
+        return nil if times.empty?
+
+        # `git log` returns the dates in reverse chronological order.
+        # The first date is the last time the file was modified.
+        # The last date is the first time the file was modified.
+        # We want to return the first and last dates.
+        [DateTime.parse(times.last), DateTime.parse(times.first)]
       end
 
       def top_level_directory

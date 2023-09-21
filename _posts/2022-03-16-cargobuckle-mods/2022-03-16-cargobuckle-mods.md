@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title:  "Improved Tie-downs for the Motorcycle Lift"
 tags: [🛠, 🏍]
 description: I got a set of CargoBuckles and modified them for motorcycle lift duty.
