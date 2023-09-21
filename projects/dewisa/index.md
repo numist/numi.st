@@ -10,11 +10,11 @@ I have a Klipsch Reference Premiere HD Wireless system comprised of:
 * 2×[RP-140WM](RP-140WM-Spec-Sheet.pdf) (bookshelf)
 * 1×[RP-110WSW](RP-110WSW-Spec-Sheet.pdf) (subwoofer)
 
-The two biggest selling points of the system for us were 1) no cables running from the receiver to each speaker 2) the [receiver](RP-HUB1-Spec-Sheet.pdf)'s excellent compact form factor[^cornwall].
+The biggest selling points of the system for us were 1) no cables running from the receiver to each speaker 2) the small size of the [receiver](RP-HUB1-Spec-Sheet.pdf). Also, the speakers were three or four orders of magnitude smaller than my [outgoing Cornwalls](IMG_9676.jpeg)[^marriage].
 
 We first bought Fry's' floor models on clearance, a 2.1 system (2×floorstanding speakers and a subwoofer) plus the hub all marked "DEMO ONLY NOT FOR SALE", which we liked well enough to add factory-refurbished center and rear channels after we moved.
 
-The system sounds great, the receiver is good. I like the remote. But WiSA never worked right for us. It uses 24 bands in the 5GHz spectrum that's shared with weather-radar and military applications which you might think was our problem, but it also obviously suffered interference from our Apple TV operating on a non-overlapping band. Despite wiring our input sources into ethernet, and after multiple rounds of firmware updates over the years, the system still suffered drops even when we played records.
+The system sounds great, the receiver's form factor really is awesome[^rack], I even like the remote. But WiSA never worked right for us. It uses 24 bands in the 5GHz spectrum that's shared with weather-radar and military applications which you might think was our problem, but it also obviously suffered interference from our Apple TV operating on a completely non-overlapping band. Despite wiring our input sources into ethernet, and after multiple rounds of firmware updates over the years, the system still suffered drops even when we played records.
 
 I'm sad to say goodbye to the receiver, but it didn't support 4K anyway so its fate was inevitable. The speakers, on the other hand, still have a future if they can be converted into powered monitors.
 
@@ -53,6 +53,7 @@ With this knowledge, it seems like the best plan of action is to design a new PC
 1. Process the resulting signal into three bands of output (20-200Hz, 20-1,800Hz, 1.8-20kHz) for the amplifier board using an Analog Devices [ADAU1701](ADAU1701.pdf)
 1. If using the amplifier board in a single-ended configuration isn't practical[^extra], each output channel will also need a TI [DRV134/DRV135](drv134.pdf)
 
-[^cornwall]: Also, the speakers were three or four orders of magnitude smaller than my [outgoing Cornwalls](IMG_9676.jpeg)
+[^marriage]: I'm still sad to have seen them go, but they outlived one of my dad's marriages followed by my own; keeping them wasn't worth the risk.
+[^rack]: I don't understand why receivers are still 19" wide; no normal person is racking their stereo!
 [^dip]: It might make sense to use a 8-pin DIP socket for these in combination with jumper(s) so the same board can handle a variety of line levels, though a 2-gang potentiometer wired as a [balanced attenuator](balanced-attenuator.jpg) would probably do just as well
 [^extra]: Or I decide to go for extra credit?
