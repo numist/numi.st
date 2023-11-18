@@ -233,7 +233,7 @@ blockquote {
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  border-radius: .25rem;
+  border-radius: .375rem;
   background-color: #f7f7f7;
   color: darken($grey-color, 20%);
   :last-child {
@@ -269,7 +269,7 @@ svg.graphviz {
   margin-bottom: calc($spacing-unit / 2);
   padding: 16px;
   overflow: auto;
-  border-radius: 6px;
+  border-radius: .5rem;
   border: 1px solid $grey-color-light;
   background-color: white;
   display: block;
@@ -324,7 +324,7 @@ pre {
   font-size: $small-font-size;
   font-variant-numeric: slashed-zero;
   line-height: 1.45;
-  border-radius: .5em;
+  border-radius: .5rem;
   
   >code {
     padding: 0;
