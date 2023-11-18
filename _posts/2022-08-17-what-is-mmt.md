@@ -13,12 +13,12 @@ It has two basic premises:
 
 More formally: _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._ If you're an American getting paid in baht, the IRS will ask for its cut in dollars[^expats].
 
-Within the United States, support for the dollar also extends to debts:
+Within the United States, demand-side support for the dollar also extends to debts:
 
 > United States coins and currency [including Federal Reserve notes and circulating notes of Federal Reserve Banks and national banks] are legal tender for all debts, public charges, taxes, and dues.
 > <cite>– §31 U.S.C. 5103</cite>
 
-In normal conditions this creates a virtuous cycle for the currency issuer; since everyone needs dollars to pay their debts and taxes, employees are likely to demand dollars from their employers, who in turn are pressured to accept dollars[^denom] for goods and services. People's faith that the dollar is useful is what gives it value beyond the baseline set by taxes, and its ubiquity earns that faith.
+In normal conditions this creates a virtuous cycle for the currency issuer; since everyone needs dollars to pay their taxes (and debts), employees are likely to demand dollars from their employers, who in turn are pressured to accept dollars[^denom] for goods and services. People's _faith_ that the dollar is useful is what gives it value beyond the baseline set by taxes, and its ubiquity earns that faith.
 
 This provides a concrete answer to why the dollar is more valuable to an American than a decentralized currency—a cryptocurrency's fundamental value can be calculated in terms of the payments for which it is the only option, which for most people is more or less nothing[^ransom]. Same reason the Euro isn't worth very much to most Americans when they're at home[^tradecurrency].
 
@@ -79,7 +79,7 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 > <cite>– John F. Kennedy</cite>
 
 [^expats]: This is true even for expats—the US is one of only five countries with citizenship-based taxation.
-[^denom]: Or dollar-denominated payment methods, like a credit card.
-[^ransom]: In 2012 cryptocurrency was a favoured method for buying hard drugs and paying ransoms, though a decade later it seems like [having an immutable public record of your crimes has turned out to be a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), leaving cryptocurrencies in competition with the dollar for solving forex problems like [remittances to countries whose economies are actively imploding](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/).
+[^denom]: Or other payment methods denominated in dollars.
+[^ransom]: In 2012 cryptocurrency was a favoured method for buying hard drugs and paying ransoms, though a decade later it turned out that [having an immutable public record of your crimes is a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), which mostly left forex problems like [remittances to countries whose economies are actively imploding](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/), which nowadays are best served by stablecoins, most of which are denominated in dollars. Oops.
 [^tradecurrency]: Though the dollar _is_ worth something to Europeans because of its role as an international trade currency. The [story of how that came to be](https://www.npr.org/transcripts/526051566) is pretty bonkers. Accordingly, this further props up the value of the US dollar.
 [^twopercent]: Much like the concept of [full employment](https://www.investopedia.com/terms/f/fullemployment.asp) including some non-zero percentage of unemployment, the "ideal" inflation value of 2% is simultaneously broadly accepted _and_ completely fabricated.
