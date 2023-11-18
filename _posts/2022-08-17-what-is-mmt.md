@@ -11,7 +11,7 @@ It has two basic premises:
 
 ## 1: People need money
 
-More formally: _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._
+More formally: _the fundamental value of a dollar is non-zero because the market for dollars is propped up on the demand side by taxes._ If you're an American getting paid in baht, the IRS will ask for its cut in dollars[^expats].
 
 Within the United States, support for the dollar also extends to debts:
 
@@ -78,6 +78,7 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 > As long as there is plenty, poverty is evil. Government belongs wherever evil needs an adversary and there are people in distress.
 > <cite>– John F. Kennedy</cite>
 
+[^expats]: This is true even for expats—the US is one of only five countries with citizenship-based taxation.
 [^denom]: Or dollar-denominated payment methods, like a credit card.
 [^ransom]: In 2012 cryptocurrency was a favoured method for buying hard drugs and paying ransoms, though a decade later it seems like [having an immutable public record of your crimes has turned out to be a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), leaving cryptocurrencies in competition with the dollar for solving forex problems like [remittances to countries whose economies are actively imploding](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/).
 [^tradecurrency]: Though the dollar _is_ worth something to Europeans because of its role as an international trade currency. The [story of how that came to be](https://www.npr.org/transcripts/526051566) is pretty bonkers. Accordingly, this further props up the value of the US dollar.
