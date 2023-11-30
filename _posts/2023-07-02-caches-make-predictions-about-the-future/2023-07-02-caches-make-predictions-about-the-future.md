@@ -43,7 +43,7 @@ Building on this, they propose an eviction policy called <abbr title="Static RRI
 
 ## In Software
 
-Of course caches are common in software, too—values can be costly to conjure, but the storage available for them is finite. Per-slot counters aren't practical to implement in code, but the same concept can be expressed by a ring buffer of doubly-linked lists: a value's index in the ring represents its <abbr title="Re-Reference Prediction Value">RRPV</abbr>, and is incremented by rotation. A ring with four indexes provides the same cache insertion points as a hardware implementation using 2-bit counters:
+Of course caches are common in software, too—values can be costly to conjure, but the storage available for them is finite. Per-slot counters aren't practical to implement in code, but the same concept can be expressed by a ring buffer of doubly-linked lists: a value's index in the ring represents its <abbr title="Re-Reference Prediction Value">RRPV</abbr>, and is incremented by rotation. A ring with four indexes provides the same cache insertion points as a hardware implementation using 2-bit counters[^short]:
 
 {% graphviz width="280pt" height="234pt" %}
 digraph RRIP {
@@ -122,3 +122,4 @@ CPUs depend on the performance of their cache hierarchies, which have steadily i
 [^bip]: Intentionally analogous to <abbr title="Bimodal Insertion Policy">BIP</abbr>, for anyone familiar.
 [^dueling]: Which Intel [_also_ had a hand in inventing](Qureshi - 2007 - Adaptive Insertion Policies for High Performance Caching.pdf)!
 [^lookup-time]: So `node(forKey:)` can run in sub-linear time.
+[^short]: _RRPV=1_ is not given a name by the paper, but _short_ seemed the obvious counterpart for _long_.
