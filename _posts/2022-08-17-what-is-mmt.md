@@ -24,7 +24,7 @@ This provides a concrete answer to why the dollar is more valuable to an America
 
 ## 2: Money is a tool, not an asset
 
-Dollars are created and destroyed by the government; the amount (and manner) in which they are distributed or recovered is the government's most important economic (and social) policy tool.
+Dollars are created and destroyed by the government; the amount (and manner) in which they are distributed or recovered is the government's most important economic (and social) policy tool[^political].
 
 A key point here is that _governments don't have bank accounts_. The central bank settles debts by creating money. Likewise, money collected by the government is magicked out of existence. A currency issuer's purpose is not to _have_ money, it's to manage the economy by _exerting control_ over money.
 
@@ -80,6 +80,7 @@ If you found this interesting, check out [this talk by Stephanie Kelton](https:/
 
 [^expats]: This is true even for expats—the US is one of only five countries with citizenship-based taxation.
 [^denom]: Or other payment methods denominated in dollars.
-[^ransom]: In 2012 cryptocurrency was a favoured method for buying hard drugs and paying ransoms, though a decade later it turned out that [having an immutable public record of your crimes is a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), which mostly left forex problems like [remittances to countries whose economies are actively imploding](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/), which nowadays are best served by stablecoins, most of which are denominated in dollars. Oops.
+[^ransom]: In 2012 cryptocurrency was favoured for buying hard drugs and paying ransoms, though a decade later it's turned out that [having an immutable public record of your crimes is a liability](https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business), which mostly leaves forex problems (like [remittances](https://www.reuters.com/technology/venezuelas-economy-regresses-crypto-fills-gaps-2021-06-22/)), which are mostly served by stablecoins, most of which are denominated in dollars. Oops.
 [^tradecurrency]: Though the dollar _is_ worth something to Europeans, because the delegates at the 1944 Bretton Woods Conference unwittingly agreed to change "[every reference to gold-convertible currency to U.S. dollar](https://www.npr.org/transcripts/526051566#:~:text=That%20night%2C%20they%20went%20through%20the%20draft%20IMF%20Articles%20of%20Agreement%2C%20ultimately%2096%20pages%2C%20and%20changed%20every%20reference%20to%20gold-convertible%20currency%20to%20U.S.%20dollar)".
+[^political]: Obviously currency is _also_ a [political tool](https://www.bitsaboutmoney.com/archive/bond-villain-compliance-strategy/#:~:text=Dollarization%20is%20very%20intentionally%20wielded%20like%20a%20club%20to%20accomplish%20the%20U.S.’s%20goals)"
 [^twopercent]: Much like the concept of [full employment](https://www.investopedia.com/terms/f/fullemployment.asp) including some non-zero percentage of unemployment, the "ideal" inflation value of 2% is simultaneously broadly accepted _and_ completely fabricated.
