@@ -15,7 +15,7 @@ Expecting to reuse the pomodoro firmware for a reminders board someday, I define
 0. One turn of the knob (24 steps) changes the time interval's order of magnitude
 0. The values are maximally round.
 
-The following Python code more or less generates the sequence I settled on:
+The following Python code more or less[^less] generates the sequence I settled on:
 
 ``` python
 def time_intervals():
@@ -44,3 +44,4 @@ def time_intervals():
 [^oven]: Also: less prone to errors! Our oven's timers will clock out an hour when set to 1:00, but if you punch in 60? After an hour it starts over and counts down _a second hour_. It will also accept 3:75 (I was trying to set the temperature)—what duration _that_ represents is anyone's guess.
 [^watch-defaults]: [Citation](https://discussions.apple.com/thread/7665078). My watch is littered with custom intervals, but they _also_ follow this distribution.
 [^dates]: Before someone links me to [Falsehoods programmers believe about time](https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time), these are time intervals that compromise precision for ergonomics! _Of course_ years aren't 31,556,908 seconds long, but if you're setting a timer for "a year" it's _close enough_. Days aren't 86,400 seconds long either, but good luck convincing your kids, pets, or plants otherwise!
+[^less]: For the interval of "`[91d...1y)` in steps of 'a month'" my actual firmware uses `(91+round(i*30.417))*day` to ensure that the timer expires around the same time of day, but the code I had for that was a bit messy for this post.

@@ -4,6 +4,12 @@ layout: page
 
 Gists are nice, but I prefer self-hosting since it allows me to tell a story alongside the code.
 
+Agnostic:
+
+* [More humane time intervals](/post/2023/non-linear-time/)
+
+By language/platform:
+
 * this unordered seed list will be replaced by toc as unordered list
 {:toc}
 
