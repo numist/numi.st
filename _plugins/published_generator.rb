@@ -12,13 +12,19 @@ module Jekyll
       published = []
 
       # Add posts with a published_at field to the published collection
-      site.posts.each do |post|
-        published << post if post.data['published_at']
+      site.posts.docs.each do |post|
+        if post.data['published_at']
+          post.data['published_at'] = DateTime.parse(post.data['published_at']) if post.data['published_at'].is_a?(String)
+          published << post
+        end
       end
 
       # Add pages with a published_at field to the published collection
       site.pages.each do |page|
-        published << page if page.data['published_at']
+        if page.data['published_at']
+          page.data['published_at'] = DateTime.parse(page.data['published_at']) if page.data['published_at'].is_a?(String)
+          published << page
+        end
       end
 
       # Assign the combined published collection to site.published
