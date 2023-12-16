@@ -25,7 +25,7 @@ def time_intervals():
         (1, 15),                       # to 15s in steps of 1s
         (5, minute+30),                # to 1m30s in steps of 5s
         (15, 5*minute),                # to 5m in steps of 15s
-        (60, 20*minute),               # to 20m in steps of 1m
+        (minute, 20*minute),           # to 20m in steps of 1m
         (5*minute, hour+30*minute),    # to 1h30m in steps of 5m
         (15*minute, 5*hour),           # to 5h in steps of 15m
         (hour, day),                   # to 24h in steps of 1h
