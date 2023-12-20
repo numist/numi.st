@@ -40,9 +40,10 @@ def time_intervals():
         yield (91+round(i*30.417))*day
 ```
 
-Since the human experience of time mixes so many bases, the increments selected for different intervals are round factors of the prevailing unit—seconds and minutes by 1, 5, and 15; hours by 4; days by 1 and 7. The last range is responsible for breaking a year into "months", which are an objectively terrible unit of measure. The average length of a month is 30.417 days, but a monthlong timer should expire the same time of day[^ish] it was set, so when incrementing by month the generator rounds to the nearest day. This results in a mix of increments (either 30 or 31 days) that naturally ends at 365 days.
+Since the human experience of time mixes so many bases, the increments used by different intervals are round factors of the prevailing unit—seconds and minutes count by 1, 5, and 15; hours by 1 and 4; days by 1, 7, and… "a month". Months are an _objectively terrible_ unit of measure, with an average length of 30.417 days. One would reasonably expect a monthlong timer to expire the same time of day[^ish] it was set, so when incrementing by month the generator rounds to the nearest day. This results in a mix of increments (either 30 or 31 days) that naturally ends at 365 days.[^year]
 
 [^oven]: Also: less prone to errors! Our oven's timers will clock out an hour when set to 1:00, but if you punch in 60? After an hour it starts over and counts down _a second hour_. It will also accept 3:75 (I was trying to set the temperature)—what duration _that_ represents is anyone's guess.
 [^watch-defaults]: [Citation](https://discussions.apple.com/thread/7665078). My watch is littered with custom intervals, but they _also_ follow this distribution.
 [^dates]: Before someone links me to [Falsehoods programmers believe about time](https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time), these are time intervals that compromise precision for ergonomics! _Of course_ years aren't 31,536,000 seconds long, but if you're setting a timer for "a year" it's _close enough_. Days aren't 86,400 seconds long either, but good luck convincing your kids, pets, or plants otherwise!
 [^ish]: _ish_. See previous footnote.
+[^year]: Which is a year. See previous footnote.
