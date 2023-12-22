@@ -7,9 +7,9 @@ layout: page
 
 # Electronics
 
-As a tinkerer, I like to fix things (or at least learn more about their insides) when they're broken. Like [reviving an electronic keyboard]({% post_url 2022-04-06-reviving-a-Yamaha-PSS-A50 %}) we got for our kid, or [replacing a worn contactor in my electric vehicle charger]({% post_url 2022-09-25-contactor-replacement %}).
+As a tinkerer, I like to fix things (or at least learn more about their insides) when they're broken. Like [reviving an electronic keyboard]({% post_url 2022-04-06-reviving-a-Yamaha-PSS-A50 %}) we got for our kid, or [replacing a worn contactor in my electric vehicle charger]({% post_url 2022-09-25-contactor-replacement %}). Currently I'm [trying to de-WiSA-fy our home theater system](https://xoxo.zone/@numist/110812673720717013).
 
-A long time ago [I turned a Brother SX-4000 into a teletype](http://numist.net/post/2010/project-typewriter.html). Later, [I forced it to print all tweets that mentioned @Square]({% post_url 2013-09-30-square-tweetwriter %}). Finally, I shipped it off to Quebec to live out its days as an art project.<!-- TODO -->
+A long time ago [I turned a Brother SX-4000 into a teletype](http://numist.net/post/2010/project-typewriter.html). Later, [I forced it to print all tweets that mentioned @Square]({% post_url 2013-09-30-square-tweetwriter %}). Finally, [I shipped it off to Québec for a new life as art](/post/2015/typewriter-as-art/).
 
 # Fiber Arts
 
