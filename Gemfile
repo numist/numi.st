@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 4.3.2"
+gem "jekyll", "~> 4.3.3"
 gem "posix-spawn", "~> 0.3.9"
 gem "ruby-graphviz"
 
