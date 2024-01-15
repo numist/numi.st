@@ -44,6 +44,7 @@ Since the human experience of time mixes so many bases, the increments used by d
 
 [^oven]: Also: less prone to errors! Our oven's timers will clock out an hour when set to 1:00, but if you punch in 60? After an hour it starts over and counts down _a second hour_. It will also accept 3:75 (I was trying to set the temperature)—what duration _that_ represents is anyone's guess.
 [^watch-defaults]: [Citation](https://discussions.apple.com/thread/7665078). My watch is littered with custom intervals, but they _also_ follow this distribution.
-[^dates]: Before someone links me to [Falsehoods programmers believe about time](https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time), these are time intervals that compromise precision for ergonomics! _Of course_ years aren't 31,536,000 seconds long, but if you're setting a timer for "a year" it's _close enough_. Days aren't 86,400 seconds long either, but good luck convincing your kids, pets, or plants otherwise!
+[^dates]: Before someone links me to [Falsehoods programmers believe about time](https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time), these are time intervals that compromise precision for ergonomics! _Of course_ years aren't 31,536,000 seconds long[^obv], but if you're setting a timer for "a year" it's _close enough_. Days aren't 86,400 seconds long either, but good luck convincing your kids, pets, or plants otherwise!
+[^obv]: _Obviously_, they're 31,556,908.8 seconds.
 [^ish]: _ish_. See previous footnote.
 [^year]: Which is a year. See previous footnote.

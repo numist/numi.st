@@ -1,12 +1,12 @@
 /**
  * Reset some basic elements
  */
-body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
-dl, dd, ol, ul, figure {
-  margin: 0;
-  padding: 0;
-}
+// body, h1, h2, h3, h4, h5, h6,
+// p, blockquote, pre,
+// dl, dd, ol, ul, figure {
+//   margin: 0;
+//   padding: 0;
+// }
 
 
 
@@ -84,9 +84,9 @@ figcaption {
 /**
  * Lists
  */
-ul, ol {
-  margin-left: $spacing-unit;
-}
+// ul, ol {
+//   margin-left: $spacing-unit;
+// }
 
 li {
   > ul,
@@ -295,7 +295,7 @@ tt {
   padding: .1em .2em;
   margin: 0;
   background-color: rgba(175,184,193,0.2);
-  border-radius: 0.2em;
+  border-radius: 0.3rem;
 }
 
 code br,
@@ -334,6 +334,16 @@ pre {
     background: transparent;
     border: 0;
   }
+}
+
+.list-group-item .highlight {
+  margin-bottom: 0;
+  background: transparent;
+}
+.list-group-item .highlight pre {
+  border-width: 0;
+  padding: 0;
+  border: 0;
 }
 
 pre code,
