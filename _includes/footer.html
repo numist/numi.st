@@ -5,10 +5,9 @@
 {%- endif -%}
 {%- assign mtime = page.modified_at | date: date_format -%}
 
-<footer class="site-footer h-card">
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col">
+<div class="footer container" style="margin: 0px; max-width: 98%;">
+  <div class="row">
+      <div class="col-md-10">
         {%- if ptime -%}
           Published
           <time class="dt-published" datetime="{{ page.published_at | date_to_xmlschema }}" itemprop="datePublished">{{ ptime }}</time>
@@ -24,15 +23,17 @@
         <br />
         Comments welcome by <a class="u-email" href="mailto:{{ site.email }}?subject=Comment on: {{ page.title }}">email</a>, corrections on <a href="https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/{{ page.path }}" target="_self">GitHub</a>
       </div>
-      <div class="footer-col text-end" style="float: right;">
+      <div class="col-md-2 text-md-end" style="line-height: 24px;">
         <a href="/license" title="Copyright/Licensing" style="text-decoration: none;">
           <svg class="cc-icon" alt="Creative Commons"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc' | relative_url }}"></use></svg>
           <svg class="cc-icon" alt="Attribution"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc-attribution' | relative_url }}"></use></svg>
-          <svg class="cc-icon" alt="Non-Commercial"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc-nc' | relative_url }}"></use></svg>
+          <svg class="cc-icon" alt="Non-Commercial"><use width="100%" height="100%" xlink:href="{{ '/assets/img/icons.svg#cc-nc' | relative_url }}"></use></svg></a><br />
+        <a style="background-image: none; padding: 0;" rel="me" title="GitHub" href="https://github.com/numist">
+          <svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#github' | relative_url }}"></use></svg>
         </a>
-        <br />
-        <a style="background-image: none; padding: 0;" rel="me" title="GitHub" href="https://github.com/numist"><svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#github' | relative_url }}"></use></svg></a> <a style="background-image: none; padding: 0;" rel="me" title="Mastodon" href="https://xoxo.zone/@numist"><svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#mastodon' | relative_url }}"></use></svg></a>
+        <a style="background-image: none; padding: 0;" rel="me" title="Mastodon" href="https://xoxo.zone/@numist">
+          <svg class="social-svg-icon"><use xlink:href="{{ '/assets/img/icons.svg#mastodon' | relative_url }}"></use></svg>
+        </a>
       </div>
-    </div>
   </div>
-</footer>
+</div>
