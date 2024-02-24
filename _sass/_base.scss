@@ -1,16 +1,4 @@
 /**
- * Reset some basic elements
- */
-body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
-dl, dd, ol, ul, figure {
-  margin: 0;
-  padding: 0;
-}
-
-
-
-/**
  * Basic styling
  */
 body {
@@ -32,16 +20,11 @@ body {
   font-variant-numeric: ordinal;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: $title-font-family;
-  font-weight: 300;
-}
-
 /**
  * Set `margin-bottom` to maintain vertical rhythm
  */
 h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
+p, blockquote, pre, .card,
 ul, ol, dl, figure,
 %vertical-rhythm {
   margin-bottom: calc($spacing-unit / 2);
@@ -56,52 +39,12 @@ main {
   display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */
 }
 
-
-
-/**
- * Images
- */
-img {
-  max-width: 100%;
-  vertical-align: middle;
-}
-
-
-
-/**
- * Figures
- */
-figure > img {
-  display: block;
-}
-
-figcaption {
-  font-size: $small-font-size;
-}
-
-
-
-/**
- * Lists
- */
-ul, ol {
-  margin-left: $spacing-unit;
-}
-
-li {
-  > ul,
-  > ol {
-    margin-bottom: 0;
-  }
-}
-
-
-
 /**
  * Headings
  */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: $base-font-weight;
+ h1, h2, h3, h4, h5, h6 {
+  font-family: $title-font-family;
+  font-weight: $base-font-weight; // 300
 }
 
 .anchorjs-link {
@@ -110,27 +53,6 @@ h1, h2, h3, h4, h5, h6 {
 *:hover > .anchorjs-link {
   margin-left: -1.375em !important;
 }
-
-/**
- * Wrapper
- */
-.wrapper {
-  max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
-  max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: $spacing-unit;
-  padding-left: $spacing-unit;
-  @extend %clearfix;
-
-  @include media-query($on-laptop) {
-    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
-    max-width:         calc(#{$content-width} - (#{$spacing-unit}));
-    padding-right: calc($spacing-unit / 2);
-    padding-left: calc($spacing-unit / 2);
-  }
-}
-
 
 
 /**
@@ -144,6 +66,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
+// TODO: test tables
 /**
  * Tables
  */
@@ -172,10 +95,6 @@ table {
     border: 1px solid $grey-color-light;
   }
 }
-
-
-
-/* Keepin' these: */
 
 
 /**
@@ -264,6 +183,11 @@ cite {
   font-style: italic;
 }
 
+
+/**
+ * Graphviz diagrams
+ */
+
 svg.graphviz {
   font-variant-numeric: tabular-nums slashed-zero;
   margin-bottom: calc($spacing-unit / 2);
@@ -277,17 +201,17 @@ svg.graphviz {
   margin-right: auto;
 }
 
+
 /**
  * Code formatting
  */
-code { font-family: 'Fira Code', monospace; }
-
 @supports (font-variation-settings: normal) {
   code { font-family: 'Fira Code VF', monospace; }
 }
 
 pre,
 code {
+  font-family: 'Fira Code', monospace;
   border: 1px solid $grey-color-light;
 }
 code,
@@ -295,7 +219,7 @@ tt {
   padding: .1em .2em;
   margin: 0;
   background-color: rgba(175,184,193,0.2);
-  border-radius: 0.2em;
+  border-radius: 0.25em;
 }
 
 code br,
@@ -336,6 +260,16 @@ pre {
   }
 }
 
+.list-group-item .highlight {
+  margin-bottom: 0;
+  background: transparent;
+}
+.list-group-item .highlight pre {
+  border-width: 0;
+  padding: 0;
+  border: 0;
+}
+
 pre code,
 pre tt {
   display: inline;
@@ -349,6 +283,7 @@ pre tt {
   border: 0;
 }
 
+
 /*
  * Footnotes
  */
@@ -358,6 +293,10 @@ pre tt {
   position: sticky;
   top: 0;
   color: $grey-color;
+
+  ol li {
+    padding-right: calc($spacing-unit/3);
+  }
 }
 
 .footnote {
@@ -382,6 +321,7 @@ pre tt {
     margin-bottom: 0;
   }
 }
+
 
 /*
  * Abbreviations
