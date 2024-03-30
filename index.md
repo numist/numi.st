@@ -4,7 +4,7 @@ title: WELCOME TO SCOTT'S HOME PAGE
 showtitle: false
 ---
 
-Hi! I'm [Scott Perry](about), and this is where I write things that I might want to refer to later[^social]. The page I share most often is [What is Modern Monetary Theory?]({% post_url 2022-08-17-what-is-mmt %}) Despite that, the most popular page is [`<!-- 🤦 -->`]({% post_url 2022-11-12-facepalm %}).
+Hi! I'm [Scott Perry](about), and this is where I write things that I might want to refer to later[^social]. The page I share most often is [What is Modern Monetary Theory?](/post/2022/what-is-mmt/) Despite that, the most popular page is [`<!-- 🤦 -->`](/post/2022/facepalm/).
 
 This site is made to be explored[^garden]; if you enjoy it, consider subscribing to the [feed](/feed.xml)—you can preview its contents [here](blog).
 
