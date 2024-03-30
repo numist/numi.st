@@ -78,7 +78,12 @@ module GitMetadata
         # The first date is the last time the file was modified.
         # The last date is the first time the file was modified.
         # We want to return the first and last dates.
-        [DateTime.parse(times.last), DateTime.parse(times.first)]
+        begin
+          [DateTime.parse(times.last), DateTime.parse(times.first)]
+        rescue Date::Error
+          Jekyll.logger.warn "Error: could not parse dates for #{path}: #{times}"
+          nil
+        end
       end
 
       def top_level_directory
