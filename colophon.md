@@ -22,7 +22,7 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * <abbr title="Abbreviation">Abbr</abbr>s use popovers, [similar to footnotes](https://github.com/numist/numi.st/blob/df03820b253b22937a6b7be033e247cc13311676/assets/js/abbr.js)
 * Labels on [external links](external-links)
 * [Repository](https://github.com/numist/highlight-css) of CSS files for syntax highlighting
-* Plugin for [generating graphviz SVGs from DOT]({% post_url 2023-03-17-graphviz %})
+* Plugin for [generating graphviz SVGs from DOT](/post/2023/graphviz/)
 * Plugin for making git metadata available to liquid (not quite ready to share yet)
 
 In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.

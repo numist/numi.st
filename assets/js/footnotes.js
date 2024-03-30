@@ -126,7 +126,7 @@ function alignFootnotes() {
             return;
         }
 
-        var referenceTop = $(this).offset().top - $('.container').offset().top;
+        var referenceTop = $(this).offset().top - $('main').offset().top;
         if (referenceTop < previousFootnoteBottom) {
             referenceTop = previousFootnoteBottom;
         }
@@ -139,9 +139,9 @@ function alignFootnotes() {
 
     if (footnotes.length === 0) { return; }
 
-    if ($(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true) > $('footer').offset().top) {
+    if ($(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true) > $('.footer').offset().top) {
         // Calculate the distance between the bottom of the last footnote and the top of the footer
-        var distance = $('footer').offset().top - ($('.container').offset().top + $(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true));
+        var distance = $('.footer').offset().top - ($('.container').offset().top + $(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true));
         console.log('Footnote ' + footnotes.last() + ' needs to be shifted ' + distance + 'px to clear the footer.');
 
         for (var index = footnotes.length - 1; index >= 1 && distance < 0; index--) {

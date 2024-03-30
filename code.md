@@ -21,16 +21,16 @@ By language/platform:
 
 ## Jekyll
 
-* A plugin providing support for [Graphviz]({% post_url 2023-03-17-graphviz %})
+* A plugin providing support for [Graphviz](/post/2023/graphviz/)
 * A [page](https://numist.github.io/highlight-css/) hosting various code highlighting themes[^highlight]
 
 ## Objective-C
 
-* [`defer` for Objective-C]({% post_url 2022-01-08-objc-defer %})
+* [`defer` for Objective-C](/post/2022/objc-defer/)
 
 ## Swift
 
-* [`.onLazyHover`]({% post_url 2022-12-10-onLazyHover %}), for when [`.onHover`](https://developer.apple.com/documentation/swiftui/view/onhover(perform:)) is too eager
+* [`.onLazyHover`](/post/2022/onLazyHover/), for when [`.onHover`](https://developer.apple.com/documentation/swiftui/view/onhover(perform:)) is too eager
 
 ## Web
 
