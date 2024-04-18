@@ -254,12 +254,25 @@ layout: page
 
         while (targetIndex < target.length && queryIndex < query.length) {
             if (target[targetIndex] === query[queryIndex]) {
-                if (targetIndexLastMatch >= 0
-                && targetIndexLastMatch !== targetIndex - 1
-                && target[targetIndex - 1] !== query[queryIndex - 1]
-                ) {
-                    // There is a gap between the last match and the current match
-                    matchGaps.push(targetIndex - targetIndexLastMatch - 1);
+                if (targetIndexLastMatch >= 0 && targetIndexLastMatch !== targetIndex - 1) {
+                    // `targetIndex - targetIndexLastMatch - 1` may overrepresent the gap between
+                    // matches due to greedy matching, so we search backwards to find the actual gap.
+                    // This correction may be overly charitable if the target has multiple instances
+                    // of the same character, but it's well worth the improvement in identifying
+                    // exact matches.
+                    //
+                    // For example, the query "note" should match "beamed sixteenth notes" with
+                    // no gaps, but without this correction there would be a gap of 4 ("th n").
+                    let gap = targetIndex - targetIndexLastMatch - 1;
+                    for (let i = targetIndex - 1; i > targetIndexLastMatch; i--) {
+                        if (target[i] === query[queryIndex - 1]) {
+                            gap = targetIndex - i - 1;
+                            break;
+                        }
+                    }
+                    if (gap > 0) {
+                        matchGaps.push(gap);
+                    }
                 }
                 queryIndex++; // Move to the next character in the query
                 targetIndexLastMatch = targetIndex; // Update the last match index
