@@ -2,7 +2,7 @@
 layout: page
 ---
 
-<input class="search">
+<input class="search" placeholder="Search symbols...">
 
 <div class="symbols">
 </div>
