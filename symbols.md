@@ -249,8 +249,8 @@ layout: page
         let haystackIndexLastMatch = -1; // Index to track position in haystack of the last match
         let matchGaps = []; // List to track gaps between matched characters
 
-        haystack = haystack.toLowerCase(); // Normalize haystack string
-        needle = needle.toLowerCase();   // Normalize needle string
+        haystack = haystack.toLowerCase();
+        needle = needle.toLowerCase();
 
         while (haystackIndex < haystack.length && needleIndex < needle.length) {
             if (haystack[haystackIndex] === needle[needleIndex]) {
@@ -274,10 +274,10 @@ layout: page
                         matchGaps.push(gap);
                     }
                 }
-                needleIndex++; // Move to the next character in the needle
-                haystackIndexLastMatch = haystackIndex; // Update the last match index
+                needleIndex++;
+                haystackIndexLastMatch = haystackIndex;
             }
-            haystackIndex++; // Always move to the next character in the haystack
+            haystackIndex++;
         }
 
         if (needleIndex !== needle.length) {
