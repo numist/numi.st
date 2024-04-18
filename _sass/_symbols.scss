@@ -1,0 +1,60 @@
+.symbols {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, 125px);
+}
+
+.symbol {
+    background-color: transparent;
+    border: 1.5px solid $grey-color-light;
+    border-radius: 0.25em;
+    padding: 1rem;
+    font-size: 6rem;
+    text-align: center;
+    line-height: 100%;
+    height: 125px;
+    width: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 200ms linear;
+}
+
+.symbol:hover {
+    background: #fff;
+}
+
+.symbol-clicked {
+    font-size: 2rem;
+    background-color: lighten($brand-color, 45%);
+    border: 1px dashed #555;
+    border-radius: 10%;
+    padding: 1rem;
+    aspect-ratio: 1;
+    text-align: center;
+    line-height: 100%;
+    min-height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 200ms linear;
+}
+
+input.search {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border: 1px solid $grey-color-light;
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); // Add the magnifying glass icon
+    background-repeat: no-repeat; // Prevent the icon from repeating
+    background-position: 16px center; // Position the icon 5px from the left edge of the input field and centered vertically
+    background-size: 16px 16px; // Set the size of the icon
+    padding-left: 40px; // Ensure there is enough padding to the left of the icon
+}
