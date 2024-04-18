@@ -62,4 +62,4 @@ function fuzzyMatch(haystack, needle) {
 }
 ```
 
-[^logs]: I wanted one gap of four characters between matches to score worse than four gaps of one character each.
+[^logs]: I wanted one gap of four characters between matches to score better than four gaps of one character each.
