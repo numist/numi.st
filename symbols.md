@@ -243,30 +243,30 @@ layout: page
         updateMatches();
     });
 
-    function fuzzyMatch(target, query) {
-        let targetIndex = 0; // Index to track position in target
-        let queryIndex = 0;  // Index to track position in query
-        let targetIndexLastMatch = -1; // Index to track position in target of the last match
+    function fuzzyMatch(haystack, needle) {
+        let haystackIndex = 0; // Index to track position in haystack
+        let needleIndex = 0;  // Index to track position in needle
+        let haystackIndexLastMatch = -1; // Index to track position in haystack of the last match
         let matchGaps = []; // List to track gaps between matched characters
 
-        target = target.toLowerCase(); // Normalize target string
-        query = query.toLowerCase();   // Normalize query string
+        haystack = haystack.toLowerCase(); // Normalize haystack string
+        needle = needle.toLowerCase();   // Normalize needle string
 
-        while (targetIndex < target.length && queryIndex < query.length) {
-            if (target[targetIndex] === query[queryIndex]) {
-                if (targetIndexLastMatch >= 0 && targetIndexLastMatch !== targetIndex - 1) {
-                    // `targetIndex - targetIndexLastMatch - 1` may overrepresent the gap between
+        while (haystackIndex < haystack.length && needleIndex < needle.length) {
+            if (haystack[haystackIndex] === needle[needleIndex]) {
+                if (haystackIndexLastMatch >= 0 && haystackIndexLastMatch !== haystackIndex - 1) {
+                    // `haystackIndex - haystackIndexLastMatch - 1` may overrepresent the gap between
                     // matches due to greedy matching, so we search backwards to find the actual gap.
-                    // This correction may be overly charitable if the target has multiple instances
+                    // This correction may be overly charitable if the haystack has multiple instances
                     // of the same character, but it's well worth the improvement in identifying
                     // exact matches.
                     //
-                    // For example, the query "note" should match "beamed sixteenth notes" with
+                    // For example, the needle "note" should match "beamed sixteenth notes" with
                     // no gaps, but without this correction there would be a gap of 4 ("th n").
-                    let gap = targetIndex - targetIndexLastMatch - 1;
-                    for (let i = targetIndex - 1; i > targetIndexLastMatch; i--) {
-                        if (target[i] === query[queryIndex - 1]) {
-                            gap = targetIndex - i - 1;
+                    let gap = haystackIndex - haystackIndexLastMatch - 1;
+                    for (let i = haystackIndex - 1; i > haystackIndexLastMatch; i--) {
+                        if (haystack[i] === needle[needleIndex - 1]) {
+                            gap = haystackIndex - i - 1;
                             break;
                         }
                     }
@@ -274,14 +274,14 @@ layout: page
                         matchGaps.push(gap);
                     }
                 }
-                queryIndex++; // Move to the next character in the query
-                targetIndexLastMatch = targetIndex; // Update the last match index
+                needleIndex++; // Move to the next character in the needle
+                haystackIndexLastMatch = haystackIndex; // Update the last match index
             }
-            targetIndex++; // Always move to the next character in the target
+            haystackIndex++; // Always move to the next character in the haystack
         }
 
-        if (queryIndex !== query.length) {
-            // No match: not all query characters were found in sequence
+        if (needleIndex !== needle.length) {
+            // No match: not all needle characters were found in sequence
             return 0;
         }
 
