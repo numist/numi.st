@@ -246,44 +246,67 @@ layout: page
     function fuzzyMatch(target, query) {
         let targetIndex = 0; // Index to track position in target
         let queryIndex = 0;  // Index to track position in query
+        let targetIndexLastMatch = -1; // Index to track position in target of the last match
+        let matchGaps = []; // List to track gaps between matched characters
 
         target = target.toLowerCase(); // Normalize target string
         query = query.toLowerCase();   // Normalize query string
 
         while (targetIndex < target.length && queryIndex < query.length) {
             if (target[targetIndex] === query[queryIndex]) {
-            queryIndex++; // Move to the next character in the query
+                if (targetIndexLastMatch >= 0
+                && targetIndexLastMatch !== targetIndex - 1
+                && target[targetIndex - 1] !== query[queryIndex - 1]
+                ) {
+                    // There is a gap between the last match and the current match
+                    matchGaps.push(targetIndex - targetIndexLastMatch - 1);
+                }
+                queryIndex++; // Move to the next character in the query
+                targetIndexLastMatch = targetIndex; // Update the last match index
             }
             targetIndex++; // Always move to the next character in the target
         }
 
-        return queryIndex === query.length; // Check if all query characters were found in sequence
+        if (queryIndex !== query.length) {
+            // No match: not all query characters were found in sequence
+            return 0;
+        }
+
+        // Map all gaps to their logarithm
+        matchGaps = matchGaps.map(gap => Math.log(gap + 1));
+        // Calculate the score as the inverse of the sum of the logarithms of the gaps
+        return 1 / matchGaps.reduce((a, b) => a + b, 0);
     }
 
     function updateMatches() {
         const inputElement = document.querySelector('.search');
         const parent = document.querySelector(".symbols");
+        let filteredSymbols = inputElement.value == "" ? symbols :
+            Object.fromEntries(Object.entries(symbols)
+                .map(([symbol, description]) => [symbol, { description, score: fuzzyMatch(description, inputElement.value) }])
+                .filter(([symbol, { score }]) => score !== 0)
+                .sort((a, b) => b[1].score - a[1].score)
+                .map(([symbol, { description }]) => [symbol, description]));
+
         parent.innerHTML = "";
-        for (const [symbol, description] of Object.entries(symbols)) {
-            if (inputElement.value == "" || fuzzyMatch(description, inputElement.value)) {
-                const elem = document.createElement("div");
-                elem.classList = "symbol";
-                elem.textContent = symbol;
-                elem.title = description;
-                elem.addEventListener("click", () => {
-                    const symbol = elem.textContent;
-                    navigator.clipboard.writeText(symbol);
+        for (const [symbol, description] of Object.entries(filteredSymbols)) {
+            const elem = document.createElement("div");
+            elem.classList = "symbol";
+            elem.textContent = symbol;
+            elem.title = description;
+            elem.addEventListener("click", () => {
+                const symbol = elem.textContent;
+                navigator.clipboard.writeText(symbol);
 
-                    elem.textContent = "Copied!";
-                    elem.classList = "symbol-clicked";
+                elem.textContent = "Copied!";
+                elem.classList = "symbol-clicked";
 
-                    setTimeout(() => {
-                        elem.textContent = symbol;
-                        elem.classList = "symbol";
-                    }, 1000);
-                });
-                parent.appendChild(elem);
-            }
+                setTimeout(() => {
+                    elem.textContent = symbol;
+                    elem.classList = "symbol";
+                }, 1000);
+            });
+            parent.appendChild(elem);
         }
     }
 
