@@ -293,13 +293,13 @@ layout: page
         const clearBtn = document.querySelector('.clear-btn');
 
         inputElement.addEventListener('input', () => {
-            clearBtn.style.display = inputElement.value ? 'block' : 'none';
             updateMatches();
+            clearBtn.style.display = inputElement.value ? 'block' : 'none';
         });
 
         clearBtn.addEventListener('click', () => {
-            clearBtn.style.display = 'none';
             inputElement.value = '';
+            clearBtn.style.display = 'none';
             updateMatches();
         });
 
