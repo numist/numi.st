@@ -58,3 +58,20 @@ input.search {
     background-size: 16px 16px;
     padding-left: 36px;
 }
+
+.search-container {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+
+.clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none; /* Hide the button by default */
+}

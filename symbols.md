@@ -2,7 +2,17 @@
 layout: page
 ---
 
-<input class="search" placeholder="Search symbols...">
+<div class="search-container">
+    <input class="search" placeholder="Search symbols...">
+    <button class="clear-btn" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="#808080"/>
+            <g transform="translate(12, 12)">
+                <path fill="#ffffff" stroke="#ffffff" d="M-3.3-3.3L3.3 3.3M3.3-3.3L-3.3 3.3"/>
+            </g>
+        </svg>
+    </button>
+</div>
 
 <div class="symbols">
 </div>
@@ -239,7 +249,18 @@ layout: page
 
     document.addEventListener("DOMContentLoaded", () => {
         const inputElement = document.querySelector('.search');
-        inputElement.addEventListener('input', function() { updateMatches(); });
+        const clearBtn = document.querySelector('.clear-btn');
+
+        inputElement.addEventListener('input', () => {
+            clearBtn.style.display = inputElement.value ? 'block' : 'none';
+            updateMatches();
+        });
+
+        clearBtn.addEventListener('click', () => {
+            clearBtn.style.display = 'none';
+            inputElement.value = '';
+            updateMatches();
+        });
 
         updateMatches();
     });
