@@ -1,6 +1,9 @@
 ---
 layout: page
+title: Symbol Picker
 ---
+
+The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a symbol to copy it to your clipboard.
 
 <div class="search-container">
     <input class="search" placeholder="Search symbols...">

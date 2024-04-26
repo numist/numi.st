@@ -8,10 +8,11 @@ Hi! I'm [Scott Perry](about), and this is where I write things that I might want
 
 This site is made to be explored[^garden]; if you enjoy it, consider subscribing to the [feed](/feed.xml)—you can preview its contents [here](blog).
 
-Broadly categorized, I enjoy writing about:
+By category, you'll find:
 
-* [ideas](ideas)
-* [stories](stories)
+* [online tools](tool) I've built to make my life easier
+* [ideas](ideas) I couldn't get out of my head
+* [stories](stories) of things that have happened to me (or that I did to myself)
 * [code](code) snippets, solutions to small problems I've had and ideas that have struck me
 * [projects](projects) throughout their lifecycle
 * [stuff I use](iusethis) that makes me happy (or not) in the hopes that it'll make you happy (or not?) too
