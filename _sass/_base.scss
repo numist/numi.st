@@ -296,6 +296,10 @@ pre tt {
 
   ol li {
     padding-right: calc($spacing-unit/3);
+
+    p {
+      margin-bottom: 1em;
+    }
   }
 }
 
