@@ -348,3 +348,22 @@ abbr[data-content] {
 ::placeholder {
   color: #6c757d;
 }
+
+.copyable.one-line {
+  .copy-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 16px;
+  }
+}
+
+
+.copyable {
+  position: relative;
+  .copy-button {
+    position: absolute;
+    top: .75em;
+    right: .75em;
+  }
+}
