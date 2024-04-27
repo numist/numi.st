@@ -173,6 +173,6 @@ Paste a URL and some text from the page into the fields below to generate a link
 
 * Each of `Prefix`, `Start` (`Text`), `End`, and `Suffix` will only match text within a single block-level element, but `Start`...`End` ranges can span multiple blocks.
 
-* You can specify multiple text fragments in a single URL by joining `text=…` parameters with `&`, like this: [`#:~:text=easy&text=a%20-,text%20fragment`](#:~:text=easy&text=a%20-,text%20fragment).
+* You can specify multiple text fragments in a single URL by joining `text=…` parameters with `&`, like this: [`#:~:text=generate%20a%20link,-1&text=that-,text`](#:~:text=generate%20a%20link,-1&text=that-,text).
 
 [^ref]: [_URL Fragment Text Directives_](https://wicg.github.io/scroll-to-text-fragment/). Draft Community Group Report, 13 December 2023

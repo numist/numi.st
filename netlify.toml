@@ -7,5 +7,4 @@ package = "netlify-plugin-checklinks"
     "main.css",
     "_site/feed.xml", # https://github.com/Munter/netlify-plugin-checklinks/issues/566
     "_site/post/2022/facepalm/index.html", # I think something about the title of this post is causing havoc?
-    "_site/tool/link-to-text-fragment/index.html", # False negatives caused by links to text fragments (filed Munter/netlify-plugin-checklinks#590)
   ]
