@@ -42,7 +42,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                 </div>
             </div>
             <div class="row">
-                <div id="link-container" class="form-group">
+                <div id="link-container" class="form-group copyable one-line">
                     <a id="link" href="#" class="form-control"></a>
                     <div id="link-placeholder" class="form-control placeholder-text"></div>
                 </div>
@@ -64,6 +64,7 @@ Paste a URL and some text from the page into the fields below to generate a link
 
         const linkElement = document.getElementById('link');
         const placeholderElement = document.getElementById('link-placeholder');
+        const copyButton = document.querySelector('.copyable button');
         if (url && start) {
             // Prefix, Start...End, Suffix (Prefix, End, and Suffix may be nil)
             let truncatedUrl = url;
@@ -91,6 +92,7 @@ Paste a URL and some text from the page into the fields below to generate a link
             linkElement.style.display = "block";
             linkElement.href = link;
             linkElement.textContent = link;
+            copyButton.disabled = false;
         } else {
             let missingFields = "";
             if (!url) {
@@ -103,6 +105,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                 missingFields += $('#start').attr("placeholder");
             }
             linkElement.style.display = "none";
+            copyButton.disabled = true;
             placeholderElement.style.display = "block";
             placeholderElement.textContent = "Fill required fields to generate link (missing: "+missingFields+")";
         }
