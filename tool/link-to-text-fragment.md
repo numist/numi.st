@@ -43,7 +43,7 @@ Paste a URL and some text from the page into the fields below to generate a link
             </div>
             <div class="row">
                 <div id="link-container" class="form-group copyable one-line">
-                    <a id="link" href="#" class="form-control"></a>
+                    <a id="link" href="#" class="form-control" target="_blank"></a>
                     <div id="link-placeholder" class="form-control placeholder-text"></div>
                 </div>
             </div>
