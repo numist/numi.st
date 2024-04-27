@@ -142,7 +142,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                 $('#generator-help').html('Links to the first block of text that is preceded by <code class="language-plaintext highlighter-rouge">Prefix</code>, starts with <code class="language-plaintext highlighter-rouge">Start</code>, ends with <code class="language-plaintext highlighter-rouge">End</code>, and is followed by <code class="language-plaintext highlighter-rouge">Suffix</code> at the given URL.');
                 textInputs.each(function() {
                     this.style.display = "block";
-                    this.classList = "form-group mb-3 col-md-3";
+                    this.classList = "form-group mb-3 col-md-6 col-xl-3";
                     if (this.id === "start-container") {
                         $('#start').attr("placeholder", "Start");
                     }
@@ -173,6 +173,6 @@ Paste a URL and some text from the page into the fields below to generate a link
 
 * Each of `Prefix`, `Start` (`Text`), `End`, and `Suffix` will only match text within a single block-level element, but `Start`...`End` ranges can span multiple blocks.
 
-* You can specify multiple text fragments in a single URL by joining `text=…` parameters with `&` like this: [`#:~:text=easy&text=a%20-,text%20fragment`](#:~:text=easy&text=a%20-,text%20fragment).
+* You can specify multiple text fragments in a single URL by joining `text=…` parameters with `&`, like this: [`#:~:text=easy&text=a%20-,text%20fragment`](#:~:text=easy&text=a%20-,text%20fragment).
 
 [^ref]: [_URL Fragment Text Directives_](https://wicg.github.io/scroll-to-text-fragment/). Draft Community Group Report, 13 December 2023
