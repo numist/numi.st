@@ -337,3 +337,14 @@ abbr[data-content] {
   -webkit-text-decoration-skip-ink: none;
   text-decoration-skip-ink: none;
 }
+
+
+/*
+ * Miscellaneous
+ */
+.placeholder-text {
+  color: #6c757d;
+}
+::placeholder {
+  color: #6c757d;
+}
