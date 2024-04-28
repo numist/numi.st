@@ -35,6 +35,7 @@ By language/platform:
 ## Web
 
 * Some [CSS and JS for decorating external links](/colophon/external-links) on a page.
+* Automatic [copy buttons](/code/copy-buttons/) for all elements with `class="copyable"`.
 
 [^highlight]: This site uses a variation of [tomorrow](https://numist.github.io/highlight-css/#other-tomorrow)
 [^juripakaste]: This links directly to someone else's blog; I have nothing constructive to add.
