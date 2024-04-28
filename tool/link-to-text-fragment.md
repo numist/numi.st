@@ -24,21 +24,21 @@ Paste a URL and some text from the page into the fields below to generate a link
         <form>
             <div class="row">
                 <div class="form-group mb-3">
-                    <input type="text" id="url" name="url" placeholder="URL (Optional)" oninput="updateLink()" class="form-control" />
+                    <input type="text" id="url" name="url" placeholder="URL" oninput="updateLink()" class="form-control" />
                 </div>
             </div>
             <div id="text-inputs" class="row">
                 <div id="prefix-container">
-                    <input type="text" id="prefix" name="text" placeholder="Prefix (Optional)" oninput="updateLink()" class="form-control" />
+                    <input type="text" id="prefix" name="text" placeholder="Prefix" oninput="updateLink()" class="form-control" />
                 </div>
                 <div id="start-container">
                     <input type="text" id="start" name="text" placeholder="" oninput="updateLink()" class="form-control" required />
                 </div>
                 <div id="end-container">
-                    <input type="text" id="end" name="text" placeholder="End (Optional)" oninput="updateLink()" class="form-control" />
+                    <input type="text" id="end" name="text" placeholder="End" oninput="updateLink()" class="form-control" />
                 </div>
                 <div id="suffix-container">
-                    <input type="text" id="suffix" name="text" placeholder="Suffix (Optional)" oninput="updateLink()" class="form-control" />
+                    <input type="text" id="suffix" name="text" placeholder="Suffix" oninput="updateLink()" class="form-control" />
                 </div>
             </div>
             <div class="row">
@@ -92,11 +92,10 @@ Paste a URL and some text from the page into the fields below to generate a link
             linkElement.textContent = link;
             copyButton.disabled = false;
         } else {
-            let missingFields = start ? "" : $('#start').attr("placeholder");
             linkElement.style.display = "none";
             copyButton.disabled = true;
             placeholderElement.style.display = "block";
-            placeholderElement.textContent = "Fill required fields to generate link (missing: "+missingFields+")";
+            placeholderElement.textContent = "Fill required field(s) to generate link";
         }
     }
 
@@ -112,7 +111,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                     if (this.id === "start-container") {
                         this.style.display = "block";
                         this.classList = "form-group mb-3";
-                        $('#start').attr("placeholder", "Text");
+                        $('#start').attr("placeholder", "Text (Required)");
                     } else {
                         this.style.display = "none";
                     }
@@ -121,7 +120,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                 $('#generator-help').html('Links to the first block of text that starts with <code class="language-plaintext highlighter-rouge">Start</code> and ends with <code class="language-plaintext highlighter-rouge">End</code> at the given URL.');
                 textInputs.each(function() {
                     if (this.id === "start-container") {
-                        $('#start').attr("placeholder", "Start");
+                        $('#start').attr("placeholder", "Start (Required)");
                         this.classList = "form-group mb-3 col-md-6";
                     } else if (this.id === "end-container") {
                         this.style.display = "block";
@@ -136,7 +135,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                     this.style.display = "block";
                     this.classList = "form-group mb-3 col-md-6 col-xl-3";
                     if (this.id === "start-container") {
-                        $('#start').attr("placeholder", "Start");
+                        $('#start').attr("placeholder", "Start (Required)");
                     }
                 });
             } else {
