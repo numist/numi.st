@@ -3,9 +3,23 @@ function copyAction(event) {
 
     const clone = event.target.parentElement.cloneNode(true);
     clone.querySelector('.copy-button').remove();
-    clone.querySelectorAll('[style*="display: none"]').forEach(function(element) {
-        element.remove();
+
+    // The clone and its elements are not styled by the browser
+    // unless they are part of the document. Adding and removing
+    // them synchronously should avoid them getting picked up by
+    // the browser's rendering cycle.
+    document.body.appendChild(clone);
+    Array.from(clone.querySelectorAll('*')).forEach(function(element) {
+        const style = window.getComputedStyle(element);
+        if (
+            style.display === 'none' ||
+            style.visibility === 'hidden' ||
+            style.opacity === '0'
+        ) {
+            element.remove();
+        }
     });
+    document.body.removeChild(clone);
 
     navigator.clipboard.writeText(clone.textContent.trim())
         .catch(err => console.error('Failed to copy content: ', err));
