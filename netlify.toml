@@ -4,8 +4,8 @@ package = "netlify-plugin-checklinks"
   [plugins.inputs]
   # checkExternal = true
   skipPatterns = [
-    "main.css",
-    "_site/feed.xml", # https://github.com/Munter/netlify-plugin-checklinks/issues/566
+    # "main.css",
+    "_site/feed.xml", # Munter/netlify-plugin-checklinks#566
     "_site/post/2022/facepalm/index.html", # I think something about the title of this post is causing havoc?
-    "_site/tool/link-to-text-fragment/index.html", # False negatives caused by links to text fragments (filed Munter/netlify-plugin-checklinks#590)
+    "fragment-check", # Munter/netlify-plugin-checklinks#590
   ]
