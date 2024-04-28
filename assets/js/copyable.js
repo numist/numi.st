@@ -22,26 +22,30 @@ function copyAction(event) {
     document.body.removeChild(clone);
 
     navigator.clipboard.writeText(clone.textContent.trim())
+        .then(() => {
+            event.target.textContent = "Copied!";
+            event.target.classList.remove("btn-outline-secondary");
+            event.target.classList.add("btn-success");
+            setTimeout(() => {
+                event.target.textContent = "Copy";
+                event.target.classList.remove("btn-success");
+                event.target.classList.add("btn-outline-secondary");
+            }, 2000);
+        })
         .catch(err => console.error('Failed to copy content: ', err));
-
-    $(event.target).popover('show');
-    setTimeout(() => $(event.target).popover('hide'), 800);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Make code blocks copyable
     $('div.highlight').each(function() {
         this.classList.add("copyable");
     });
+    // Add copy buttons to copyable elements
     $('.copyable').each(function() {
         let copyButton = document.createElement("button");
         copyButton.textContent = "Copy";
-        copyButton.classList.add("btn", "btn-secondary", "btn-sm", "copy-button");
+        copyButton.classList.add("btn", "btn-outline-secondary", "btn-sm", "copy-button");
         copyButton.onclick = copyAction;
-        $(copyButton).popover({
-            content: "Copied",
-            boundary: "viewport",
-            trigger: "manual"
-        });
         this.appendChild(copyButton);
     });
 });

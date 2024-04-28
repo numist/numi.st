@@ -349,30 +349,40 @@ abbr[data-content] {
   color: #6c757d;
 }
 
-.copyable.form-group {
-  display: flex; /* Establishes a flex container */
-  align-items: center; /* Aligns items vertically in the center */
-
-  .form-control {
-    width: auto;
-    flex-grow: 1; /* Allows the link to expand and fill the available space */
-    // white-space: nowrap; /* Ensures text stays in a single line and overflows with ellipsis if needed */
-    // overflow: hidden; /* Hide overflowed content */
-    // text-overflow: ellipsis; /* Add ellipsis when text overflows */
-  }
-
-  .copy-button {
-    position: static;
-    flex-shrink: 0;
-    margin-left: 10px;
-  }
-}
-
+/*
+ * Copyable content
+ */
 .copyable {
   position: relative;
   .copy-button {
     position: absolute;
     top: .75em;
     right: .75em;
+  }
+}
+
+// Code blocks only show button on hover
+.highlight .copy-button {
+  transition: visibility 0s, opacity 0.2s linear;
+  opacity: 0;
+}
+.highlight:hover .copy-button {
+  opacity: 1;
+}
+
+// Used by tool/link-to-text-fragment.md
+.copyable.form-group {
+  display: flex;
+  align-items: center; /* Vertically */
+
+  .form-control {
+    width: auto; /* Override Bootstrap's `width: 100%` on .form-control */
+    flex-grow: 1; /* Allows the element to expand and fill the available space */
+  }
+
+  .copy-button {
+    position: static;
+    flex-shrink: 0;
+    margin-left: 10px;
   }
 }
