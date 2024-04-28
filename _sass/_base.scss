@@ -349,15 +349,24 @@ abbr[data-content] {
   color: #6c757d;
 }
 
-.copyable.one-line {
+.copyable.form-group {
+  display: flex; /* Establishes a flex container */
+  align-items: center; /* Aligns items vertically in the center */
+
+  .form-control {
+    width: auto;
+    flex-grow: 1; /* Allows the link to expand and fill the available space */
+    // white-space: nowrap; /* Ensures text stays in a single line and overflows with ellipsis if needed */
+    // overflow: hidden; /* Hide overflowed content */
+    // text-overflow: ellipsis; /* Add ellipsis when text overflows */
+  }
+
   .copy-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 16px;
+    position: static;
+    flex-shrink: 0;
+    margin-left: 10px;
   }
 }
-
 
 .copyable {
   position: relative;
