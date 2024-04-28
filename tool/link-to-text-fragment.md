@@ -24,7 +24,7 @@ Paste a URL and some text from the page into the fields below to generate a link
         <form>
             <div class="row">
                 <div class="form-group mb-3">
-                    <input type="text" id="url" name="url" placeholder="https://example.com/page" oninput="updateLink()" class="form-control" required />
+                    <input type="text" id="url" name="url" placeholder="URL (Optional)" oninput="updateLink()" class="form-control" />
                 </div>
             </div>
             <div id="text-inputs" class="row">
@@ -65,13 +65,7 @@ Paste a URL and some text from the page into the fields below to generate a link
         const linkElement = document.getElementById('link');
         const placeholderElement = document.getElementById('link-placeholder');
         const copyButton = document.querySelector('.copyable button');
-        if (url && start) {
-            // Prefix, Start...End, Suffix (Prefix, End, and Suffix may be nil)
-            let truncatedUrl = url;
-            if (url.includes("#")) {
-                truncatedUrl = url.split("#")[0];
-            }
-
+        if (start) {
             const encodedStart = encodeURIComponent(start);
             let link = `${encodedStart}`;
             if (end && selectedTab !== "simple-tab") {
@@ -86,7 +80,11 @@ Paste a URL and some text from the page into the fields below to generate a link
                 const encodedSuffix = encodeURIComponent(suffix);
                 link = `${link},-${encodedSuffix}`;
             }
-            link = `${truncatedUrl}#:~:text=${link}`;
+            link = `#:~:text=${link}`;
+
+            if (url) {
+                link = `${url.split("#")[0]}${link}`;
+            }
 
             placeholderElement.style.display = "none";
             linkElement.style.display = "block";
@@ -94,16 +92,7 @@ Paste a URL and some text from the page into the fields below to generate a link
             linkElement.textContent = link;
             copyButton.disabled = false;
         } else {
-            let missingFields = "";
-            if (!url) {
-                missingFields += "URL";
-            }
-            if (!start) {
-                if (missingFields) {
-                    missingFields += ", ";
-                }
-                missingFields += $('#start').attr("placeholder");
-            }
+            let missingFields = start ? "" : $('#start').attr("placeholder");
             linkElement.style.display = "none";
             copyButton.disabled = true;
             placeholderElement.style.display = "block";
