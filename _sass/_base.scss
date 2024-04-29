@@ -158,11 +158,15 @@ blockquote {
   :last-child {
       margin-bottom: 0;
   }
+  :first-child {
+      margin-top: 0;
+  }
   border-left: .25rem solid lighten(blue, 40%);
 }
 
 blockquote blockquote {
   border-left-color: lighten(green, 40%);
+  padding: 0rem 1rem;
 }
 
 blockquote blockquote blockquote {
