@@ -21,5 +21,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
 //     placement: "left",
 //     icon: "¶"
 //   };
-//   anchors.add("div.post-content > p");  
+//   anchors.add("div.post-content > p");
 // });
