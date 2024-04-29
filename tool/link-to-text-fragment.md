@@ -106,7 +106,7 @@ Paste a URL and some text from the page into the fields below to generate a link
 
             let textInputs = $('#text-inputs div');
             if (tabElement.id === "simple-tab") {
-                $('#generator-help').html('Links to the first match of <code class="language-plaintext highlighter-rouge">Text</code> at the given URL.');
+                $('#generator-help').html('Link to the first match of <code class="language-plaintext highlighter-rouge">Text</code> at the given URL.');
                 textInputs.each(function() {
                     if (this.id === "start-container") {
                         this.style.display = "block";
@@ -117,7 +117,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                     }
                 });
             } else if (tabElement.id === "start-end-tab") {
-                $('#generator-help').html('Links to the first block of text that starts with <code class="language-plaintext highlighter-rouge">Start</code> and ends with <code class="language-plaintext highlighter-rouge">End</code> at the given URL.');
+                $('#generator-help').html('Link to the first block of text that starts with <code class="language-plaintext highlighter-rouge">Start</code> and ends with <code class="language-plaintext highlighter-rouge">End</code> at the given URL.');
                 textInputs.each(function() {
                     if (this.id === "start-container") {
                         $('#start').attr("placeholder", "Start (Required)");
@@ -130,7 +130,7 @@ Paste a URL and some text from the page into the fields below to generate a link
                     }
                 });
             } else if (tabElement.id === "advanced-tab") {
-                $('#generator-help').html('Links to the first block of text that is preceded by <code class="language-plaintext highlighter-rouge">Prefix</code>, starts with <code class="language-plaintext highlighter-rouge">Start</code>, ends with <code class="language-plaintext highlighter-rouge">End</code>, and is followed by <code class="language-plaintext highlighter-rouge">Suffix</code> at the given URL.');
+                $('#generator-help').html('Link to the first block of text that is preceded by <code class="language-plaintext highlighter-rouge">Prefix</code>, starts with <code class="language-plaintext highlighter-rouge">Start</code>, ends with <code class="language-plaintext highlighter-rouge">End</code>, and is followed by <code class="language-plaintext highlighter-rouge">Suffix</code> at the given URL.');
                 textInputs.each(function() {
                     this.style.display = "block";
                     this.classList = "form-group mb-3 col-md-6 col-xl-3";
