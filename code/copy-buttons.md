@@ -15,10 +15,10 @@ When the DOM is loaded, code blocks are made copyable and then each copyable ele
 
 ``` javascript
 document.addEventListener("DOMContentLoaded", function() {
-    $('div.highlight').each(function() {
+    $("div.highlight").each(function() {
         this.classList.add("copyable");
     });
-    $('.copyable').each(function() {
+    $(".copyable").each(function() {
         let copyButton = document.createElement("button");
         copyButton.textContent = "Copy";
         copyButton.classList.add("copy-button");
@@ -35,15 +35,15 @@ function copyAction(event) {
     event.preventDefault();
 
     const clone = event.target.parentElement.cloneNode(true);
-    clone.querySelector('.copy-button').remove();
+    clone.querySelector(".copy-button").remove();
 
     document.body.appendChild(clone);
-    Array.from(clone.querySelectorAll('*')).forEach(function(element) {
+    Array.from(clone.querySelectorAll("*")).forEach(function(element) {
         const style = window.getComputedStyle(element);
         if (
-            style.display === 'none' ||
-            style.visibility === 'hidden' ||
-            style.opacity === '0'
+            style.display === "none" ||
+            style.visibility === "hidden" ||
+            style.opacity === "0"
         ) {
             element.remove();
         }
@@ -57,7 +57,7 @@ function copyAction(event) {
                 event.target.textContent = "Copy";
             }, 2000);
         })
-        .catch(err => console.error('Failed to copy content: ', err));
+        .catch(err => console.error(`Failed to copy content: ${err}`));
 }
 ```
 
