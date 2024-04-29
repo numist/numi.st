@@ -33,17 +33,17 @@ digraph LRU {
 
 On a "miss", a node is evicted from the <span style="font-family: 'Museo';">tail</span> of the list and the new value is inserted at the <span style="font-family: 'Museo';">head</span>. On a "hit", the reused value's node is moved to the <span style="font-family: 'Museo';">head</span>. Unused values drift toward the <span style="font-family: 'Museo';">tail</span>, "aged out" by the insertion (or movement) of newer (hotter) values to the <span style="font-family: 'Museo';">head</span>.
 
-Conceptually, the two ends of this list represent _re-reference predictions_: values near the <span style="font-family: 'Museo';">head</span> are expected to be reused in the _near-immediate_[^parlance] future, while values at the <span style="font-family: 'Museo';">tail</span> will probably never be seen again.
+Conceptually, the two ends of this list represent _re-reference interval predictions_[^abbr]: values near the <span style="font-family: 'Museo';">head</span> are expected to be reused in the _near-immediate_[^parlance] future, while values at the <span style="font-family: 'Museo';">tail</span> will probably never be needed again.
 
 ## Supporting Better Predictions
 
-With this background, the paper asks: what if caches supported more nuanced re-reference interval predictions (RRIP)? It conceptualizes intermediate predictions as inserting a value somewhere in the middle of the list, and those counters are how they implement it in hardware[^middle].
+With this background, the paper asks: what if caches supported more nuanced re-reference interval predictions? It conceptualizes intermediate predictions as inserting a value somewhere in the middle of the list, and those counters are how they implement it in hardware[^middle].
 
 Building on this, they propose an eviction policy called <abbr title="Static RRIP">SRRIP</abbr> that bets values are not likely to be re-referenced unless they have been hit in the past, accomplishing this by inserting new values near (but not at!) the <span style="font-family: 'Museo';">tail</span> of the list and promoting them towards[^priority] the <span style="font-family: 'Museo';">head</span> when they're hit. Another policy, called <abbr title="Bimodal RRIP">BRRIP</abbr>[^bip], provides thrash resistance by assuming cold values will be reused in the _distant_ future, with an occasional _long_ prediction thrown in. Finally, <abbr title="Dynamic  RRIP">DRRIP</abbr> pits the two against each other using set dueling[^dueling].
 
 ## In Software
 
-Of course caches are common in software, too—values can be costly to conjure, but the storage available for them is finite. Per-slot counters aren't practical to implement in code, but the same concept can be expressed by a ring buffer of doubly-linked lists: a value's index in the ring represents its <abbr title="Re-Reference Prediction Value">RRPV</abbr>, and is incremented by rotation. A ring with four indexes provides the same cache insertion points as a hardware implementation using 2-bit counters[^short]:
+Of course caches are common in software, too—values can be costly to conjure, but the storage available for them is finite. Per-slot counters aren't practical to implement in code, but the same concept can be expressed by a ring buffer of doubly-linked lists: a value's index in the ring represents its <abbr title="Re-Reference Prediction Value">RRPV</abbr>, and is incremented by rotation when the eviction process finds an empty _distant_ list. A ring with four indexes provides the same cache insertion points as a hardware implementation using 2-bit counters[^short]:
 
 {% graphviz width="280pt" height="234pt" %}
 digraph RRIP {
@@ -111,11 +111,12 @@ Also note that a _distant_ re-reference prediction inserts entries into the drai
 
 ## In Short
 
-CPUs depend on the performance of their cache hierarchies, which have steadily improved as engineers have discovered ways to better predict the future. Advancements like set dueling are important for general purpose caches, but RRIPs are unique in that they offer flexibility that can also be exploited by tasks with domain-specific knowledge. I haven't seen many examples of people actually taking advantage of this, presumably because most such tasks exist in the realm of software. Luckily, it's fairly straightforward to implement a RRIP cache in code!
+CPUs depend on the performance of their cache hierarchies, which have steadily improved as engineers have discovered increasingly accurate heuristics for predicting reuse. Advancements like set dueling are important for general purpose caches, but RRIPs are unique in that they offer flexibility that can also be exploited by tasks with domain-specific knowledge. I haven't seen many examples of people actually taking advantage of this, presumably because most such tasks exist in the realm of software. Luckily, it's fairly straightforward to implement a RRIP cache in code!
 
 
 [^141]: I'm being glib here, there _are_ limits. In college two friends and I managed to design an application-specific CPU that included an instruction so complex that Xilinx reported the theoretical maximum clock speed would have been below 5MHz.
 [^bits]: Well, they're probably using 3 or 4 bits.
+[^abbr]: This is the "RRIP" acronym you'll be seeing later.
 [^parlance]: In the parlance of the paper.
 [^middle]: Specifically, an _m_-bit counter provides _2<sup>m</sup>_ distinct insertion points into the cache.
 [^priority]: SRRIP has two distinct behaviours here, _Hit Priority_ (which promotes hits all the way to the <span style="font-family: 'Museo';">head</span>) and _Frequency Priority_ (which decrements the <abbr title="Re-Reference Prediction Value">RRPV</abbr>). These behaviours are analogous to LRU and <abbr title="Least Frequently Used">LFU</abbr>, respectively.
