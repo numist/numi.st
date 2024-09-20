@@ -9,7 +9,7 @@ I like to do a bit of woodworking in my spare time, a craft with a history that 
 
 In the 1600s, a chair would have been made with handsaws, planes, chisels, brace and bit, drawknife, and spokeshave. Today the same chair could be built in a fraction of the time using a lathe, power drill, orbital sander, and the "big four"[^bigfour]—all "power" tools. Harnessing a power source to operate woodworking tools was so revolutionary that it upended the economics of the industry; suddenly the wood itself dominated the cost of producing furniture, leading to further innovations to reduce material costs, like particle board.
 
-I write software in my work time, a craft with a history that arguably goes back to punch card looms but is more practically dated to the development of assembly language in 1947. Compared to woodworking, software is in its infancy. And if you work in software today, you use a text editor to write source code by hand, using terms that map fairly straightforwardly to machine code. You are a "traditional developer" in a craft that is witnessing the arrival of its first power tools.
+I write software in my work time, a craft with a history that arguably goes back to punch card looms but is more practically dated to the development of assembly language in 1947. Compared to woodworking, software is in its infancy. And if you work in software today, you use a text editor to write source code by hand, using terms that map _fairly_ straightforwardly[^straightforward] to machine code. You are a "traditional developer" in a craft that is witnessing the arrival of its first power tools.
 
 Yes, this is a post about AI. Please bear with me.
 
@@ -37,6 +37,7 @@ And once you've taken advantage of your power tools' strengths you can put them 
 
 [^tradition]: Except for milling, which is _extraordinarily_ labour-intensive.
 [^bigfour]: The four power tools required for milling: band saw, jointer, planer, and table saw.
+[^straightforward]: Since I already footnoted an exception for milling I may as well compromise my metaphor by excusing compilers, for the same reason.
 [^bayes]: We were focused on Bayesian neural networks, which [has been making a comeback](https://brandinho.github.io/bayesian-perspective-q-learning/) as a remedy for model overconfidence.
 [^gpu]: When used for FP16-heavy workloads common to neural nets the GeForce 4 Ti was good for around 30 GFLOPS while an A100 is capable of 312 TFLOPS, though keen readers might also note that the Pentium 4 was good for around 100 GFLOPS. We weren't really using GPUs for these workloads twenty years ago.
 [^engineered]: In its defense, engineered wood has significant practical advantages over solid wood. It's stable, consistent, and can be stronger too. But it's also _ugly_ in a way that screams "I'm cheap".
