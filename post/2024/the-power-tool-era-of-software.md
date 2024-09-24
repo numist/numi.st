@@ -11,7 +11,7 @@ In the 1600s, a chair would have been made with handsaws, planes, chisels, brace
 
 I write software in my work time, a craft with a history that arguably goes back to punch card looms but is more practically dated to the development of assembly language in 1947. Compared to woodworking, software is in its infancy. And if you work in software today, you use a text editor to write source code by hand, using terms that map _fairly_ straightforwardly[^straightforward] to machine code. You are a "traditional developer" in a craft that is witnessing the arrival of its first power tools.
 
-Yes, this is a post about AI. Please bear with me.
+Yes, this is a post about AI. Please bear with me[^bear].
 
 ## Some History
 
@@ -45,3 +45,4 @@ And once you've taken advantage of your power tools' strengths you can put them 
 [^engineered]: In its defense, engineered wood has significant practical advantages over solid wood. It's stable, consistent, and can be stronger too. But it's also _ugly_ in a way that screams "I'm cheap".
 [^marc]: As far as I know this can largely be attributed to Marc Spagnuolo and his book [Hybrid Woodworking](https://thewoodwhisperer.com/product/hybrid-woodworking-book/).
 [^ruby]: I'm lucky enough to be friends with some extraordinarily talented Ruby developers and I would have been _mortified_ to ask them some of the things that I typed without a second thought into GPT-4, which always answered (usually correctly!) without any judgement.
+[^bear]: Or check out [On Steam Power](/post/2024/on-steam-power/) first.
