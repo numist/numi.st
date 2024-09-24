@@ -5,7 +5,7 @@ description: "And why doomerism gets us nowhere."
 published_at: Tue Sep 24 00:35:36 PDT 2024
 ---
 
-Surprising nobody, one topic of conversation following my [post about power tools](/post/2024/the-power-tool-era-of-software/) was the environmental impacts of generative models. There was a lot of content that didn't make the cut because it was irrelevant to the thesis, but there _is_ a valid (and obvious) follow-up question of "are these new tools worth the cost?" Running these models is incredibly expensive, with energy and water consumption numbers that boggle the mind—datacenters belonging to Google, Microsoft, and Meta consumed approximately 2.2×10⁹ m³ of water in 2022[^ai-water]!
+Surprising nobody, one topic of conversation following my [post about power tools](/post/2024/the-power-tool-era-of-software/) was the environmental impact of generative models, and "are these new tools worth the cost?" is an entirely valid follow-up question. Running these models is incredibly expensive, with energy and water consumption numbers that boggle the mind—datacenters belonging to Google, Microsoft, and Meta consumed approximately 2.2×10⁹ m³ of water in 2022[^ai-water]!
 
 That's 0.5% of the 444.4×10⁹ m³ consumed by the United States alone in 2020[^global-water], but people _need_ food and _don't need_, as one person put it, "bullshit factories". Which is true! I don't need "spicy autocomplete" to write code any more than I need a router to cut a rabbet, but both are useful and neither are going away. To continue with the metaphors: these new power tools are themselves in their steam power era.
 
