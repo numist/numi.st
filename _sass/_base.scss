@@ -155,13 +155,13 @@ blockquote {
   border-radius: .375rem;
   background-color: #f7f7f7;
   color: darken($grey-color, 20%);
+  border-left: .25rem solid lighten(blue, 40%);
   :last-child {
       margin-bottom: 0;
   }
   :first-child {
       margin-top: 0;
   }
-  border-left: .25rem solid lighten(blue, 40%);
 }
 
 blockquote blockquote {
