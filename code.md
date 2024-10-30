@@ -2,7 +2,7 @@
 layout: page
 ---
 
-Gists are nice, but I prefer self-hosting since it allows me to tell a story alongside the code.
+Gists are nice, but I prefer self-hosting since it allows me to tell a story alongside the code. Also, this allows me to use a real git repo.
 
 Agnostic:
 
