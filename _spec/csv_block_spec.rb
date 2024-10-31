@@ -11,7 +11,7 @@ describe Jekyll::CSVBlock do
                      .render({})
   end
   
-  it 'renders a basic CSV table with headers' do
+  it 'renders a table with headers' do
     csv_content = "Name, Age, Occupation\nAlice, 30, Engineer\nBob, 25, Designer"
     output = render_csv_block(csv_content, "header:true")
 
@@ -28,9 +28,21 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>Alice</td>')
   end
 
+  it 'renders tables with headers by default' do
+    csv_content = "Alice, 30, Engineer\nBob, 25, Designer"
+    output = render_csv_block(csv_content)
+
+    csv_content = "Name, Age, Occupation\nAlice, 30, Engineer\nBob, 25, Designer"
+    output = render_csv_block(csv_content)
+
+    expect(output).to include('<table>')
+    expect(output).to include('<th>Name</th>')
+    expect(output).to include('<td>Alice</td>')
+  end
+
   it 'supports tab-separated values' do
     csv_content = "Name\tAge\tOccupation\nAlice\t30\tEngineer\nBob\t25\tDesigner"
-    output = render_csv_block(csv_content, "header:true separator:tab")
+    output = render_csv_block(csv_content, "separator:tab")
 
     expect(output).to include('<th>Name</th>')
     expect(output).to include('<td>30</td>')
@@ -48,5 +60,35 @@ describe Jekyll::CSVBlock do
     output = render_csv_block(csv_content, "header:true")
 
     expect(output).to include('<td>250</td>') # 100 + 150 in Total column
+  end
+
+  it 'detects and reports circular dependencies' do
+    csv_content = "= B1, = A1"
+    output = render_csv_block(csv_content, "header:false")
+    expect(output).to include("Error: Circular Reference at cell [0, 1]")
+  end
+
+  it 'detects and reports circular dependencies with headers' do
+    csv_content = "A, B\n= B2, = A2"
+    output = render_csv_block(csv_content, "header:true")
+    expect(output).to include("Error: Circular Reference at cell [0, 1]")
+  end
+
+  it 'reports out-of-bounds references' do
+    csv_content = "A, B\n= B3, 20"
+    output = render_csv_block(csv_content, "header:true")
+    expect(output).to include("Error: Out of Bounds reference B3 at row 2, col 1")
+  end
+
+  it 'reports invalid column references' do
+    csv_content = "A, B\n= C1, 20"
+    output = render_csv_block(csv_content, "header:true")
+    expect(output).to include("Error: Invalid Column Reference C")
+  end
+
+  it 'reports formula syntax errors' do
+    csv_content = "A, B\n= 5 + *, 20"
+    output = render_csv_block(csv_content, "header:true")
+    expect(output).to include("Error: Formula Evaluation in cell [0, 0]")
   end
 end
