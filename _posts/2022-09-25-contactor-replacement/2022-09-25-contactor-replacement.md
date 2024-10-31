@@ -3,7 +3,7 @@ layout: page
 title:  "Reviving a Clipper Creek HCS-40"
 tags: [🛠]
 description: "Turns out contactors are a wear part?"
-image: "IMG_9571.jpeg"
+image: "/post/2022/contactor-replacement/IMG_9571.jpeg"
 ---
 
 I've been using a secondhand Clipper Creek HCS-40P to charge my motorcycles for the last four years. Occasionally it would throw a fault, but it would (nearly) always work again after cycling the circuit breaker. But in the last year the faults have been getting more frequent and I've been wanting more reliability now that I've been using charging schedules (because our house has solar now).

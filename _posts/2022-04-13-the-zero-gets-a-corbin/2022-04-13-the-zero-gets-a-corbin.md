@@ -3,7 +3,7 @@ layout: page
 title: "The Zero Gets a Corbin Saddle"
 tags: [🏍]
 description: "Giving myself a little present now that I've been summoned back into the office."
-image: IMG_7480%20medium.jpeg
+image: /post/2022/the-zero-gets-a-corbin/IMG_7480%20medium.jpeg
 ---
 
 Figured I'd give myself a little present today; my mileage is about to increase dramatically now that I've been summoned back into the office.

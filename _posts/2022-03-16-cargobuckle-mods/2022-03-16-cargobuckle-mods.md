@@ -3,7 +3,7 @@ layout: page
 title:  "Improved Tie-downs for the Motorcycle Lift"
 tags: [🛠, 🏍]
 description: I got a set of CargoBuckles and modified them for motorcycle lift duty.
-image: IMG_7408.jpeg
+image: /post/2022/cargobuckle-mods/IMG_7408.jpeg
 ---
 
 I got a set of [CargoBuckle](https://www.imminet.com/products/tie-downs/cargobuckle/)s. They're basically ratchet straps with a seatbelt retractor built in.

@@ -3,7 +3,7 @@ layout: page
 title:  "The Square Tweetwriter"
 tags: [⌨️]
 description: "The typewriter gets dusted off for hack week."
-image: "BSZHo-HCcAASmtw.jpeg"
+image: "/post/2013/square-tweetwriter/BSZHo-HCcAASmtw.jpeg"
 ---
 In 2010 I [turned a typewriter into a serial teletype for fun](http://numist.net/post/2010/project-typewriter.html) but it has collected dust ever since, just one more thing to pack whenever I've moved. Each quarter, Square sets aside a full week for everyone in the company to build something self-directed and this time seemed like a good opportunity to dust it off and do something fun.
 

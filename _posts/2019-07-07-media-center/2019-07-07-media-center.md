@@ -4,7 +4,7 @@ title: "A Plywood Vinyl Media Center"
 timestamp: Wednesday July 7, 2019 22:03:46 PDT
 tags: [🛠]
 description: "The first reasonably intricate project I've done with the Shaper Origin"
-image: IMG_0122.JPG
+image: /post/2019/media-center/IMG_0122.JPG
 ---
 
 A while ago some friends gifted us a small record collection along with a broken record player, which I was able to revive with some dubious electrical engineering. During the holidays, Tanya gifted me a nicer record player. Now I need a place for these things to live.

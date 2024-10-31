@@ -3,7 +3,7 @@ layout: page
 title: Caches Make Predictions About the Future
 excerpt: "How a paper about CPU caches changed the way I think about software caches too"
 showtitle: false
-image: header.png
+image: /post/2023/caches-make-predictions-about-the-future/header.png
 ---
 
 It's funny how hardware and software are able to solve the same problems in dramatically different ways. Want to add a 2-bit counter to every slot in your cache, then find the first slot with a counter value of `3`—incrementing them all in parallel until a suitable slot is found—in sub-linear time? Sure, why not? It's just transistors! They excel at doing a bunch of stuff in parallel, it's just die space and power![^141]

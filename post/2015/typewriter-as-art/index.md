@@ -2,7 +2,7 @@
 layout: "page"
 published_at: 15 Jan 2015 22:23:32 PST
 title: "Teletypewriter as Art"
-image: unnamed.jpg
+image: /post/2015/typewriter-as-art/unnamed.jpg
 excerpt: Too loud to continue banging out tweets in an open office, the teletypewriter is given a second chance by an art student in Québec.
 ---
 
