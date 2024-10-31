@@ -1,7 +1,7 @@
 ---
 layout: page
-title:  "Danny's Wager"
-date: Wednesday February 20, 2008 22:58:12 PST
+title: "Danny's Wager"
+published_at: Wednesday February 20, 2008 22:58:12 PST
 permalink: post/2008/pascals-wager.html
 description: "Or: the problem with Pascal's Wager."
 ---

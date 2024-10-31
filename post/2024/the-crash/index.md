@@ -2,7 +2,7 @@
 layout: page
 title: "The Crash"
 published_at: Tue Oct 29 23:56:27 PDT 2024
-image: IMG_4933.jpeg
+image: /post/2024/the-crash/IMG_4933.jpeg
 ---
 
 My commute home from work did not go as planned.

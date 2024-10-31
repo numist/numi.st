@@ -6,7 +6,7 @@ showtitle: false
 
 Hi! I'm [Scott Perry](about), and this is where I write things that I might want to refer to later[^social]. The page I share most often is [What is Modern Monetary Theory?](/post/2022/what-is-mmt/) Despite that, the most popular page is [`<!-- 🤦 -->`](/post/2022/facepalm/).
 
-This site is made to be explored[^garden]; if you enjoy it, consider subscribing to the [feed](/feed.xml)—you can preview its contents [here](blog).
+This site is made to be explored[^garden]; if you enjoy it, consider subscribing to the [feed](/feed.xml)—you can preview its contents [here](blog). The most recent post is <a  target="_self" href="{{ site.published.first.link | default: site.published.first.url | relative_url }}">{{ site.published.first.title | markdownify | remove: '<p>' | remove: '</p>' | strip }}</a>
 
 By category, you'll find:
 
