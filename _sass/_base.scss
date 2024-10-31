@@ -99,6 +99,7 @@ table {
 img {
   max-width: 100%;  /* Constrains the image to container's width */
   height: auto;     /* Maintains the image's aspect ratio */
+  border-radius: .375rem;
   // display: block;   /* Removes any extra space around the image */
 }
 
