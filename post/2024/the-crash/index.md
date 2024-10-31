@@ -79,7 +79,7 @@ Notes from my <abbr title="History and Physical examination">H&P</abbr>:
 > * Plan for definitive repair 8/22
 > * Will admit
 
-Turned out my wrist wasn't broken, just, uh,  "disassembled". A shot of fentanyl in my IV (and some local anesthetic) numbed things up enough to attempt a "reduction" but it immediately fell back apart without the radius to back it up. Oh well. Trauma sent scans to orthopædics, who expressed concern about bone death and wanted to operate the following day.
+Turned out my wrist wasn't broken, just, uh,  "disassembled". A shot of fentanyl in my IV (and some local anesthetic) numbed things up enough to attempt a "reduction" but my wrist fell back apart immediately without the radius backing it up. Oh well. Trauma sent scans to orthopædics, who expressed concern about bone death and wanted to operate the following day.
 
 But I did learn a new word[^search]!
 
