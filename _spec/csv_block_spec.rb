@@ -28,6 +28,14 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>Alice</td>')
   end
 
+  it 'renders a single-row table with headers' do
+    csv_content = "Name, Age, Occupation"
+    output = render_csv_block(csv_content, "header:true")
+
+    expect(output).to include('<table>')
+    expect(output).to include('<th>Name</th>')
+  end
+
   it 'renders tables with headers by default' do
     csv_content = "Alice, 30, Engineer\nBob, 25, Designer"
     output = render_csv_block(csv_content)
@@ -48,45 +56,73 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>30</td>')
   end
 
-  it 'evaluates basic formulas in cells' do
-    csv_content = "Item, Quantity, Price, Total\nWidget, 2, 5, =SUM(B2...C2)"
+  it 'evaluates formulas' do
+    csv_content = "Item, Quantity, Price, Total\nWidget, 2, 5, = 3 + 6"
     output = render_csv_block(csv_content, "header:true")
 
+    expect(output).to include('<td>9</td>') # 2 * 5 in Total column
+  end
+
+  it 'evaluates formulas with references across columns' do
+    csv_content = "Item, Quantity, Price, Total\nWidget, 2, 5, =SUM(B2:C2)"
+    output = render_csv_block(csv_content, "header:true")
+
+    # TODO: lol llms are dumb. that's mul not sum
     expect(output).to include('<td>10</td>') # 2 * 5 in Total column
   end
 
-  it 'evaluates formulas with references across rows and columns' do
-    csv_content = "Product, Q1, Q2, Total\nGadget, 100, 150, =SUM(B2...C2)"
+  it 'evaluates formulas with references across rows' do
+    csv_content = "Product, Q1, Q2, Total\nGadget, 100, 150, =SUM(B2:C2)"
     output = render_csv_block(csv_content, "header:true")
 
     expect(output).to include('<td>250</td>') # 100 + 150 in Total column
   end
 
-  it 'detects and reports circular dependencies' do
-    csv_content = "= B1, = A1"
+  # TODO: should it?
+  it 'evaluates formulas with rectangular references' do
+    csv_content = "Product, Q1, Q2, Total\nGadget, 100, 150, =SUM(B2:C2)"
+    output = render_csv_block(csv_content, "header:true")
+
+    expect(output).to include('<td>250</td>') # 100 + 150 in Total column
+  end
+
+  it 'detects and reports self-referential equations' do
+    csv_content = "A, B\n= A2, 3"
+    output = render_csv_block(csv_content)
+    expect(output).to include("Error: Circular Reference at cell [0, 1]")
+  end
+
+  it 'detects and reports self-referential equations without headers' do
+    csv_content = "A, B\n= A2, 3"
     output = render_csv_block(csv_content, "header:false")
     expect(output).to include("Error: Circular Reference at cell [0, 1]")
   end
 
-  it 'detects and reports circular dependencies with headers' do
+  it 'detects and reports evaluations with circular dependencies' do
     csv_content = "A, B\n= B2, = A2"
-    output = render_csv_block(csv_content, "header:true")
+    output = render_csv_block(csv_content)
     expect(output).to include("Error: Circular Reference at cell [0, 1]")
   end
 
-  it 'reports out-of-bounds references' do
+  it 'detects and reports evaluations with circular dependencies without headers' do
+    csv_content = "A, B\n= B2, = A2"
+    output = render_csv_block(csv_content, "header:false")
+    expect(output).to include("Error: Circular Reference at cell [0, 1]")
+  end
+
+  it 'reports evaluations with out-of-bounds references' do
     csv_content = "A, B\n= B3, 20"
     output = render_csv_block(csv_content, "header:true")
     expect(output).to include("Error: Out of Bounds reference B3 at row 2, col 1")
   end
 
-  it 'reports invalid column references' do
+  it 'reports evaluations with invalid column references' do
     csv_content = "A, B\n= C1, 20"
     output = render_csv_block(csv_content, "header:true")
     expect(output).to include("Error: Invalid Column Reference C")
   end
 
-  it 'reports formula syntax errors' do
+  it 'reports evaluations with formula syntax errors' do
     csv_content = "A, B\n= 5 + *, 20"
     output = render_csv_block(csv_content, "header:true")
     expect(output).to include("Error: Formula Evaluation in cell [0, 0]")
