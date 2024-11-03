@@ -77,6 +77,13 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>3</td>')
   end
 
+  it 'evaluates formulas with multiple references to the same cell' do
+    csv_content = "Item, Quantity, Price, Total\nWidget, =2, 5, =B2+B2"
+    output = render_csv_block(csv_content)
+
+    expect(output).to include('<td>4</td>')
+  end
+
   it 'evaluates formulas with references to columns > 26' do
     csv_content = "=AD1 + 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29"
     output = render_csv_block(csv_content, "header:false")
@@ -116,27 +123,39 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>1111</td>')
   end
 
-# TODO: test backwards ranges
+  it 'reports invalid row ranges' do
+    csv_content = "A, B\n= A2:A1, 20"
+    output = render_csv_block(csv_content)
 
-  it 'detects and reports self-referential equations' do
+    expect(output).to include("Error: A2 references invalid range A2:A1")
+  end
+
+  it 'reports invalid column ranges' do
+    csv_content = "A, B\n= B1:A1, 20"
+    output = render_csv_block(csv_content)
+
+    expect(output).to include("Error: A2 references invalid range B1:A1")
+  end
+
+  it 'reports self-referential equations' do
     csv_content = "A, B\n= A2, 3"
     output = render_csv_block(csv_content)
     expect(output).to include("Error: circular reference: A2")
   end
 
-  it 'detects and reports self-referential equations without headers' do
+  it 'reports self-referential equations without headers' do
     csv_content = "A, B\n= A2, 3"
     output = render_csv_block(csv_content, "header:false")
     expect(output).to include("Error: circular reference: A2")
   end
 
-  it 'detects and reports evaluations with circular dependencies' do
+  it 'reports evaluations with circular dependencies' do
     csv_content = "A, B\n= B2, = A2"
     output = render_csv_block(csv_content)
     expect(output).to include("Error: circular reference: A2, B2")
   end
 
-  it 'detects and reports evaluations with circular dependencies without headers' do
+  it 'reports evaluations with circular dependencies without headers' do
     csv_content = "A, B\n= B2, = A2"
     output = render_csv_block(csv_content, "header:false")
     expect(output).to include("Error: circular reference: A2, B2")
@@ -164,5 +183,12 @@ describe Jekyll::CSVBlock do
     csv_content = "A, B\n= 5 + *, 20"
     output = render_csv_block(csv_content)
     expect(output).to include("Error: A2 uses invalid formula: 5 + *")
+  end
+
+  it 'reports circular references to columns > 26' do
+    csv_content = "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, =AD1"
+    output = render_csv_block(csv_content, "header:false")
+
+    expect(output).to include("Error: circular reference: AD1")
   end
 end
