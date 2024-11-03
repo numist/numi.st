@@ -157,7 +157,7 @@ module Jekyll
         end
       end
 
-      evaluated_result = @calculator.evaluate(formula_with_values) or raise "Error: #{col_index_to_val(col_index)}#{row_index_to_val(row_index)} uses invalid formula: #{formula}"
+      evaluated_result = @calculator.evaluate(formula_with_values) or raise "Error: #{col_index_to_val(col_index)}#{row_index_to_val(row_index)} uses invalid formula: #{formula_with_values}"
 
       @evaluation_cache[cell_key] = evaluated_result
       evaluated_result

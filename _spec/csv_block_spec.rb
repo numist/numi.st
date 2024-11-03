@@ -112,6 +112,15 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>250</td>')
   end
 
+  it 'understands currency?' do
+    csv_content = "$100\n$150\n=SUM(A1:A2)"
+    output = render_csv_block(csv_content, "header:false")
+
+    # Alas, for now.
+    # expect(output).to include('<td>$250</td>')
+    expect(output).to include('<td>Error: A3 uses invalid formula: SUM($100,$150)</td>')
+  end
+
   it 'evaluates formulas with rectangular references' do
     csv_content = "1, 10, =SUM(A1:B1)\n100, 1000, =SUM(A2:B2)\n=SUM(A1:A2), =SUM(B1:B2), =SUM(A1:B2)"
     output = render_csv_block(csv_content, "header:false")
