@@ -5,11 +5,12 @@ description: "For when the Markdown syntax is too annoying to work with."
 published_at: Wed Oct 30 20:54:57 PDT 2024
 ---
 
-Not that I'm using tables anywhere on this site, but I did some tabular-shaped stuff at work recently and it really made me appreciate the ubiquity of CSV data and tooling that understands me. Which immediately made me cranky about Markdown's table syntax, which is annoying to edit even among people who can remember it in the first place.
+I engaged in some tabular shenanigans at work recently and it really made me appreciate CSV. This, of course, made me cranky about Markdown's table syntax, which is annoying to edit even among people who can remember it in the first place.
 
-So, here's a basic plugin that turns CSV/TSV into a `<table>`:
+So here's a Jekyll plugin that takes CSV/TSV and emits a `<table>`:
 
 ``` ruby
+# _plugins/csv_block.rb
 require 'csv'
 
 module Jekyll
@@ -68,7 +69,7 @@ end
 Liquid::Template.register_tag('csv', Jekyll::CSVBlock)
 ```
 
-Usage:
+## Usage:
 
 ``` liquid
 {% raw %}{% csv %}
@@ -92,7 +93,7 @@ Charlie	35	Teacher
 {% endcsv %}{% endraw %}
 ```
 
-Output:
+### Output:
 
 {% csv %}
 Name, Age, Occupation
@@ -114,6 +115,8 @@ Bob	25	Designer
 Charlie	35	Teacher
 {% endcsv %}
 
-And if you're keen to write equations (and don't mind adding `dentaku` to your dependencies), [here's](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_plugins/csv_block.rb) a version[^tests] that supports the common `=SUM(A1:A15)` style.
+## But wait, there's more!
+
+If you're keen to write equations (and don't mind adding `dentaku` to your dependencies), [here's](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_plugins/csv_block.rb) a version[^tests] that supports the common `=SUM(A1:A15)` style.
 
 [^tests]: [With tests!](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_spec/csv_block_spec.rb)
