@@ -1,0 +1,87 @@
+/* Flex container for bars */
+.tablature {
+    font-family: "Fira Code";
+    margin: 20px;
+    background-color: #f8f8f8;
+    color: #333;
+
+    display: flex;
+    flex-wrap: wrap; /* Allow bars to wrap to the next line */
+    gap: 20px 0px; /* Spacing between bars */
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: .5rem;
+    background-color: #fff;
+    border: 1px solid $grey-color-light;
+    padding: 10px;
+    padding-left: 2em;
+    max-width: 100%; /* Responsive container */
+
+    /* Each bar is a self-contained grid */
+    .bar {
+        display: grid;
+        grid-template-columns: repeat(100, 1fr); /* 96 columns: 24 positions per beat x 4 beats plus padding */
+        grid-template-rows: repeat(6, 1fr); /* 6 strings */
+        position: relative;
+        background-image: url('data:image/svg+xml;utf8,\
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">\
+                        <line x1="0" y1="8.33%" x2="100%" y2="8.33%" stroke="black" stroke-width="1"/>\
+                        <line x1="0" y1="25%" x2="100%" y2="25%" stroke="black" stroke-width="1"/>\
+                        <line x1="0" y1="41.67%" x2="100%" y2="41.67%" stroke="black" stroke-width="1"/>\
+                        <line x1="0" y1="58.33%" x2="100%" y2="58.33%" stroke="black" stroke-width="1"/>\
+                        <line x1="0" y1="75%" x2="100%" y2="75%" stroke="black" stroke-width="1"/>\
+                        <line x1="0" y1="91.67%" x2="100%" y2="91.67%" stroke="black" stroke-width="1"/>\
+                    </svg>');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width: 16em; /* Fixed width per bar */
+    }
+
+    .bar.first-in-row::before {
+        content: "";
+        position: absolute;
+        left: 0; /* Align to the right edge */
+        top: 8.33%; /* Start at the first string line */
+        bottom: 8.33%; /* End at the last string line */
+        width: 2px;
+        background-color: black;
+        z-index: 2; /* Ensure the line appears above the background */
+    }
+
+    .bar::after {
+        content: "";
+        position: absolute;
+        right: 0; /* Align to the right edge */
+        top: 8.33%; /* Start at the first string line */
+        bottom: 8.33%; /* End at the last string line */
+        width: 2px;
+        background-color: black;
+        z-index: 2; /* Ensure the line appears above the background */
+    }
+
+    /* String name container */
+    .string-names {
+        position: absolute;
+        left: -1.1rem; /* Place it to the left of the bar */
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%; /* Match the height of the bar */
+        font-weight: bold;
+        text-align: right;
+    }
+
+    /* Frets are centered and masked properly */
+    .fret {
+        position: relative;
+        background-color: #fff; /* Mask the string line */
+        text-align: center;
+        font-weight: bold;
+        padding: 0 2px;
+        z-index: 1;
+        justify-self: center;
+        align-self: center;
+        width: auto;
+    }
+}

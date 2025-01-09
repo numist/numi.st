@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+{%- include head.html -%}
+
+<body>
+    <main class="page-content" aria-label="Content">
+        {%- if page.title and page.showtitle != false -%}
+            <h1 class="post-title" style="justify-content: center; display: flex;" itemprop="name headline">{{ page.title | smartify | markdownify | remove: '<p>' | remove: '</p>' | strip }}</h1>
+        {%- endif -%}
+
+        <figure class="tablature">
+            {{ content }}
+        </figure>
+    </main>
+    
+    {%- include footer.html -%}
+    
+    <script>
+        function addStringNames() {
+            // Remove existing string names to avoid duplicates
+            document.querySelectorAll('.string-names').forEach(el => el.remove());
+            
+            const bars = document.querySelectorAll('.tablature .bar.first-in-row');
+            
+            bars.forEach(bar => {
+                // Create container for string names
+                let scale = bar.getAttribute("scale") || "{{page.scale}}" || "EADGBe"
+                let innerHTML = Array.from(scale)
+                    .reverse()
+                    .map(char => `<div>${char}</div>`)
+                    .join("");
+                const stringNames = document.createElement('div');
+                stringNames.classList.add('string-names');
+                stringNames.innerHTML = innerHTML;
+                
+                // Append string names to the bar
+                bar.appendChild(stringNames);
+            });
+        }
+        
+        function markFirstBarsInRow() {
+            const bars = document.querySelectorAll('.tablature .bar');
+            let lastTop = null;
+            
+            bars.forEach(bar => {
+                const { top } = bar.getBoundingClientRect();
+                if (lastTop === null || top > lastTop) {
+                    bar.classList.add('first-in-row');
+                } else {
+                    bar.classList.remove('first-in-row');
+                }
+                lastTop = top;
+            });
+            
+            addStringNames(); // Add string names after marking rows
+        }
+        
+        window.addEventListener('load', markFirstBarsInRow);
+        window.addEventListener('resize', markFirstBarsInRow);
+    </script>
+</body>
+</html>
