@@ -20,17 +20,11 @@ module Jekyll
 
     def render(context)
       begin
-
-        csv_text = super.strip
         has_headers = @options.fetch('header', true)
         separator = @options.fetch('separator', ',')
 
-        csv_data = CSV.parse(csv_text, headers: has_headers, col_sep: separator)
-        if has_headers
-          table_data = [csv_data.headers] + csv_data.map(&:to_hash).map(&:values)
-        else
-          table_data = csv_data
-        end
+        csv = super.gsub(/^\n+/, '') # strip leading newlines only
+        table_data = CSV.parse(csv, headers: has_headers, col_sep: separator).to_a
 
         html = "<table>\n"
         
@@ -111,7 +105,7 @@ module Jekyll
 
     # Implementation of formula evaluation.
     def evaluate_formula_at_index_internal(col_index, row_index, table_data, visiting = Set.new)
-      value = table_data[row_index][col_index].strip
+      value = (table_data[row_index][col_index] || '').strip
       return value unless value.is_a?(String) && value.start_with?('=')
 
       cell_key = [col_index, row_index]
@@ -158,7 +152,7 @@ module Jekyll
       end
 
       evaluated_result = @calculator.evaluate(formula_with_values) or raise "Error: #{col_index_to_val(col_index)}#{row_index_to_val(row_index)} uses invalid formula: #{formula_with_values}"
-
+      evaluated_result = evaluated_result.to_s('F') if evaluated_result.is_a?(BigDecimal)
       @evaluation_cache[cell_key] = evaluated_result
       evaluated_result
     end

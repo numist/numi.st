@@ -18,4 +18,5 @@ group :development do
   gem "rack-jekyll", github: "adaoraul/rack-jekyll"
   gem "rack-livereload", "~> 0.6.1"
   gem "webrick", "~> 1.9"
+  gem "capybara"
 end
