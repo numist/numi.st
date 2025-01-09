@@ -2,6 +2,7 @@
 require 'rspec'
 require 'jekyll'
 require 'liquid'
+require 'capybara'
 require_relative '../_plugins/csv_block'
 
 describe Jekyll::CSVBlock do
@@ -56,11 +57,85 @@ describe Jekyll::CSVBlock do
     expect(output).to include('<td>30</td>')
   end
 
+  it 'handles empty cells' do
+    csv_content = "Name, Age, Occupation\nAlice, , Engineer\nBob, 25, "
+    output = render_csv_block(csv_content)
+
+    expect(output).to include('<td></td>')
+    expect(output).not_to include('undefined method')
+  end
+
+  it 'handles leading empty cells' do
+    csv_content = ", Age, Occupation\nAlice, , Engineer\nBob, 25, "
+    output_html = render_csv_block(csv_content)
+    output = Capybara::Node::Simple.new(output_html)
+
+    expect(output).to have_selector("thead tr", count: 1) # Only one row in thead
+    expect(output).to have_selector("thead tr:first-child th", count: 3)
+  end
+
+  it 'handles cells containing only periods' do
+    csv_content = ".\t.\tCyl 1\t.\tCyl 2\t.\n.\t.\tFore\tAft\tFore\tAft\n"    
+    output_html = render_csv_block(csv_content, "separator:tab")
+    output = Capybara::Node::Simple.new(output_html)
+
+    expect(output).to have_selector("thead tr", count: 1) # Only one row in thead
+    expect(output).to have_selector("thead tr:first-child th", count: 6) # Six cells in the row
+    expect(output).to have_selector("thead tr:first-child th:nth-child(1)", text: ".")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(2)", text: ".")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(3)", text: "Cyl 1")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(4)", text: ".")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(5)", text: "Cyl 2")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(6)", text: ".")
+
+    expect(output).to have_selector("tbody tr", count: 1) # Only one row in tbody
+    expect(output).to have_selector("tbody tr:first-child td", count: 6) # Six cells in the row
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(1)", text: ".")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(2)", text: ".")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(3)", text: "Fore")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(4)", text: "Aft")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(5)", text: "Fore")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(6)", text: "Aft")
+  end
+
+  it 'handles empty leading and trailing cells with leading newline' do
+    csv_content = "\n\t\tCyl 1\t\tCyl 2\t\n\t\tFore\tAft\tFore\tAft\n"
+    output_html = render_csv_block(csv_content, "separator:tab")
+    output = Capybara::Node::Simple.new(output_html)
+
+    expect(output_html).to include('<th>Cyl 2</th>')
+
+    expect(output).to have_selector("thead tr", count: 1) # Only one row in thead
+    expect(output).to have_selector("thead tr:first-child th", count: 6) # Six cells in the row
+    expect(output).to have_selector("thead tr:first-child th:nth-child(1):empty")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(2):empty")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(3)", text: "Cyl 1")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(4):empty")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(5)", text: "Cyl 2")
+    expect(output).to have_selector("thead tr:first-child th:nth-child(6):empty")
+
+    expect(output).to have_selector("tbody tr", count: 1) # Only one row in tbody
+    expect(output).to have_selector("tbody tr:first-child td", count: 6) # Six cells in the row
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(1):empty")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(2):empty")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(3)", text: "Fore")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(4)", text: "Aft")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(5)", text: "Fore")
+    expect(output).to have_selector("tbody tr:first-child td:nth-child(6)", text: "Aft")
+  end
+
   it 'evaluates formulas' do
     csv_content = "Item, Quantity, Price, Total\nWidget, 2, 5, = 3 + 6"
     output = render_csv_block(csv_content)
 
     expect(output).to include('<td>9</td>') # 2 * 5 in Total column
+  end
+
+  it 'doesn\'t use scientific notation unnecessarily' do
+    csv_content = "0.006, =A1*24.5"
+    output = render_csv_block(csv_content, "header:false")
+
+    expect(output).to include('<td>0.147</td>')
   end
 
   it 'evaluates formulas in headers' do

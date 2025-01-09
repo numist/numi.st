@@ -11,6 +11,7 @@ group :jekyll_plugins do
   # Local plugin dependencies
   gem "ruby-graphviz"
   gem "dentaku"
+  gem "capybara"
 end
 
 group :development do
