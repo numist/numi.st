@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 4.3.4"
+gem "jekyll", "~> 4.4.0"
 gem "posix-spawn", "~> 0.3.9"
 
 group :jekyll_plugins do
