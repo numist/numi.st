@@ -103,6 +103,7 @@ Input a fraction in the format "numerator/denominator" to generate a Unicode fra
         }
 
         resultElement.value = result;
+        resultElement.textContent = result;
         if (copyButton) {
             copyButton.disabled = !copyable;
         }
