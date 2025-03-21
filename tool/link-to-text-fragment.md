@@ -90,10 +90,14 @@ Paste a URL and some text from the page into the fields below to generate a link
             linkElement.style.display = "block";
             linkElement.href = link;
             linkElement.textContent = link;
-            copyButton.disabled = false;
+            if (copyButton) {
+                copyButton.disabled = false;
+            }
         } else {
             linkElement.style.display = "none";
-            copyButton.disabled = true;
+            if (copyButton) {
+                copyButton.disabled = true;
+            }
             placeholderElement.style.display = "block";
             placeholderElement.textContent = "Fill required field(s) to generate link";
         }
@@ -155,6 +159,7 @@ Paste a URL and some text from the page into the fields below to generate a link
         // Set up the initial state
         $('#generatorTabs a.active').click();
         updateLink();
+        document.getElementById("url").focus();
     });
 </script>
 

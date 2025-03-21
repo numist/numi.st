@@ -152,14 +152,27 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
         "”": "Right Double Quotation Mark",
         "‘": "Left Single Quotation Mark",
         "’": "Right Single Quotation Mark",
-        "⅛": "Fraction One Eighth",
-        "¼": "Fraction One Quarter",
-        "⅜": "Fraction Three Eighths",
-        "½": "Fraction One Half",
-        "⅝": "Fraction Five Eighths",
-        "¾": "Fraction Three Quarter",
-        "⅞": "Fraction Seven Eighths",
+        "⅟": "Fraction Numerator One",
         "⁄": "Fraction Slash",
+        "↉": "Fraction Zero Thirds",
+        "⅒": "Fraction One Tenth",
+        "⅑": "Fraction One Ninth",
+        "⅛": "Fraction One Eighth",
+        "⅐": "Fraction One Seventh",
+        "⅙": "Fraction One Sixth",
+        "⅕": "Fraction One Fifth",
+        "¼": "Fraction One Quarter",
+        "⅓": "Fraction One Third",
+        "⅜": "Fraction Three Eighths",
+        "⅖": "Fraction Two Fifths",
+        "½": "Fraction One Half",
+        "⅗": "Fraction Three Fifths",
+        "⅝": "Fraction Five Eighths",
+        "⅔": "Fraction Two Thirds",
+        "¾": "Fraction Three Quarters",
+        "⅘": "Fraction Four Fifths",
+        "⅚": "Fraction Five Sixths",
+        "⅞": "Fraction Seven Eighths",
         "℀": "Account Of",
         "℁": "Addressed To The Subject",
         "℅": "Care Of",
@@ -194,6 +207,7 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
         "☞": "White Right Pointing Index",
         "ℹ︎": "Information Source",
         "☃︎": "Snowman",
+        "𐃆": "Spear",
         "♠︎": "Black Spade Suit",
         "♣︎": "Black Club Suit",
         "♥︎": "Black Heart Suit",
@@ -220,6 +234,7 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
         "⸘": "Inverted Interrobang",
         "¡": "Inverted Exclamation Mark",
         "¿": "Inverted Question Mark",
+        "⁻": "Superscript Minus Sign",
         "⁰": "Superscript Zero",
         "¹": "Superscript One",
         "²": "Superscript Two",
@@ -294,6 +309,17 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
     document.addEventListener("DOMContentLoaded", () => {
         const inputElement = document.querySelector('.search');
         const clearBtn = document.querySelector('.clear-btn');
+
+        // Read anchor parameter and set as initial search value
+        const anchor = window.location.hash.substring(1);
+        if (anchor) {
+            inputElement.value = decodeURIComponent(anchor);
+            clearBtn.style.display = 'block';
+        }
+        else if (navigator.maxTouchPoints === 0) {
+            // Focus search field only on devices with physical keyboards
+            inputElement.focus();
+        }
 
         inputElement.addEventListener('input', () => {
             updateMatches();

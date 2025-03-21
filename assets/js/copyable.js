@@ -36,6 +36,12 @@ function copyAction(event) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Only add copy buttons if we're in a secure context
+    if (!window.isSecureContext) {
+        console.log("Copy buttons disabled: not in a secure context");
+        return;
+    }
+
     // Make code blocks copyable
     $("div.highlight").each(function() {
         this.classList.add("copyable");

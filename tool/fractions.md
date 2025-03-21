@@ -3,22 +3,20 @@ layout: page
 title: Unicode Fraction Generator
 excerpt_only: true
 description: "I made a little tool to generate Unicode fractions"
+published_at: Fri Mar 21 14:49:09 PDT 2025
 ---
 
-Input an integer numerator and denominator to generate a Unicode fraction. Vulgar fractions and fraction numerators are used when available.
+Input a fraction in the format "numerator/denominator" to generate a Unicode fraction. [Vulgar fractions and fraction numerators](/symbols#Fraction) are used when available.
 
 <div class="card">
     <div class="card-body">
         <form>
             <div class="row">
-                <div id="numerator-container" class="col">
-                    <input type="text" id="numerator" name="text" placeholder="Numerator" oninput="updateFract()" class="form-control" required />
-                </div>
-                <div id="denominator-container" class="col">
-                    <input type="text" id="denominator" name="text" placeholder="Denominator" oninput="updateFract()" class="form-control" required />
+                <div class="col">
+                    <input type="text" id="fraction" name="text" placeholder="1/2" oninput="updateFract()" class="form-control" required />
                 </div>
                 <div id="result-container" class="form-group copyable col">
-                    <input type="text" id="result" name="text" class="form-control" readonly />
+                    <input type="text" id="result" name="text" class="form-control" placeholder="½" readonly />
                 </div>
             </div>
         </form>
@@ -36,12 +34,47 @@ Input an integer numerator and denominator to generate a Unicode fraction. Vulga
         return String(num).split('').map(digit => subscriptDigits[parseInt(digit)]).join('')
     }
     function updateFract() {
-        const numerator = document.getElementById("numerator").value;
-        const denominator = document.getElementById("denominator").value;
+        const input = document.getElementById("fraction").value;
+        const parts = input.split('/');
 
         const resultElement = document.getElementById('result');
         const copyButton = document.querySelector('.copyable button');
-        if (isInteger(numerator) && isInteger(denominator)) {
+
+        var result;
+        var copyable = false;
+
+        if (!input) {
+            // Empty case
+            result = "";
+        }
+        else if (
+            parts.length > 2 || parts.length <= 0 ||
+            (parts.length >= 1 && !isInteger(parts[0]) && parts[0] != "") ||
+            (parts.length >= 2 && !isInteger(parts[1]) && parts[1] != "")
+        ) {
+            // Error case
+            result = "(invalid)";
+        }
+        else if (
+            isInteger(parts[0]) &&
+            (parts.length == 1 || parts[1] == "")
+        ) {
+            // Incomplete case (numerator only)
+            const numerator = parts[0];
+            if (numerator == 1 && parts.length == 2) {
+                result = "⅟";
+            } else {
+                result = superscript(numerator);
+                if (parts.length == 2) {
+                    result = `${result}⁄`;
+                }
+            }
+        }
+        else {
+            // Complete fraction
+            const numerator = parts[0];
+            const denominator = parts[1];
+
             if (numerator == 0 && denominator == 3) { result = "↉"; }
             else if (numerator == 1 && denominator == 2) { result = "½"; }
             else if (numerator == 1 && denominator == 3) { result = "⅓"; }
@@ -66,17 +99,18 @@ Input an integer numerator and denominator to generate a Unicode fraction. Vulga
                 else { result = `${superscript(numerator)}⁄`; }
                 result = `${result}${subscript(denominator)}`;
             }
+            copyable = true;
+        }
 
-            resultElement.value = result;
-            copyButton.disabled = false;
-        } else {
-            resultElement.value = "";
-            copyButton.disabled = true;
+        resultElement.value = result;
+        if (copyButton) {
+            copyButton.disabled = !copyable;
         }
     }
 
     document.addEventListener("DOMContentLoaded", function() {
         updateFract();
+        document.getElementById("fraction").focus();
     });
 </script>
 
