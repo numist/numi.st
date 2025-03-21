@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "Data Loss"
+image: IMG_5448.jpg
 description: "I had a major data loss event in 2013 and have been gradually piecing things back together since then."
 published_at: Thu Mar 20 20:14:14 PDT 2025
 ---
