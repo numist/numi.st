@@ -4,7 +4,7 @@ image: IMG_3480_thumb.jpg
 description: A photo from the tail end of my time in San Diego
 title: "Green and Gold"
 created_at: Sun Apr 19 09:59:45 PDT 2009
-published_at: Thu Mar 21 00:27:41 PDT 2025
+published_at: Thu Mar 20 23:53:59 PDT 2025
 photo: {
   date: Sun Apr 19 09:59:45 PDT 2009,
   sdr: IMG_3480.jpg,
