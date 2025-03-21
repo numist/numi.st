@@ -1,6 +1,12 @@
 ---
 layout: page
 title: Link to Text Fragment Generator
+nav: [
+    {
+        url: /tool/,
+        title: "Tools"
+    },
+]
 ---
 
 Paste a URL and some text from the page into the fields below to generate a link[^ref] that will take you directly to that text when you click it.

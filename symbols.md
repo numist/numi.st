@@ -1,6 +1,12 @@
 ---
 layout: page
 title: Symbol Picker
+nav: [
+    {
+        url: /tool/,
+        title: "Tools"
+    },
+]
 ---
 
 The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a symbol to copy it to your clipboard.

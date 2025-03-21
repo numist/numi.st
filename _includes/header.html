@@ -1,5 +1,25 @@
-<nav class="navbar bg-body-tertiary">
-  <div class="container-fluid offset-md-2 offset-lg-3">
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="navbar-nav container-fluid justify-content-center">
+      <span>
+        <a class="nav-link" href="{{ "/" | relative_url }}">{{ site.title | markdownify | remove: '<p>' | remove: '</p>' | trim }}</a>
+      </span>
+      {% if page and page.url != "/" %}
+        {% if page.nav %}
+          {% for item in page.nav %}
+            →
+            <span>
+              <a class="nav-link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            </span>
+          {% endfor %}
+        {% endif %}
+        →
+        <span>
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ page.title }}</a>
+        </span>
+      {% endif %}
+    </div>
+</nav>
+  <!-- <div class="container-fluid">
     <a class="navbar-brand" rel="author" href="{{ "/" | relative_url }}">{{ site.title | markdownify | remove: '<p>' | remove: '</p>' | trim }}</a>
   </div>
-</nav>
+</nav> -->

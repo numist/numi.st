@@ -23,7 +23,7 @@ layout: none
   {% endif %}
 
   {% if title %}
-    <title type="html">{{ title | smartify | xml_escape }}</title>
+    <title type="html">{{ title | xml_escape }}</title>
   {% endif %}
 
   {% if site.description %}
@@ -62,7 +62,7 @@ layout: none
     <!-- We need to differentiate posts vs pages here because post.content is pre-rendered but page.content is not -->
     {% assign is_post = post.path | starts_with: "_posts/" %}
     <entry{% if post.lang %}{{" "}}xml:lang="{{ post.lang }}"{% endif %}>
-      {% assign post_title = post.title | smartify | normalize_whitespace | xml_escape %}
+      {% assign post_title = post.title | normalize_whitespace | xml_escape %}
 
       <title type="html">{{ post_title }}</title>
       <link href="{{ post.link | default: post.url | absolute_url }}" rel="alternate" type="text/html" title="{{ post_title }}" />

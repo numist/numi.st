@@ -4,6 +4,12 @@ title: Unicode Fraction Generator
 excerpt_only: true
 description: "I made a little tool to generate Unicode fractions"
 published_at: Fri Mar 21 14:49:09 PDT 2025
+nav: [
+    {
+        url: /tool/,
+        title: "Tools"
+    },
+]
 ---
 
 Input a fraction in the format "numerator/denominator" to generate a Unicode fraction. [Vulgar fractions and fraction numerators](/symbols/#Fraction) are used when available.
