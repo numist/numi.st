@@ -12,12 +12,12 @@ require 'posix/spawn'
 module GitMetadata
   def self.birthtime(path)
     raise "file #{path} does not exist" unless File.exist?(path)
-    File.birthtime(path)
+    DateTime.parse(File.birthtime(path).to_s)
   end
   
   def self.mtime(path)
     return nil unless File.exist?(path)
-    File.mtime(path)
+    DateTime.parse(File.mtime(path).to_s)
   end
   
   def self.inject_dates(page)
@@ -30,9 +30,12 @@ module GitMetadata
     created_at = git_created_at || birthtime(page.path)
     modified_at = git_modified_at || mtime(page.path)
 
-    page.data['created_at'] = created_at
+    page.data['created_at'] = DateTime.parse(page.data['created_at']) if page.data['created_at'].is_a? String
+    page.data['created_at'] = created_at if page.data['created_at'].nil?
     page.data['date'] = created_at if page.data['date'].nil?
     page.data['modified_at'] = modified_at
+    raise "creation time has unexpected type #{ page.data['created_at'] }" unless page.data['created_at'].is_a? DateTime
+    raise "modified time has the incorrect type #{ page.data['modified_at'] }" unless page.data['modified_at'].is_a? DateTime
   end
 
   class Git

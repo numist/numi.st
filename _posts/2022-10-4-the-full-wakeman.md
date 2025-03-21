@@ -2,6 +2,7 @@
 layout: page
 title: The Full Wakeman
 excerpt: "Get your fucking shit together"
+published_at: 2022-10-04
 ---
 
 Years ago, during a Dames group ride around San Francisco[^sadie], we came upon a _uniquely_ incompetent driver. I don't recall the exact details of what they were(n't) doing, but I _do_ remember Emily crystallizing the moment when she yelled "GET YOUR FUCKING SHIT TOGETHER" through their open window as we passed.

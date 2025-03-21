@@ -1,0 +1,40 @@
+<figure class="figure hdrjpg" {%- if photo.mp4 -%}data-mp4-src="{{ photo.mp4 }}"{%- endif -%}>
+    <picture class="figure-img">
+        {%- if photo.hdr -%}
+        <source srcset="{{ photo.hdr }}" media="all and (min--moz-device-pixel-ratio:0) and (min-resolution: 3e1dpcm) {}" type="image/avif" /> 
+        {%- endif -%}
+        <img src="{{ photo.sdr }}" style="image-rendering: -webkit-optimize-contrast;">
+    </picture>
+    <figcaption class="figure-caption text-end">
+        Taken&#32;
+        {%- if photo.date -%}
+            {%- assign date_format = "%-d %B %Y" -%}
+            {%- assign time = photo.date | date: date_format -%}        
+            on <time datetime="{{ photo.date | date_to_xmlschema }}">{{ time }}</time>&#32;
+        {%- endif -%}
+        at ISO {{ photo.iso }}, {{ photo.mm }} mm, ƒ/{{ photo.av }}, {{ photo.tv }} s
+        {%- if photo.location -%}
+        &#32;in {{ photo.location }}
+        {%- endif -%}
+        &#32;(<a href="{{ photo.sdr }}">sdr</a>
+        {%- if photo.hdr -%}, <a href="{{ photo.hdr }}">hdr</a>{%- endif -%}
+        {%- if photo.raw -%}, <a href="{{ photo.raw }}">raw</a>{%- endif -%}
+        )
+    </figcaption>
+</figure>
+
+<!--
+if (
+    'MozAppearance' in document.documentElement.style /* Target Firefox */
+    ||
+    /^((?!chrome|android).)*safari/i.test(navigator.userAgent) /* Target Safari */
+) {
+    document.querySelectorAll('.hdrjpg[data-mp4-src]').forEach((element) => {
+        element.querySelector('picture').remove();
+        let video = document.createElement('video');
+        video.src = element.dataset.mp4Src;
+        video.muted = true;
+        element.appendChild(video);
+    });
+}
+-->
