@@ -6,6 +6,7 @@ title: "Green and Gold"
 created_at: Sun Apr 19 09:59:45 PDT 2009
 published_at: Thu Mar 20 23:53:59 PDT 2025
 photo: {
+  description: "A ZRX1100 in Kawasaki green parked on the edge of a road in front of some lightly shrubbed California foothills, just turning gold as the season changes from spring to summer.",
   date: Sun Apr 19 09:59:45 PDT 2009,
   sdr: IMG_3480.jpg,
   iso: 100,
