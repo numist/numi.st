@@ -6,6 +6,12 @@
         <img src="{{ photo.sdr }}" {% if photo.description %} alt="{{ photo.description }}"{% endif %} style="image-rendering: -webkit-optimize-contrast;">
     </picture>
     <figcaption class="figure-caption text-end">
+        {% if photo.caption %}
+            <span>
+                {{ photo.caption }}
+            </span>
+            <br />
+        {% endif %}
         <span style="white-space: nowrap;">Taken at ɪsᴏ {{ photo.iso }}, {{ photo.mm }} mm, ƒ/{{ photo.av }}, {{ photo.tv }} s</span>
         {% if photo.date %}
             <span style="white-space: nowrap;">
@@ -19,11 +25,11 @@
                 in
                 {% if photo.location.lat and photo.location.long %}
                     <a href="https://www.openstreetmap.org/?mlat={{ photo.location.lat }}&mlon={{ photo.location.long }}#map=18/{{ photo.location.lat }}/{{ photo.location.long }}">
-                {% endif %}
-                {{ photo.location.string }}
-                {% if photo.location.lat and photo.location.long %}
+                        {{ photo.location.string }}
                     </a>
-                {% endif %}
+                    {% else %}
+                        {{ photo.location.string }}
+                    {% endif %}
             </span>
         {% endif %}
         <span style="white-space: nowrap;">

@@ -1,7 +1,7 @@
 ---
 layout: page
 image: 4305319023_2228e45e56_o-thumb.jpg
-description: Photo from a camping trip to the desert
+description: Memories of a camping trip to the desert
 title: "Camping with RHiRHi"
 published_at: Wed Apr  2 06:57:26 PDT 2025
 photo: {
