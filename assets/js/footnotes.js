@@ -117,6 +117,7 @@ function alignFootnotes() {
     // An empty hash to aggregate footnotes as they're processed
     var footnotes = [];
 
+    // First pass: position all footnotes and let them reflow
     $(".footnote").each(function () {
         var footnoteID = $(this).attr("href");
         var escapedFootnoteID = escapeSelector(footnoteID);
@@ -126,34 +127,52 @@ function alignFootnotes() {
             return;
         }
 
-        var referenceTop = $(this).offset().top - $("main").offset().top;
-        if (referenceTop < previousFootnoteBottom) {
-            referenceTop = previousFootnoteBottom;
-        }
-        console.log(`Positioning footnote ${escapedFootnoteID} at ${referenceTop}px`);
         footnote.css("position", "absolute");
-        footnote.css("top", referenceTop);
-        previousFootnoteBottom = referenceTop + footnote.outerHeight(true);
         footnotes.push(escapedFootnoteID);
     });
 
     if (footnotes.length === 0) { return; }
 
-    if ($(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true) > $(".footer").offset().top) {
-        // Calculate the distance between the bottom of the last footnote and the top of the footer
-        var distance = $(".footer").offset().top - ($(".container").offset().top + $(footnotes.last()).offset().top + $(footnotes.last()).outerHeight(true));
-        console.log(`Footnote ${footnotes.last()} needs to be shifted ${distance}px to clear the footer.`);
+    // Second pass: position footnotes, adjusting for overlaps
+    const container = $("article.post");
+    const containerTop = container.offset().top;
+    const containerBottom = containerTop + container.outerHeight(true);
+    let hasOverlap;
+    do {
+        hasOverlap = false;
+        previousFootnoteBottom = 0;
 
-        for (var index = footnotes.length - 1; index >= 1 && distance < 0; index--) {
-            var footnote = $(footnotes[index]);
-            console.log(`Repositioning footnote ${footnotes[index]} ${distance}px`);
-            footnote.css("top", footnote.offset().top + distance);
+        footnotes.forEach(function(escapedFootnoteID) {
+            var footnote = $(escapedFootnoteID);
+            var reference = $(`a.footnote[href="${escapedFootnoteID}"]`);
 
-            // Recalculate the distance for repositioning the previous footnote
-            distance = footnote.offset().top - ($(".container").offset().top + $(footnotes[index - 1]).offset().top + $(footnotes[index - 1]).outerHeight(true));
-            if (distance < 0) {
-                console.log(`Footnote ${footnotes[index - 1]} needs to be shifted ${distance}px to clear the previous footnote.`);
+            // Get reference position relative to container
+            var referenceTop = reference.offset().top - containerTop;
+            var referenceY = referenceTop + reference.outerHeight(true);
+            // var referenceY = (referenceTop + referenceBottom) / 2;
+
+            // Try to center the footnote relative to its reference
+            var targetTop = referenceY - (footnote.outerHeight(true) / 2);
+
+            // If this would overlap with previous footnote, position below it
+            if (targetTop < previousFootnoteBottom) {
+                targetTop = previousFootnoteBottom;
             }
-        }
-    }
+
+            // If this would extend beyond container bottom, try shifting up
+            var footnoteBottom = targetTop + footnote.outerHeight(true);
+            if (footnoteBottom > containerBottom - containerTop) {
+                var newTop = (containerBottom - containerTop) - footnote.outerHeight(true);
+                if (newTop < previousFootnoteBottom) {
+                    // Need to shift previous footnotes up to make room
+                    hasOverlap = true;
+                }
+                targetTop = newTop;
+            }
+
+            console.log(`Positioning footnote ${escapedFootnoteID} at ${targetTop}px`);
+            footnote.css("top", targetTop);
+            previousFootnoteBottom = targetTop + footnote.outerHeight(true);
+        });
+    } while (hasOverlap);
 }

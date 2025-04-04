@@ -28,7 +28,7 @@ nav.navbar {
  * Page content
  */
 .page-content {
-  padding: calc($spacing-unit/2) 0;
+  // padding: calc($spacing-unit/2) 0;
   flex: 1;
 }
 
@@ -70,6 +70,10 @@ nav.navbar {
 /**
  * Posts
  */
+.post {
+  margin-bottom: calc($spacing-unit/2);
+}
+
 .post-header {
   margin-bottom: $spacing-unit;
 }
@@ -84,7 +88,7 @@ nav.navbar {
 }
 
 .post-content {
-  margin-bottom: calc($spacing-unit/2);
+  // margin-bottom: calc($spacing-unit/2);
 
   h2 {
     @include relative-font-size(2);
