@@ -3,7 +3,7 @@ layout: page
 image: 4305319023_2228e45e56_o-thumb.jpg
 description: Memories of a camping trip to the desert
 title: "Camping with RHiRHi"
-published_at: Wed Apr  2 06:57:26 PDT 2025
+published_at: Fri Jan 22 20:14:53 PDT 2010
 photo: {
   description: "Rhiannon standing ankle deep in a desert water crossing, wearing a very shocked face. She's holding a flask.",
   date: Fri Jan 22 20:14:53 PDT 2010,

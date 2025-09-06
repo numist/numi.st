@@ -3,7 +3,7 @@ layout: page
 image: 3853512867_6df9977976_thumb.jpg
 description: Photo from a trip to the Monterey Bay Aquarium
 title: "Weedy Seadragon"
-published_at: Thu Mar 27 12:10:57 PDT 2025
+published_at: Sat Aug 15 14:49:03 PDT 2009
 photo: {
   description: "A weedy seadragon (Phyllopteryx taeniolatus) in a tank at the Monterey Bay Aquarium. The background has the sort of blue wavy pattern you'd see on the bottom of a pool",
   date: Sat Aug 15 14:49:03 PDT 2009,

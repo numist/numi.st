@@ -3,7 +3,7 @@ layout: page
 image: IMG_3686-thumb.jpg
 description: My most "New Orleans" nightlife photo
 title: "Overflowing Taxi"
-published_at: Fri Apr  4 10:22:07 PDT 2025
+published_at: Sat Apr 17 22:45:17 CDT 2010
 photo: {
   description: "A Crown Vic wearing black and white United Cab livery with at least five passengers. Possibly an entire bachelorette party? They are drunk. One is waving out an open window and screaming, the one on her lap is blowing me a kiss through the front window. The drivers' face is partially obscured by beads hanging off the mirror and his expression is pretty deadpan, but I like to think that he believes fares like these are what make New Orleans the best place in the world, as long as they don't throw up in his car.",
   caption: "Terrible exposure settings, but I only had a split second to get the shot.",
