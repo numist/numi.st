@@ -11,9 +11,9 @@ I got a set of [CargoBuckle](https://www.imminet.com/products/tie-downs/cargobuc
 They're great, but two mods make them even better for securing bikes to a lift:
 
 1. Fork loops:
-   
+
     ![Fork loops sewn to the hook end of the ratchet strap](IMG_7023.jpeg)
-    
+
 2. Square tube mount (shown partially-inserted):
-    
+
     ![CargoBuckle mounted to the lift](66919137953__A1A93B81-CDA6-43BD-A093-4FB69A6AE182.jpeg)

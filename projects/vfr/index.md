@@ -50,7 +50,7 @@ I got a complete '01 RC51 SP1 front end. Only wrinkle is the fork offsets are di
 In case steering stops (or trail changes) are too annoying:
 
 > VFR1200 triple clamps (35mm offset vs 30mm offset for SP1)…on my 3rd gen the fork tubes hit these bosses on the frame without additional steering stops
-> 
+>
 > There's no need to use a different lower bearing.  They use the same upper and lower bearings as the RC36, so no need to use a 3mm spacer (which is required to fit the CBR/RC51 SP1 lower yoke into the RC36 headstock.
 
 And in case it's easier to buy than paint:
@@ -60,7 +60,7 @@ And in case it's easier to buy than paint:
 There's also further [upgrade potential](https://www.rc51forums.com/threads/a-guide-to-ohlins-forks-front-suspension-for-the-rc51.39641/):
 
 > The 30mm NIX cartridge kit is the most current Ohlins R&T front suspension option. However, for those who don't know, it is not a full Ohlins fork. It is a drop in kit for forks on current sportbikes. This kit replaces all of the internals on the OEM RC51 Showa forks. Amongst other internal changes (the kit is a full cartridge change), it uses 30mm Ohlins valving in place of the original 20mm Showa valves. Compression damping is found on the left fork leg while the right leg controls rebound damping. The main advantage of this setup is the ease of and speed in which spring changes can be made as well as other internal suspension tuning. Spring changes can literally take 8 minutes, which is very valuable in a racing environment. The compression adjusters on the bottom of the RC51 fork leg remain but are no longer used. Technically, Ohlins does not make this kit specifically for the RC51 as they don't normally provide new product for older bike platforms. However, Kyle USA has developed a custom kit that retrofits the Ohlins 30mm NIX cartridge kits into the OEM RC51 Showa forks. In order to retrofit the kit, custom extended fork caps are made by Kyle USA and used. That is why you see large black caps on the forks in pictures of this kit for the RC51.
-> 
+>
 > The Ohlins 30mm NIX cartridge front suspension kit is generally considered to be the best option for people who want the ultimate performance, which is often on the track and in racing. Their performance in a racing environment is generally considered slightly better than even upgraded Ohlins FG832 and 322 forks. The aesthetics of the 30mm NIX upgrade are not as appealing to most people compared to the Ohlins FG832 and FG322 forks.
 
 # Shock
@@ -78,7 +78,7 @@ homemade per IMG_4476 to IMG_4484
 * CBR1000RR gauges can be made to work, and the bikes have the same redline (11.5)~
 
     > JACKPOT! Guys I did write it down. :wheel: Seeing gazman's schematic finally trigger one of my last functioning brain cells :beer: which let me recall that I enlarged the schematic and printed it in the hopes of reading it better. Anyway, I found that print out and I did label things. Starting from left to right on the above connector of the cbr1000rr gauge harness:
-    > 
+    >
     > * CBR wire colors=function
     > * P= Speedometer (1)
     > * Br/W = Instrument lighting (switched)
@@ -170,7 +170,7 @@ Other than the [oil cooler](#oil-cooler), probably all this stuff should wait fo
 ~~I dunno why but I don't like the oil:air cooler. Wish it was oil:water like modern bikes. Apparently [the RC30 was this way?](http://www.rc30.info/rc30brochures.html):~~
 
 > Two radiators are used, both are upgradable to HRC parts but only the larger upper radiator is really necessary. Water circulates through an oil cooler between the block and the oil filter, usually referred to as the 'oil heater' and discarded.
-> 
+>
 > ![](brochure-rc30-rads.jpg)
 
 ~~Begs the questions: does it have a different water pump with an extra oil cooler circuit? How were the [oil cooler lines dealt with](Sync%20Day.jpg) (can they just be capped)? What part is the pancake and will it fit? [This guy](https://rc30.yolasite.com/project.php) appears to have built an RC30 from parts he found and would probably know. evl_twin has two RC30s and would also know.~~

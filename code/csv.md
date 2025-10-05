@@ -53,7 +53,7 @@ module Jekyll
         html << "</tr>\n"
       end
       html << "</tbody>\n</table>\n"
-      
+
       html
     end
   end

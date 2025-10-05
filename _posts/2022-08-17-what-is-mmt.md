@@ -34,11 +34,11 @@ The government has many options for increasing the money supply, including spend
 
 <!--
 > We can, and must, tax the rich. But not because we can't afford to do anything without them. We shoudl tax billionaires to rebalance the distribution of wealth and income and to protect the health of our democracy.
-> 
+>
 > — The Deficit Myth, p12
 -->
 
-This premise puts the lie to the most common complaint against public spending: "how will you pay for it?" Through the lens of MMT, the government's budget _doesn't need to balance_. Running a deficit is not the same as overspending unless it sparks… 
+This premise puts the lie to the most common complaint against public spending: "how will you pay for it?" Through the lens of MMT, the government's budget _doesn't need to balance_. Running a deficit is not the same as overspending unless it sparks…
 
 ## Inflation
 

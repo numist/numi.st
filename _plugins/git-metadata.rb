@@ -14,12 +14,12 @@ module GitMetadata
     raise "file #{path} does not exist" unless File.exist?(path)
     DateTime.parse(File.birthtime(path).to_s)
   end
-  
+
   def self.mtime(path)
     return nil unless File.exist?(path)
     DateTime.parse(File.mtime(path).to_s)
   end
-  
+
   def self.inject_dates(page)
     # detect when we've got undated document injection working
     raise "nil date for document" if page.data['date'].nil? and page.instance_of? Jekyll::Document
@@ -114,7 +114,7 @@ module GitMetadata
       end
     end
   end
-  
+
   module Executor
     extend POSIX::Spawn
 

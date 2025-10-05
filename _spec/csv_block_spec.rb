@@ -75,7 +75,7 @@ describe Jekyll::CSVBlock do
   end
 
   it 'handles cells containing only periods' do
-    csv_content = ".\t.\tCyl 1\t.\tCyl 2\t.\n.\t.\tFore\tAft\tFore\tAft\n"    
+    csv_content = ".\t.\tCyl 1\t.\tCyl 2\t.\n.\t.\tFore\tAft\tFore\tAft\n"
     output_html = render_csv_block(csv_content, "separator:tab")
     output = Capybara::Node::Simple.new(output_html)
 
