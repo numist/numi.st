@@ -9,3 +9,4 @@ Some in-browser tools I've built to make my life easier. Hopefully they can make
 * [Symbol Picker](/symbols), for finding special characters on the go.
 * Unicode [Fraction Generator](/tool/fractions), for making pretty shutter speed values.
 * [Bluey episode filter](/tool/bluey)
+* [Fixed-point number visualizer](/tool/fixed-point)

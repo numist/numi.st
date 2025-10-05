@@ -9,6 +9,13 @@ function copyAction(event) {
     // them synchronously should avoid them getting picked up by
     // the browser's rendering cycle.
     document.body.appendChild(clone);
+
+    // Replace input/textarea elements with text nodes containing their values
+    Array.from(clone.querySelectorAll("input, textarea")).forEach(function(input) {
+        const textNode = document.createTextNode(input.value);
+        input.parentNode.replaceChild(textNode, input);
+    });
+
     Array.from(clone.querySelectorAll("*")).forEach(function(element) {
         const style = window.getComputedStyle(element);
         if (
@@ -23,6 +30,7 @@ function copyAction(event) {
 
     navigator.clipboard.writeText(clone.textContent.trim())
         .then(() => {
+            console.log("Copied to clipboard: " + clone.textContent.trim());
             event.target.textContent = "Copied!";
             event.target.classList.remove("btn-outline-secondary");
             event.target.classList.add("btn-success");

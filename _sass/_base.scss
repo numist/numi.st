@@ -388,11 +388,6 @@ abbr[data-content] {
   display: flex;
   align-items: center; /* Vertically */
 
-  .form-control {
-    width: auto; /* Override Bootstrap's `width: 100%` on .form-control */
-    flex-grow: 1; /* Allows the element to expand and fill the available space */
-  }
-
   .copy-button {
     position: static;
     flex-shrink: 0;
