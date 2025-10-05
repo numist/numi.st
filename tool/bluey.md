@@ -3,7 +3,18 @@ layout: page
 title: Searchable List of Bluey Episodes
 ---
 
-<input type="text" id="searchBox" placeholder="Search episodes..." style="width: 100%; padding: 8px; margin-bottom: 16px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
+<div class="search-container">
+    <input class="search" type="text" id="searchBox" placeholder="Search episodes...">
+    <button class="clear-btn" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="#808080"/>
+            <g transform="translate(12, 12)">
+                <path fill="#ffffff" stroke="#ffffff" d="M-3.3-3.3L3.3 3.3M3.3-3.3L-3.3 3.3"/>
+            </g>
+        </svg>
+    </button>
+</div>
+
 <style>
 li.hidden {
   visibility: hidden;
@@ -11,6 +22,7 @@ li.hidden {
   left: -9999px;
 }
 </style>
+
 <h2 id="season1">Season 1</h2>
 <ol class="episode-list">
 <li>Magic Xylophone</li>
@@ -179,6 +191,7 @@ li.hidden {
 
 <script>
 const searchBox = document.getElementById('searchBox');
+const clearBtn = document.querySelector('.clear-btn');
 const episodeLists = Array.from(document.getElementsByClassName('episode-list'));
 const allItems = episodeLists.flatMap(list => Array.from(list.getElementsByTagName('li')));
 
@@ -203,6 +216,7 @@ function setQueryParam(name, value) {
 const initialQuery = decodeURIComponent(getQueryParam('q'));
 if (initialQuery) {
     searchBox.value = initialQuery;
+    clearBtn.style.display = 'block';
 } else {
     searchBox.focus();
 }
@@ -243,12 +257,19 @@ function filterEpisodes(query) {
     });
 }
 
+clearBtn.addEventListener('click', () => {
+    searchBox.value = '';
+    setQueryParam('q', '');
+    clearBtn.style.display = 'none';
+    filterEpisodes('');
+});
+
 // Initial filter on page load
 filterEpisodes(searchBox.value);
 
 searchBox.addEventListener('input', function() {
     const query = this.value;
-    // Update ?q= param as user types
+    clearBtn.style.display = searchBox.value ? 'block' : 'none';
     setQueryParam('q', encodeURIComponent(query));
     filterEpisodes(query);
 });
