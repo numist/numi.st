@@ -113,24 +113,24 @@ A tool for exploring fixed-point integer representations, with configurable inte
         const fracWidth = getFracWidth();
         const signed = isSigned();
         const raw = getCurrentRawValue();
-        
+
         const params = new URLSearchParams();
-        
+
         // Store bit widths in "int.frac" format
         if (intWidth > 0 || fracWidth > 0) {
             params.set('bits', `${intWidth}.${fracWidth}`);
         }
-        
+
         // Store signed flag
         if (signed) {
             params.set('signed', '1');
         }
-        
+
         // Store value as hex (most compact representation)
         if (raw !== 0n) {
             params.set('value', raw.toString(16));
         }
-        
+
         const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
         window.history.replaceState({}, '', newUrl);
     }
@@ -251,18 +251,18 @@ A tool for exploring fixed-point integer representations, with configurable inte
     function updateAllFields(skipActiveField = true) {
         if (updating) return;
         updating = true;
-        
+
         const raw = getCurrentRawValue();
         const totalWidth = getTotalWidth();
         const signed = isSigned();
         const fracWidth = getFracWidth();
-        
+
         // Update decimal (skip if it's the active field)
         if (!skipActiveField || activeField !== 'decimal') {
             const decimal = rawToDecimal(raw, signed, fracWidth);
             document.getElementById('decimal').value = decimal.toString();
         }
-        
+
         // Update hex (skip if it's the active field)
         if (!skipActiveField || activeField !== 'hex') {
             if (totalWidth > 0) {
@@ -272,7 +272,7 @@ A tool for exploring fixed-point integer representations, with configurable inte
                 document.getElementById('hex').value = '0';
             }
         }
-        
+
         // Update binary (skip if it's the active field)
         if (!skipActiveField || activeField !== 'binary') {
             if (totalWidth > 0) {
@@ -281,11 +281,11 @@ A tool for exploring fixed-point integer representations, with configurable inte
                 document.getElementById('binary').value = '0';
             }
         }
-        
+
         updateReadOnlyFields();
-        
+
         updating = false;
-        
+
         // Update URL parameters (unless we're still initializing)
         if (document.readyState === 'complete') {
             setQueryParams();
@@ -300,7 +300,7 @@ A tool for exploring fixed-point integer representations, with configurable inte
 
         // Adjust shadow value from previous width to new width
         shadowValue = adjustValueToWidth(shadowValue, previousWidth, totalWidth, signed);
-        
+
         // Update the previous width for next time
         previousWidth = totalWidth;
 
@@ -317,40 +317,40 @@ A tool for exploring fixed-point integer representations, with configurable inte
 
     function updateFromDecimal(forceUpdate = false) {
         if (updating) return;
-        
+
         if (!forceUpdate) {
             activeField = 'decimal';
         }
-        
+
         updating = true;
-        
+
         const decimalStr = document.getElementById('decimal').value;
         if (decimalStr === '') {
             updating = false;
             if (forceUpdate) activeField = null;
             return;
         }
-        
+
         const decimal = parseFloat(decimalStr);
         if (isNaN(decimal)) {
             updating = false;
             if (forceUpdate) activeField = null;
             return;
         }
-        
+
         const fracWidth = getFracWidth();
         const totalWidth = getTotalWidth();
         const signed = isSigned();
-        
+
         // Convert to raw
         let raw = decimalToRaw(decimal, fracWidth);
-        
+
         // Handle negative numbers for signed types
         if (signed && raw < 0n && totalWidth > 0) {
             const mask = (1n << BigInt(totalWidth)) - 1n;
             raw = (mask + 1n) + raw; // Two's complement
         }
-        
+
         // Mask to current width
         if (totalWidth > 0) {
             const mask = (1n << BigInt(totalWidth)) - 1n;
@@ -358,12 +358,12 @@ A tool for exploring fixed-point integer representations, with configurable inte
         } else {
             raw = 0n;
         }
-        
+
         shadowValue = raw;
         previousWidth = totalWidth; // Update previous width when value changes
-        
+
         updating = false;
-        
+
         if (forceUpdate) {
             activeField = null;
             updateAllFields(false);
@@ -374,24 +374,24 @@ A tool for exploring fixed-point integer representations, with configurable inte
 
     function updateFromHex(forceUpdate = false) {
         if (updating) return;
-        
+
         if (!forceUpdate) {
             activeField = 'hex';
         }
-        
+
         updating = true;
-        
+
         const hexStr = document.getElementById('hex').value.replace(/[^0-9A-Fa-f]/g, '');
         if (hexStr === '') {
             updating = false;
             if (forceUpdate) activeField = null;
             return;
         }
-        
+
         try {
             let raw = BigInt('0x' + hexStr);
             const totalWidth = getTotalWidth();
-            
+
             // Mask to current width
             if (totalWidth > 0) {
                 const mask = (1n << BigInt(totalWidth)) - 1n;
@@ -399,12 +399,12 @@ A tool for exploring fixed-point integer representations, with configurable inte
             } else {
                 raw = 0n;
             }
-            
+
             shadowValue = raw;
             previousWidth = totalWidth; // Update previous width when value changes
-            
+
             updating = false;
-            
+
             if (forceUpdate) {
                 activeField = null;
                 updateAllFields(false);
@@ -419,24 +419,24 @@ A tool for exploring fixed-point integer representations, with configurable inte
 
     function updateFromBinary(forceUpdate = false) {
         if (updating) return;
-        
+
         if (!forceUpdate) {
             activeField = 'binary';
         }
-        
+
         updating = true;
-        
+
         const binaryStr = document.getElementById('binary').value.replace(/[^01]/g, '');
         if (binaryStr === '') {
             updating = false;
             if (forceUpdate) activeField = null;
             return;
         }
-        
+
         try {
             let raw = BigInt('0b' + binaryStr);
             const totalWidth = getTotalWidth();
-            
+
             // Mask to current width
             if (totalWidth > 0) {
                 const mask = (1n << BigInt(totalWidth)) - 1n;
@@ -444,12 +444,12 @@ A tool for exploring fixed-point integer representations, with configurable inte
             } else {
                 raw = 0n;
             }
-            
+
             shadowValue = raw;
             previousWidth = totalWidth; // Update previous width when value changes
-            
+
             updating = false;
-            
+
             if (forceUpdate) {
                 activeField = null;
                 updateAllFields(false);
@@ -468,7 +468,7 @@ A tool for exploring fixed-point integer representations, with configurable inte
         const bitsParam = getQueryParam('bits');
         const signedParam = getQueryParam('signed');
         const valueParam = getQueryParam('value');
-        
+
         // Parse bits parameter (format: "int.frac")
         if (bitsParam) {
             const parts = bitsParam.split('.');
@@ -483,12 +483,12 @@ A tool for exploring fixed-point integer representations, with configurable inte
                 }
             }
         }
-        
+
         // Set signed checkbox
         if (signedParam === '1') {
             document.getElementById('signed').checked = true;
         }
-        
+
         // Load value
         if (valueParam) {
             try {
@@ -502,10 +502,10 @@ A tool for exploring fixed-point integer representations, with configurable inte
                 shadowValue = 0n;
             }
         }
-        
+
         previousWidth = getTotalWidth(); // Initialize previous width
         updateAllFields();
-        
+
         // Focus the decimal field if no value was loaded
         if (!valueParam) {
             document.getElementById('decimal').focus();

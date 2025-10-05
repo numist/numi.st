@@ -3,7 +3,7 @@
 module Jekyll
     module Tags
       class CalloutBlock < Liquid::Block
-  
+
         def initialize(tag_name, type, tokens)
           super
           type.strip!
@@ -15,7 +15,7 @@ module Jekyll
             raise "callout type \"#{type}\" not supported."
           end
         end
-  
+
         def render(context)
           site = context.registers[:site]
           converter = site.find_converter_instance(::Jekyll::Converters::Markdown)
@@ -29,5 +29,5 @@ module Jekyll
       end
     end
   end
-  
+
   Liquid::Template.register_tag('callout', Jekyll::Tags::CalloutBlock)

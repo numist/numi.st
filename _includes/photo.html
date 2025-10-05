@@ -1,7 +1,7 @@
 <figure class="figure hdrjpg" {% if photo.mp4 %}data-mp4-src="{{ photo.mp4 }}"{% endif %}>
     <picture class="figure-img">
         {% if photo.hdr %}
-        <source srcset="{{ photo.hdr }}" media="all and (min--moz-device-pixel-ratio:0) and (min-resolution: 3e1dpcm) {}" type="image/avif" /> 
+        <source srcset="{{ photo.hdr }}" media="all and (min--moz-device-pixel-ratio:0) and (min-resolution: 3e1dpcm) {}" type="image/avif" />
         {% endif %}
         <img src="{{ photo.sdr }}" {% if photo.description %} alt="{{ photo.description }}"{% endif %} style="image-rendering: -webkit-optimize-contrast;">
     </picture>

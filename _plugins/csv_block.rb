@@ -27,7 +27,7 @@ module Jekyll
         table_data = CSV.parse(csv, headers: has_headers, col_sep: separator).to_a
 
         html = "<table>\n"
-        
+
         if has_headers
           html << "<thead>\n<tr>\n"
           table_data.first.each_with_index do |header, col_index|
@@ -47,7 +47,7 @@ module Jekyll
           html << "</tr>\n"
         end
         html << "</tbody>\n</table>\n"
-        
+
         return html
       rescue => e
         return e.message

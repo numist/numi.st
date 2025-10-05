@@ -14,7 +14,7 @@ Predictably, [Peter Steinberger and Matej Bukovinski beat me to this](https://ps
 This all started because I was complaining about some uninitialized pointer value causing me grief[^mmap] and someone (explicitly trolling) said they always check pointers using:
 
 ``` c
-int fds[2] = { -1, -1}; 
+int fds[2] = { -1, -1};
 pipe(fds);
 if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
     close(fds[0]);
@@ -32,7 +32,7 @@ In case it's not abundantly clear, you should never do this[^mincore], but of co
 A different formulation of this code might look like:
 
 ``` c
-int rc, fds[2] = { -1, -1}; 
+int rc, fds[2] = { -1, -1};
 pipe(fds);
 if (write(fds[0], pointer_to_check, sizeof(intptr_t)) == -1) {
     rc = not_valid;
@@ -49,7 +49,7 @@ This reduces duplication, but has worse locality. I don't love it, but I feel li
 Really what I want is something like [Swift's `defer`](https://docs.swift.org/swift-book/ReferenceManual/Statements.html#ID532):
 
 ``` objective_c
-int fds[2] = { -1, -1}; 
+int fds[2] = { -1, -1};
 pipe(fds);
 defer ^{
     close(fds[0]);
@@ -85,7 +85,7 @@ void (^ __defer_blockname(__LINE__))(void) \
 __attribute__((unused, \
                deprecated("hands off!"), \
                cleanup(__defer_cleanup) \
-)) = 
+)) =
 ```
 
 [^mmap]: as appealing as its promise is, [using `mmap` for file access is bad](/post/2024/mmap/) and you should never use it unless you truly need garbage collected shared memory between processes, in which case your life already sucks and I'm sorry. `pread` and `pwrite` will set `errno` instead of crashing your process and are not nearly as slow as you think; you should stick with them until you can measure otherwise, at which point you should investigate doing your own paging because as I just said `mmap` is dangerous and bad.
