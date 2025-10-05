@@ -182,8 +182,25 @@ const searchBox = document.getElementById('searchBox');
 const episodeLists = Array.from(document.getElementsByClassName('episode-list'));
 const allItems = episodeLists.flatMap(list => Array.from(list.getElementsByTagName('li')));
 
-// Prepopulate search box from URL hash
-const initialQuery = decodeURIComponent(location.hash.slice(1));
+// Helper to get query param
+function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name) || '';
+}
+// Helper to set query param
+function setQueryParam(name, value) {
+    const params = new URLSearchParams(window.location.search);
+    if (value) {
+        params.set(name, value);
+    } else {
+        params.delete(name);
+    }
+    const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+    window.history.replaceState({}, '', newUrl);
+}
+
+// Prepopulate search box from ?q= param
+const initialQuery = decodeURIComponent(getQueryParam('q'));
 if (initialQuery) {
     searchBox.value = initialQuery;
 } else {
@@ -195,14 +212,14 @@ function fuzzyMatch(query, text) {
     text = text.toLowerCase();
     let queryIndex = 0;
     let textIndex = 0;
-    
+
     while (queryIndex < query.length && textIndex < text.length) {
         if (query[queryIndex] === text[textIndex]) {
             queryIndex++;
         }
         textIndex++;
     }
-    
+
     return queryIndex === query.length;
 }
 
@@ -231,8 +248,8 @@ filterEpisodes(searchBox.value);
 
 searchBox.addEventListener('input', function() {
     const query = this.value;
-    // Update URL hash as user types
-    location.hash = encodeURIComponent(query);
+    // Update ?q= param as user types
+    setQueryParam('q', encodeURIComponent(query));
     filterEpisodes(query);
 });
 </script>

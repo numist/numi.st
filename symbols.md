@@ -306,14 +306,31 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
         "₎": "Subscript Right Parenthesis",
     };
 
+    // Helper to get query param
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+    }
+    // Helper to set query param
+    function setQueryParam(name, value) {
+        const params = new URLSearchParams(window.location.search);
+        if (value) {
+            params.set(name, value);
+        } else {
+            params.delete(name);
+        }
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         const inputElement = document.querySelector('.search');
         const clearBtn = document.querySelector('.clear-btn');
 
-        // Read anchor parameter and set as initial search value
-        const anchor = window.location.hash.substring(1);
-        if (anchor) {
-            inputElement.value = decodeURIComponent(anchor);
+        // Read ?q= parameter and set as initial search value
+        const initialQuery = decodeURIComponent(getQueryParam('q'));
+        if (initialQuery) {
+            inputElement.value = initialQuery;
             clearBtn.style.display = 'block';
         }
         else if (navigator.maxTouchPoints === 0) {
@@ -322,12 +339,14 @@ The search box below uses [fuzzy matching](/post/2024/symbols). Click/tap on a s
         }
 
         inputElement.addEventListener('input', () => {
+            setQueryParam('q', encodeURIComponent(inputElement.value));
             updateMatches();
             clearBtn.style.display = inputElement.value ? 'block' : 'none';
         });
 
         clearBtn.addEventListener('click', () => {
             inputElement.value = '';
+            setQueryParam('q', '');
             clearBtn.style.display = 'none';
             updateMatches();
         });

@@ -52,6 +52,27 @@ Paste a URL and some text from the page into the fields below to generate a link
 </div>
 
 <script>
+    let isInitializing = true;
+
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+    }
+
+    function setAllQueryParams(params) {
+        if (isInitializing) {
+            return;
+        }
+        const urlParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(params)) {
+            if (value) {
+                urlParams.set(key, value);
+            }
+        }
+        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
+    }
+
     function updateLink() {
         const url = document.getElementById("url").value;
 
@@ -61,6 +82,16 @@ Paste a URL and some text from the page into the fields below to generate a link
         const suffix = document.getElementById("suffix").value;
 
         const selectedTab = $('#generatorTabs a.active').attr("id");
+
+        // Update all query params at once
+        setAllQueryParams({
+            mode: selectedTab.replace('-tab', ''),
+            url: encodeURIComponent(url),
+            prefix: encodeURIComponent(prefix),
+            start: encodeURIComponent(start),
+            end: encodeURIComponent(end),
+            suffix: encodeURIComponent(suffix)
+        });
 
         const linkElement = document.getElementById('link');
         const placeholderElement = document.getElementById('link-placeholder');
@@ -104,6 +135,20 @@ Paste a URL and some text from the page into the fields below to generate a link
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+        // Prepopulate from URL params
+        const initialMode = getQueryParam('mode') || 'simple';
+        const initialUrl = decodeURIComponent(getQueryParam('url'));
+        const initialPrefix = decodeURIComponent(getQueryParam('prefix'));
+        const initialStart = decodeURIComponent(getQueryParam('start'));
+        const initialEnd = decodeURIComponent(getQueryParam('end'));
+        const initialSuffix = decodeURIComponent(getQueryParam('suffix'));
+
+        if (initialUrl) document.getElementById("url").value = initialUrl;
+        if (initialPrefix) document.getElementById("prefix").value = initialPrefix;
+        if (initialStart) document.getElementById("start").value = initialStart;
+        if (initialEnd) document.getElementById("end").value = initialEnd;
+        if (initialSuffix) document.getElementById("suffix").value = initialSuffix;
+
         $('#generatorTabs a').on('click', function (e) {
             e.preventDefault()
             var tabElement = e.target;
@@ -153,13 +198,27 @@ Paste a URL and some text from the page into the fields below to generate a link
             });
             tabElement.classList.add("active");
             tabElement.setAttribute("aria-selected", "true");
+
             updateLink();
         });
 
-        // Set up the initial state
-        $('#generatorTabs a.active').click();
+        // Set up the initial state based on mode param
+        const tabToActivate = $(`#${initialMode}-tab`);
+        if (tabToActivate.length) {
+            tabToActivate.click();
+        } else {
+            $('#generatorTabs a.active').click();
+        }
+
+        // Call updateLink to render the page correctly on load while isInitializing is still true (to prevent no-op updates to the address bar that would wipe out a text fragment hash)
         updateLink();
-        document.getElementById("url").focus();
+
+        // Focus URL field if no params
+        if (!initialUrl && !initialStart) {
+            document.getElementById("url").focus();
+        }
+
+        isInitializing = false;
     });
 </script>
 

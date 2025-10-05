@@ -6,7 +6,7 @@ description: "I made a little tool to generate Unicode fractions"
 published_at: Fri Mar 21 14:49:09 PDT 2025
 ---
 
-Input a fraction in the format "numerator/denominator" to generate a Unicode fraction. [Vulgar fractions and fraction numerators](/symbols/#Fraction) are used when available.
+Input a fraction in the format "numerator/denominator" to generate a Unicode fraction. [Vulgar fractions and fraction numerators](/symbols/?q=Fraction) are used when available.
 
 <div class="card">
     <div class="card-body">
@@ -32,6 +32,20 @@ Input a fraction in the format "numerator/denominator" to generate a Unicode fra
     function subscript(num) {
         const subscriptDigits = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
         return String(num).split('').map(digit => subscriptDigits[parseInt(digit)]).join('')
+    }
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+    }
+    function setQueryParam(name, value) {
+        const params = new URLSearchParams(window.location.search);
+        if (value) {
+            params.set(name, value);
+        } else {
+            params.delete(name);
+        }
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
     }
     function updateFract() {
         const input = document.getElementById("fraction").value;
@@ -110,8 +124,18 @@ Input a fraction in the format "numerator/denominator" to generate a Unicode fra
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+        // Prepopulate input from ?q= param
+        const inputElement = document.getElementById("fraction");
+        const initialQuery = decodeURIComponent(getQueryParam('q'));
+        if (initialQuery) {
+            inputElement.value = initialQuery;
+        }
         updateFract();
-        document.getElementById("fraction").focus();
+        inputElement.focus();
+        inputElement.addEventListener('input', function() {
+            setQueryParam('q', encodeURIComponent(inputElement.value));
+            updateFract();
+        });
     });
 </script>
 
