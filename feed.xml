@@ -69,7 +69,7 @@ layout: none
       <published>{{ post.published_at | date_to_xmlschema }}</published>
       <updated>{{ post.modified_at | default: post.published_at | date_to_xmlschema }}</updated>
       <id>{{ post.url | absolute_url | xml_escape }}</id>
-      {% assign excerpt_only = post.feed.excerpt_only | default: site.feed.excerpt_only %}
+      {% assign excerpt_only = post.feed_excerpt_only | default: site.feed.excerpt_only %}
       {%- unless excerpt_only -%}
         {%- if is_post -%}
           <content type="html" xml:base="{{ post.url | absolute_url | xml_escape }}"><![CDATA[{{ post.content | strip }}]]></content>

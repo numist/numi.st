@@ -1,12 +1,12 @@
 ---
 layout: page
 title: Fixed Point Visualization
-excerpt_only: true
-description: "A tool for debugging fixed-point integer representations"
-published_at: Sat Oct 5 00:00:00 PDT 2025
+feed_excerpt_only: true
+description: "A tool for debugging fixed-point integer representations."
+published_at: Sun Oct  5 16:45:13 PDT 2025
 ---
 
-A tool for exploring fixed-point integer representations with configurable integer and fractional bit widths.
+A tool for exploring fixed-point integer representations, with configurable integer and fractional bit widths.
 
 <style>
     /* Make readonly divs behave like readonly inputs with proper overflow */
@@ -516,6 +516,7 @@ A tool for exploring fixed-point integer representations with configurable integ
 ## About Fixed-Point Numbers
 
 Fixed-point numbers represent fractional values using integer arithmetic by allocating a fixed number of bits to the fractional part. For example, with 8 integer bits and 8 fractional bits:
+
 - The value `3.25` is stored as `832` (3 × 256 + 0.25 × 256)
 - In binary: `00000011.01000000`
 - In hex: `0x0340`

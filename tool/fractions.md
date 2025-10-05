@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Unicode Fraction Generator
-excerpt_only: true
-description: "I made a little tool to generate Unicode fractions"
+feed_excerpt_only: true
+description: "A tool for generating fractions in Unicode."
 published_at: Fri Mar 21 14:49:09 PDT 2025
 ---
 
