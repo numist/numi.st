@@ -11,7 +11,7 @@ This site is made to be explored[^garden]; if you enjoy it, consider subscribing
 By category, you'll find:
 
 * [online tools](tool) I've built to make my life easier
-* [ideas](ideas) I couldn't get out of my head
+* [things I've learned](ideas) that I needed to share. sometimes this comes from [realizing I've been lied to](/popping-science/)
 * [stories](stories) of things that have happened to me (or that I did to myself)
 * [code](code) snippets, solutions to small problems I've had and ideas that have struck me
 * [projects](projects) throughout their lifecycle
