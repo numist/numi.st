@@ -18,4 +18,4 @@ Judge Yvonne Gonzalez Rogers, in [an Epic v. Apple decision](https://storage.cou
 
 > Internally, Phillip Schiller had advocated that Apple comply with the Injunction, but Tim Cook ignored Schiller and instead allowed Chief Financial Officer Luca Maestri and his finance team to convince him otherwise.
 
-Phil did an exceptional job, running Marketing and Events with a steady and expert hand. Every interview with him has been a masterclass in PR. I hope he enjoys spending more time with his ~~Porches~~ family, he's certainly earned it.
+Phil did an exceptional job, running Marketing and Events with a steady and expert hand. Every interview with him has been a masterclass in public relations. I hope he enjoys spending more time with his ~~Porches~~ family, he's certainly earned it.
