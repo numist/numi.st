@@ -1,8 +1,9 @@
 ---
 layout: page
 title: "Motorcycle Airbags"
-excerpt: "They're good"
+excerpt: "They're good."
 published_at: Mon Sep 15 08:32:43 PDT 2025
+image: /post/2025/airbags/pull-to-eject.jpeg
 ---
 
 While my helmet was indisputably the star of [the show](/post/2024/the-crash/) in terms of injury reduction, my airbag vest soaked up a *very* hard landing and everyone from the medics that picked me up to my riding buddies have wanted to hear more about it.
