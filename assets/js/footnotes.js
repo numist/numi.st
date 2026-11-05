@@ -1,3 +1,5 @@
+// ABOUTME: Moves Jekyll's rendered footnotes into a sidebar aligned with their references on wide screens,
+// ABOUTME: and presents them as popovers on narrow screens.
 Array.prototype.last = function () {
     return this[this.length - 1];
 };
@@ -133,46 +135,50 @@ function alignFootnotes() {
 
     if (footnotes.length === 0) { return; }
 
-    // Second pass: position footnotes, adjusting for overlaps
+    // Second pass: place each footnote beside its reference, below the previous footnote
     const container = $("article.post");
     const containerTop = container.offset().top;
-    const containerBottom = containerTop + container.outerHeight(true);
-    let hasOverlap;
-    do {
-        hasOverlap = false;
-        previousFootnoteBottom = 0;
+    const containerHeight = container.outerHeight(true);
+    var footnoteTops = [];
+    footnotes.forEach(function(escapedFootnoteID) {
+        var footnote = $(escapedFootnoteID);
+        var reference = $(`a.footnote[href="${escapedFootnoteID}"]`);
 
-        footnotes.forEach(function(escapedFootnoteID) {
-            var footnote = $(escapedFootnoteID);
-            var reference = $(`a.footnote[href="${escapedFootnoteID}"]`);
+        // Get reference position relative to container
+        var referenceTop = reference.offset().top - containerTop;
+        var referenceY = referenceTop + reference.outerHeight(true);
+        // var referenceY = (referenceTop + referenceBottom) / 2;
 
-            // Get reference position relative to container
-            var referenceTop = reference.offset().top - containerTop;
-            var referenceY = referenceTop + reference.outerHeight(true);
-            // var referenceY = (referenceTop + referenceBottom) / 2;
+        // Try to center the footnote relative to its reference
+        var targetTop = referenceY - (footnote.outerHeight(true) / 2);
 
-            // Try to center the footnote relative to its reference
-            var targetTop = referenceY - (footnote.outerHeight(true) / 2);
+        // If this would overlap with previous footnote, position below it
+        if (targetTop < previousFootnoteBottom) {
+            targetTop = previousFootnoteBottom;
+        }
 
-            // If this would overlap with previous footnote, position below it
-            if (targetTop < previousFootnoteBottom) {
-                targetTop = previousFootnoteBottom;
-            }
+        footnoteTops.push(targetTop);
+        previousFootnoteBottom = targetTop + footnote.outerHeight(true);
+    });
 
-            // If this would extend beyond container bottom, try shifting up
-            var footnoteBottom = targetTop + footnote.outerHeight(true);
-            if (footnoteBottom > containerBottom - containerTop) {
-                var newTop = (containerBottom - containerTop) - footnote.outerHeight(true);
-                if (newTop < previousFootnoteBottom) {
-                    // Need to shift previous footnotes up to make room
-                    hasOverlap = true;
-                }
-                targetTop = newTop;
-            }
+    // Third pass: shift footnotes that extend beyond the container bottom up,
+    // pushing earlier footnotes up to make room
+    var nextFootnoteTop = containerHeight;
+    for (let i = footnotes.length - 1; i >= 0; i--) {
+        var footnoteHeight = $(footnotes[i]).outerHeight(true);
+        footnoteTops[i] = Math.min(footnoteTops[i], nextFootnoteTop - footnoteHeight);
+        nextFootnoteTop = footnoteTops[i];
+    }
 
-            console.log(`Positioning footnote ${escapedFootnoteID} at ${targetTop}px`);
-            footnote.css("top", targetTop);
-            previousFootnoteBottom = targetTop + footnote.outerHeight(true);
-        });
-    } while (hasOverlap);
+    // Fourth pass: footnotes can't be pushed above the container top, so any
+    // that still don't fit extend beyond the container bottom
+    previousFootnoteBottom = 0;
+    footnotes.forEach(function(escapedFootnoteID, i) {
+        var footnote = $(escapedFootnoteID);
+        var targetTop = Math.max(footnoteTops[i], previousFootnoteBottom);
+
+        console.log(`Positioning footnote ${escapedFootnoteID} at ${targetTop}px`);
+        footnote.css("top", targetTop);
+        previousFootnoteBottom = targetTop + footnote.outerHeight(true);
+    });
 }
