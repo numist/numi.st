@@ -138,15 +138,6 @@ a {
     color: $text-color;
     text-decoration: underline;
   }
-
-  &.external {
-    background-image: url("/assets/img/icons8-external-link.svg");
-    background-position-x: right;
-    background-position-y: center;
-    background-size: 0.9em;
-    padding-right: 0.95em;
-    background-repeat: no-repeat;
-  }
 }
 
 
@@ -334,6 +325,14 @@ pre tt {
   > :last-child {
     margin-bottom: 0;
   }
+}
+
+.link-preview-favicon {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.4em;
+  vertical-align: -0.125em;
+  border-radius: 0;
 }
 
 
