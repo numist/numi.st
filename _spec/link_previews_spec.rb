@@ -686,6 +686,21 @@ describe Jekyll::LinkPreviews do
         expect(annotate(html)).to eq(html)
       end
 
+      it 'does not mistake a trailing slash in an unquoted value for a self-closing tag' do
+        output = annotate(article(%(<p><a href=#{@base}/page/>x</a></p>)))
+        expect(annotated_links(output)).to eq(1)
+      end
+
+      it 'accepts apostrophes in unquoted values' do
+        html = article(%(<p title=it's>a</p><p title='quoted'>b</p>))
+        expect(annotate(html)).to eq(html)
+      end
+
+      it 'accepts self-closing tags written right after the tag name or a quote' do
+        html = article(%(<p>a<x/><y z="1"/><w /></p>))
+        expect(annotate(html)).to eq(html)
+      end
+
       it 'matches tag names case-insensitively' do
         html = %(<DIV><p>x</P></div>)
         expect(annotate(html)).to eq(html)
@@ -733,6 +748,12 @@ describe Jekyll::LinkPreviews do
           )
         end.to raise_error(markup_error, 'notes/page.md:1: </article> does not close <a> from line 1')
         expect(@requests).to be_empty
+      end
+
+      it 'fails on a tag it cannot parse, pointing at that tag' do
+        expect { annotate_page(%(<p>\n<a href="#{@base}/page"=>x</a></p>)) }.to raise_error(
+          markup_error, 'notes/page.md:2: unparseable tag'
+        )
       end
 
       it 'fails on a link inside a link' do

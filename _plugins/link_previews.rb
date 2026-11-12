@@ -45,8 +45,10 @@ module Jekyll
     VOID_ELEMENTS = %w[area base br col embed hr img input link meta param source track wbr].freeze
     RAW_TEXT_ELEMENTS = %w[script style textarea].freeze
 
-    # The rest of a tag after its name, where quoted attribute values may contain '>' or '<!--'.
-    TAG_ATTRIBUTES = %q{(?:[^>"']|"[^"]*"|'[^']*')*}
+    # The rest of a tag after its name: attributes, whose quoted values may contain '>' or '<!--' and whose
+    # unquoted values may contain quotes, and slashes. Each attribute is matched atomically, so a tag
+    # that doesn't parse fails quickly.
+    TAG_ATTRIBUTES = %q{(?>\s*(?:[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>][^\s>]*))?|/))*\s*}
 
     # Matches the markup that matters for tracking open elements: comments, doctypes and CDATA
     # (all skipped), and start and end tags.
@@ -55,7 +57,8 @@ module Jekyll
       (?<unterminated_comment><!--) |
       <!\[CDATA\[.*?\]\]> |
       <![^>]*> |
-      <(?<end>/)?(?<name>[a-z][^\s/>]*)(?<attributes>#{TAG_ATTRIBUTES})>
+      <(?<end>/)?(?<name>[a-z][^\s/>]*)(?<attributes>#{TAG_ATTRIBUTES})> |
+      (?<unparseable_tag></?[a-z])
     }mix
 
     class MarkupError < StandardError; end
@@ -144,6 +147,7 @@ module Jekyll
       while (token = TOKEN.match(html, position))
         position = token.end(0)
         markup_error(html, page, token.begin(0), 'unterminated comment') if token[:unterminated_comment]
+        markup_error(html, page, token.begin(0), 'unparseable tag') if token[:unparseable_tag]
         next unless token[:name]
 
         name = token[:name].downcase
@@ -160,7 +164,7 @@ module Jekyll
           closing_tag = %r{</#{name}\s*>}i.match(html, position)
           markup_error(html, page, token.begin(0), "<#{name}> is never closed") unless closing_tag
           position = closing_tag.end(0)
-        elsif !VOID_ELEMENTS.include?(name) && !token[:attributes].end_with?('/')
+        elsif !VOID_ELEMENTS.include?(name) && !self_closing?(token[:attributes])
           if name == 'a' && (outer_link = open_elements.find { |element| element[:name] == 'a' })
             opened_on = line_number(html, outer_link[:start])
             markup_error(html, page, token.begin(0), "<a> inside <a> from line #{opened_on}")
@@ -171,6 +175,11 @@ module Jekyll
       return if open_elements.empty?
 
       markup_error(html, page, open_elements.last[:start], "<#{open_elements.last[:name]}> is never closed")
+    end
+
+    # Whether a tag ends in '/' on its own, rather than as the end of an unquoted attribute value.
+    def self.self_closing?(attributes)
+      attributes.match?(%r{(?:\A|[\s"'])/\z})
     end
 
     def self.markup_error(html, page, offset, problem)
