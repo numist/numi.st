@@ -71,6 +71,11 @@ describe Jekyll::LinkPreviews do
       response.body = '<title>Too Late</title>'
     end
     serve.('/static/junk', 'application/octet-stream', 'not an image')
+    @server.mount_proc('/iri') do |request, response|
+      @requests << request.unparsed_uri
+      response['Content-Type'] = 'text/html'
+      response.body = %(<html><head><title>IRI</title><link rel="icon" href="ícone.png"></head></html>)
+    end
     @thread = Thread.new { @server.start }
     @base = "http://127.0.0.1:#{@server.config[:Port]}"
   end
@@ -137,6 +142,10 @@ describe Jekyll::LinkPreviews do
       expect(external?('ftp://example.com/file')).to be false
       expect(external?(nil)).to be false
       expect(external?('')).to be false
+    end
+
+    it 'treats IRIs with non-ASCII characters as external' do
+      expect(external?('https://en.wikipedia.org/wiki/Café')).to be true
     end
 
     it 'treats unparseable hrefs as internal' do
@@ -296,6 +305,13 @@ describe Jekyll::LinkPreviews do
         'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'title: Net::ReadTimeout'
       )
       expect(report(slow)).to include("Link preview: #{@base}/slow: no title (title: Net::ReadTimeout); #{fix_hint}")
+    end
+
+    it 'fetches IRIs percent-encoded, caching them under the href as written' do
+      expect(previews.title("#{@base}/iri/café")).to eq('IRI')
+      previews.save
+      expect(@requests).to eq(['/iri/caf%C3%A9', '/iri/%C3%ADcone.png', '/favicon.ico'])
+      expect(YAML.load_file(links_path).keys).to eq(["#{@base}/iri/café"])
     end
 
     it 'caches protocol-relative links under their https URL' do

@@ -60,10 +60,15 @@ module Jekyll
     class CacheError < StandardError; end
 
     def self.external?(href)
-      uri = URI.parse(href.to_s)
+      uri = URI.parse(ascii_url(href))
       !uri.host.nil? && [nil, 'http', 'https'].include?(uri.scheme&.downcase)
     rescue URI::InvalidURIError
       false
+    end
+
+    # Percent-encodes non-ASCII characters so that IRIs can be parsed and requested as URIs.
+    def self.ascii_url(url)
+      url.to_s.gsub(/[^\x00-\x7F]+/) { |characters| characters.bytes.map { |byte| format('%%%02X', byte) }.join }
     end
 
     def self.text_only?(link)
@@ -88,7 +93,7 @@ module Jekyll
       icons = links.select { |link| rels.(link).include?('icon') } +
               links.select { |link| (rels.(link) & %w[apple-touch-icon apple-touch-icon-precomposed]).any? }
       urls = icons.map do |link|
-        URI.join(page_url, link['href'].strip).to_s
+        URI.join(page_url, ascii_url(link['href'].strip)).to_s
       rescue URI::Error
         nil
       end
@@ -279,9 +284,7 @@ module Jekyll
       private
 
       def cache_key(href)
-        uri = URI(href.start_with?('//') ? "https:#{href}" : href)
-        uri.fragment = nil
-        uri.to_s
+        (href.start_with?('//') ? "https:#{href}" : href).sub(/#.*/m, '')
       end
 
       def entry(url)
@@ -303,6 +306,7 @@ module Jekyll
       end
 
       def fetch_page(url)
+        url = LinkPreviews.ascii_url(url)
         @pages[url] ||= begin
           response, final_url = get(url)
           raise "not HTML (#{response.content_type})" unless %w[text/html application/xhtml+xml].include?(response.content_type)
@@ -361,7 +365,7 @@ module Jekyll
         when Net::HTTPRedirection
           raise 'too many redirects' if redirects.zero?
 
-          get(URI.join(url, response['location']).to_s, redirects - 1)
+          get(URI.join(url, LinkPreviews.ascii_url(response['location'])).to_s, redirects - 1)
         when Net::HTTPSuccess
           [response, url]
         else
