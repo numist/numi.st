@@ -62,8 +62,13 @@ window.addEventListener("load", function () {
         pressPointerType = e.pointerType;
         pressFoundPreviewShown = current === this;
     });
+    // A press that ends in a scroll or long-press never clicks
+    links.on("pointercancel", function () {
+        pressPointerType = null;
+    });
     links.on("click", function (e) {
-        var tapped = pressPointerType === "touch";
+        // Keyboard activation clicks with a detail of 0
+        var tapped = e.detail !== 0 && pressPointerType === "touch";
         pressPointerType = null;
         if (tapped && !pressFoundPreviewShown) {
             e.preventDefault();
