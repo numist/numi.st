@@ -130,9 +130,13 @@ module Jekyll
     end
 
     # Whether a link's href is written in the page's source as-is or HTML-escaped, rather than generated.
+    # The URL must be followed by something that can't continue it, so a generated URL isn't mistaken
+    # for a longer literal URL that starts with it.
     def self.literal_in_source?(source, href, opening_tag)
       written = opening_tag.match(/\shref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i)
-      source.include?(href) || (!written.nil? && source.include?(written.captures.compact.first))
+      [href, written&.captures&.compact&.first].compact.any? do |url|
+        source.match?(/#{Regexp.escape(url)}(?=[\s"'<>)\]]|\z)/)
+      end
     end
 
     def self.squish(text)

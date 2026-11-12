@@ -864,6 +864,7 @@ describe Jekyll::LinkPreviews do
           <a href="#{@base}/meta-charset?x=1&amp;y=2">raw HTML</a>,
           a [generated link]({{ site.generated }}/empty-title),
           and a [titled generated link]({{ site.generated }}/untitled "Titled By Hand").
+          A [generated prefix]({{ site.generated }}/long) of a [longer literal link](#{@base}/long-title).
 
           [ref]: #{@base}/og
         MARKDOWN
@@ -880,9 +881,10 @@ describe Jekyll::LinkPreviews do
 
       it 'previews literal links from the source' do
         output = build_post
-        expect(output.scan('class="link-preview"').size).to eq(6)
+        expect(output.scan('class="link-preview"').size).to eq(8)
         expect(YAML.load_file(File.join(@source, '_link_previews/links.yml')).keys).to contain_exactly(
           "#{@base}/page?a=1&b=2", "#{@base}/og", "#{@base}/latin1", "#{@base}/meta-charset?x=1&y=2",
+          "#{@base}/long-title",
           "#{@base}/page" # from index.html
         )
       end
@@ -890,6 +892,12 @@ describe Jekyll::LinkPreviews do
       it 'does not fetch or cache links built by the page' do
         build_post
         expect(@requests).not_to include('/empty-title', '/untitled')
+      end
+
+      it 'does not mistake a generated URL for a longer literal URL that starts with it' do
+        build_post
+        expect(@requests).not_to include('/long')
+        expect(@log.string).to include("Link preview: post.md links to #{@base}/long, which the page generates")
       end
 
       it 'shows the URL without a favicon and warns on every build when a generated link has no title' do
