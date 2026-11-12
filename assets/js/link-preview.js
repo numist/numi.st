@@ -9,10 +9,12 @@ window.addEventListener("load", function () {
     var pressPointerType = null;
     var pressFoundPreviewShown = false;
 
+    // Without animation, hiding finishes immediately, so showing a preview again can't race a fade-out
     links.popover({
         trigger: "manual",
         placement: "auto",
-        html: true
+        html: true,
+        animation: false
     });
 
     function show(link) {
