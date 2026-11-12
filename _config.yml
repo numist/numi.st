@@ -36,6 +36,10 @@ markdown: kramdown
 
 permalink: /post/:year/:title/
 
+# Build-time cache written by _plugins/link_previews.rb; excluded so writing it doesn't retrigger --watch.
+exclude:
+  - _link_previews
+
 header_pages:
   - about.md
   - blog.md
