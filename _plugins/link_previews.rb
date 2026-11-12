@@ -161,6 +161,10 @@ module Jekyll
           markup_error(html, page, token.begin(0), "<#{name}> is never closed") unless closing_tag
           position = closing_tag.end(0)
         elsif !VOID_ELEMENTS.include?(name) && !token[:attributes].end_with?('/')
+          if name == 'a' && (outer_link = open_elements.find { |element| element[:name] == 'a' })
+            opened_on = line_number(html, outer_link[:start])
+            markup_error(html, page, token.begin(0), "<a> inside <a> from line #{opened_on}")
+          end
           open_elements << { name: name, start: token.begin(0), opening_tag_end: position }
         end
       end

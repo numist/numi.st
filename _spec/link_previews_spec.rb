@@ -735,6 +735,12 @@ describe Jekyll::LinkPreviews do
         expect(@requests).to be_empty
       end
 
+      it 'fails on a link inside a link' do
+        expect { annotate_page(%(<a href="#{@base}/page">o\n<a href="#{@base}/og">i</a></a>)) }.to raise_error(
+          markup_error, 'notes/page.md:2: <a> inside <a> from line 1'
+        )
+      end
+
       it 'fails on unterminated comments and raw text elements' do
         expect { annotate_page(%(<p>\n<!-- x</p>)) }.to raise_error(markup_error, 'notes/page.md:2: unterminated comment')
         expect { annotate_page(%(<script>x)) }.to raise_error(markup_error, 'notes/page.md:1: <script> is never closed')
