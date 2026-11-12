@@ -136,7 +136,7 @@ module Jekyll
     def self.literal_in_source?(source, href, opening_tag)
       written = opening_tag.match(/\shref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i)
       [href, written&.captures&.compact&.first].compact.any? do |url|
-        source.match?(/#{Regexp.escape(url)}(?=[\s"'<>)\]]|\z)/)
+        source.match?(/#{Regexp.escape(url)}(?=[\s"'<>)\],|;}]|\z)/)
       end
     end
 

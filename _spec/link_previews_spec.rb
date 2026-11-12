@@ -176,6 +176,24 @@ describe Jekyll::LinkPreviews do
     end
   end
 
+  describe '.literal_in_source?' do
+    def literal?(href, source)
+      described_class.literal_in_source?(source, href, %(<a href="#{href}">))
+    end
+
+    it 'finds URLs followed by punctuation that ends them, as in YAML flow collections and tables' do
+      expect(literal?('https://e.com/a', 'links: [https://e.com/a, https://e.com/b]')).to be true
+      expect(literal?('https://e.com/b', 'links: [https://e.com/a, https://e.com/b]')).to be true
+      expect(literal?('https://e.com/c', 'link: {url: https://e.com/c}')).to be true
+      expect(literal?('https://e.com/d', '| https://e.com/d|')).to be true
+      expect(literal?('https://e.com/e', 'see https://e.com/e; also')).to be true
+    end
+
+    it 'does not find a URL that only starts a longer URL' do
+      expect(literal?('https://e.com/a', 'https://e.com/ab')).to be false
+    end
+  end
+
   describe '.text_only?' do
     def link(html)
       Nokogiri::HTML5.fragment(html).at_css('a')
