@@ -332,8 +332,10 @@ module Jekyll
         url = LinkPreviews.ascii_url(url)
         @pages[url] ||= begin
           response, body, final_url = get(url, PAGE_SIZE_LIMIT) do |headers|
-            raise "not HTML (#{headers.content_type})" unless %w[text/html application/xhtml+xml].include?(headers.content_type)
+            %w[text/html application/xhtml+xml].include?(headers.content_type)
           end
+          raise "not HTML (#{response.content_type})" unless body
+
           { url: final_url, body: body, charset: response.type_params['charset'] }
         rescue StandardError => e
           { url: url, error: error_message(e) }
@@ -349,14 +351,15 @@ module Jekyll
         nil
       end
 
+      # Returns the downloaded favicon's file name, or nil if there's no usable image at the URL. Favicons
+      # are optional, so why one couldn't be used isn't recorded.
       def download_favicon(url)
         response, body, = get(url, FAVICON_SIZE_LIMIT) do |headers|
-          raise "not an image (#{headers.content_type})" if headers.content_type.to_s.match?(%r{\Atext/|svg})
-          raise 'too large' if headers.content_length.to_i > FAVICON_SIZE_LIMIT
+          !headers.content_type.to_s.match?(%r{\Atext/|svg}) && headers.content_length.to_i <= FAVICON_SIZE_LIMIT
         end
-        raise 'too large' if body.bytesize > FAVICON_SIZE_LIMIT
+        return nil if body.nil? || body.empty? || body.bytesize > FAVICON_SIZE_LIMIT
 
-        extension = !body.empty? && favicon_extension(response.content_type, body)
+        extension = favicon_extension(response.content_type, body)
         return nil unless extension
 
         name = "#{Digest::SHA256.hexdigest(body)[0, 16]}.#{extension}"
@@ -380,8 +383,9 @@ module Jekyll
       end
 
       # Fetches a URL, following redirects, and returns the response, up to just over limit bytes of
-      # its body, and the final URL. The block can raise to reject a response before its body is read.
-      def get(url, limit, redirects = MAX_REDIRECTS, &check)
+      # its body, and the final URL. The block decides from the headers whether to read the body; the
+      # body is nil for a response it rejects.
+      def get(url, limit, redirects = MAX_REDIRECTS, &accept)
         uri = URI(url)
         options = { use_ssl: uri.scheme == 'https', open_timeout: @timeout, read_timeout: @timeout }
         # Breaking out of request_get skips reading the rest of the body; leaving start closes the connection.
@@ -390,14 +394,13 @@ module Jekyll
             break [response] if response.is_a?(Net::HTTPRedirection)
             raise "HTTP #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-            check.call(response)
-            break [response, read_body(response, limit)]
+            break [response, accept.call(response) ? read_body(response, limit) : nil]
           end
         end
         return [response, body, url] unless response.is_a?(Net::HTTPRedirection)
         raise 'too many redirects' if redirects.zero?
 
-        get(URI.join(url, LinkPreviews.ascii_url(response['location'])).to_s, limit, redirects - 1, &check)
+        get(URI.join(url, LinkPreviews.ascii_url(response['location'])).to_s, limit, redirects - 1, &accept)
       end
 
       def read_body(response, limit)
