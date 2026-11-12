@@ -37,17 +37,23 @@ module Jekyll
       'image/webp' => 'webp'
     }.freeze
 
-    # The rest of an opening tag after its name, where quoted attribute values may contain '>'.
+    VOID_ELEMENTS = %w[area base br col embed hr img input link meta param source track wbr].freeze
+    RAW_TEXT_ELEMENTS = %w[script style textarea].freeze
+
+    # The rest of a tag after its name, where quoted attribute values may contain '>' or '<!--'.
     TAG_ATTRIBUTES = %q{(?:[^>"']|"[^"]*"|'[^']*')*}
 
-    # Matches links and article boundaries, plus comments and raw text elements so that tags inside them are ignored.
-    LINK_PATTERN = %r{
+    # Matches the markup that matters for tracking open elements: comments, doctypes and CDATA
+    # (all skipped), and start and end tags.
+    TOKEN = %r{
       <!--.*?--> |
-      <(?<raw>script|style|textarea)\b#{TAG_ATTRIBUTES}>.*?</\k<raw>\s*> |
-      (?<article_start><article\b#{TAG_ATTRIBUTES}>) |
-      (?<article_end></article\s*>) |
-      (?<open><a\s#{TAG_ATTRIBUTES}>).*?</a\s*>
+      (?<unterminated_comment><!--) |
+      <!\[CDATA\[.*?\]\]> |
+      <![^>]*> |
+      <(?<end>/)?(?<name>[a-z][^\s/>]*)(?<attributes>#{TAG_ATTRIBUTES})>
     }mix
+
+    class MarkupError < StandardError; end
 
     def self.external?(href)
       uri = URI.parse(href.to_s)
@@ -86,19 +92,72 @@ module Jekyll
     end
 
     # Annotates external text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
-    def self.annotate(html, previews)
-      article_depth = 0
-      html.gsub(LINK_PATTERN) do |match|
-        found = Regexp.last_match
-        article_depth += 1 if found[:article_start]
-        article_depth -= 1 if found[:article_end] && article_depth.positive?
-        next match unless found[:open] && article_depth.positive?
+    # Raises MarkupError, naming the page, if the HTML's elements aren't properly closed and nested.
+    def self.annotate(html, previews, page: nil)
+      edits = []
+      each_element(html, page) do |name, start, opening_tag_end, finish, in_article|
+        next unless name == 'a' && in_article
 
-        link = Nokogiri::HTML5.fragment(match).at_css('a')
-        next match unless link && external?(link['href']) && text_only?(link)
+        link = Nokogiri::HTML5.fragment(html[start...finish]).at_css('a')
+        next unless link && external?(link['href']) && text_only?(link)
 
-        annotated_opening_tag(link, previews) + match[found[:open].length..]
+        edits << [start, opening_tag_end, annotated_opening_tag(link, previews)]
       end
+      apply_edits(html, edits)
+    end
+
+    # Yields each element as it closes: its name, the offsets of its start, the end of its opening
+    # tag, and its end, and whether it is inside an <article>.
+    def self.each_element(html, page)
+      open_elements = []
+      position = 0
+      while (token = TOKEN.match(html, position))
+        position = token.end(0)
+        markup_error(html, page, token.begin(0), 'unterminated comment') if token[:unterminated_comment]
+        next unless token[:name]
+
+        name = token[:name].downcase
+        if token[:end]
+          element = open_elements.pop
+          markup_error(html, page, token.begin(0), "stray </#{name}>") unless element
+          unless element[:name] == name
+            opened_on = line_number(html, element[:start])
+            markup_error(html, page, token.begin(0), "</#{name}> does not close <#{element[:name]}> from line #{opened_on}")
+          end
+          in_article = open_elements.any? { |ancestor| ancestor[:name] == 'article' }
+          yield name, element[:start], element[:opening_tag_end], position, in_article
+        elsif RAW_TEXT_ELEMENTS.include?(name)
+          closing_tag = %r{</#{name}\s*>}i.match(html, position)
+          markup_error(html, page, token.begin(0), "<#{name}> is never closed") unless closing_tag
+          position = closing_tag.end(0)
+        elsif !VOID_ELEMENTS.include?(name) && !token[:attributes].end_with?('/')
+          open_elements << { name: name, start: token.begin(0), opening_tag_end: position }
+        end
+      end
+      return if open_elements.empty?
+
+      markup_error(html, page, open_elements.last[:start], "<#{open_elements.last[:name]}> is never closed")
+    end
+
+    def self.markup_error(html, page, offset, problem)
+      raise MarkupError, "#{page}:#{line_number(html, offset)}: #{problem}"
+    end
+
+    def self.line_number(html, offset)
+      html[0...offset].count("\n") + 1
+    end
+
+    # Replaces each [start, end, text] span (in document order) without touching the rest of the string.
+    def self.apply_edits(html, edits)
+      return html if edits.empty?
+
+      output = +''
+      position = 0
+      edits.each do |start, finish, text|
+        output << html[position...start] << text
+        position = finish
+      end
+      output << html[position..]
     end
 
     # A link's own title attribute overrides the cached page title, and is removed so its
@@ -125,7 +184,7 @@ module Jekyll
       (site.pages + site.documents).each do |item|
         next unless item.output && item.output_ext == '.html'
 
-        item.output = annotate(item.output, previews)
+        item.output = annotate(item.output, previews, page: item.relative_path)
       end
       previews.save
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }

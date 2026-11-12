@@ -530,15 +530,76 @@ describe Jekyll::LinkPreviews do
         expect(@requests).to be_empty
       end
 
-      it 'treats an unclosed link as running to the next </a>, hiding any </article> in between' do
-        output = annotate(
-          %(<article><a href="#{@base}/page">unclosed</article>) +
-          %(<footer><a href="#{@base}/page">footer</a></footer>) +
-          %(<a href="#{@base}/page">after</a>)
+      it 'skips comments, doctypes, and CDATA' do
+        html = %(<!DOCTYPE html><!-- <div> --><svg><![CDATA[ <div> ]]></svg>) +
+               article(%(<a href="#{@base}/page">in</a>))
+        expect(annotated_links(annotate(html))).to eq(1)
+      end
+
+      it 'handles comment markers inside quoted attributes' do
+        output = annotate(article(
+          %(<a href="#{@base}/page" data-x="<!--">one</a><a href="#{@base}/og">two</a><!-- -->)
+        ))
+        expect(annotated_links(output)).to eq(2)
+      end
+
+      it 'accepts void and self-closing elements' do
+        html = article(%(<p>a<br>b<img src="x"><wbr><input><hr><svg><path d="M0"/></svg><br /></p>))
+        expect(annotate(html)).to eq(html)
+      end
+
+      it 'matches tag names case-insensitively' do
+        html = %(<DIV><p>x</P></div>)
+        expect(annotate(html)).to eq(html)
+      end
+    end
+
+    describe 'unbalanced markup' do
+      def annotate_page(html)
+        described_class.annotate(html, Jekyll::LinkPreviews::Previews.new(cache_dir), page: 'notes/page.md')
+      end
+
+      def markup_error
+        Jekyll::LinkPreviews::MarkupError
+      end
+
+      it 'fails on an unclosed element' do
+        expect { annotate_page(%(<div>\n<section>\n</div>)) }.to raise_error(
+          markup_error, 'notes/page.md:3: </div> does not close <section> from line 2'
         )
-        expect(output).to start_with(%(<article><a href="#{@base}/page" class="link-preview"))
-        expect(output).to include(%(<footer><a href="#{@base}/page">footer</a></footer>))
-        expect(output).to match(%r{</footer><a href="#{@base}/page" class="link-preview"})
+      end
+
+      it 'fails on an element still open at the end' do
+        expect { annotate_page(%(<div>\n<p>text\n</div>)) }.to raise_error(
+          markup_error, 'notes/page.md:3: </div> does not close <p> from line 2'
+        )
+        expect { annotate_page(%(<div>\n<div>\n</div>)) }.to raise_error(
+          markup_error, 'notes/page.md:1: <div> is never closed'
+        )
+      end
+
+      it 'fails on a stray end tag' do
+        expect { annotate_page(%(<p>x</p>\n</div>)) }.to raise_error(markup_error, 'notes/page.md:2: stray </div>')
+      end
+
+      it 'does not infer optional end tags' do
+        expect { annotate_page(%(<ul><li>one<li>two</ul>)) }.to raise_error(markup_error, /does not close <li>/)
+        expect { annotate_page(%(<p>one<p>two)) }.to raise_error(markup_error, /<p> is never closed/)
+      end
+
+      it 'fails on an unclosed link' do
+        expect do
+          annotate_page(
+            %(<article><a href="#{@base}/page">unclosed</article>) +
+            %(<footer><a href="#{@base}/page">footer</a></footer>)
+          )
+        end.to raise_error(markup_error, 'notes/page.md:1: </article> does not close <a> from line 1')
+        expect(@requests).to be_empty
+      end
+
+      it 'fails on unterminated comments and raw text elements' do
+        expect { annotate_page(%(<p>\n<!-- x</p>)) }.to raise_error(markup_error, 'notes/page.md:2: unterminated comment')
+        expect { annotate_page(%(<script>x)) }.to raise_error(markup_error, 'notes/page.md:1: <script> is never closed')
       end
     end
 
@@ -619,6 +680,11 @@ describe Jekyll::LinkPreviews do
         'url' => 'http://example.com', 'quiet' => true
       )
       Jekyll::Site.new(config).process
+    end
+
+    it 'fails the build on unbalanced markup, naming the page' do
+      File.write(File.join(@source, 'broken.html'), "---\n---\n<div>\n")
+      expect { build }.to raise_error(Jekyll::LinkPreviews::MarkupError, 'broken.html:1: <div> is never closed')
     end
 
     it 'annotates HTML pages, leaves other outputs alone, and publishes favicons' do
