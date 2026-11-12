@@ -78,7 +78,7 @@ module Jekyll
     def self.extract_title(body, charset)
       document = parse(body, charset)
       candidates = [document.at_css('title')&.text, document.at_css('meta[property="og:title"]')&.[]('content')]
-      candidates.map { |candidate| candidate&.gsub(/\s+/, ' ')&.strip }.find { |candidate| candidate && !candidate.empty? }
+      candidates.map { |candidate| squish(candidate) }.find { |candidate| !candidate.empty? }
     end
 
     # Returns candidate favicon URLs for a page, most preferred first, ending with the host's /favicon.ico.
@@ -96,18 +96,37 @@ module Jekyll
     end
 
     # Annotates external text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
-    # Raises MarkupError, naming the page, if the HTML's elements aren't properly closed and nested.
-    def self.annotate(html, previews, page: nil)
+    # Links whose href isn't written out in the page's source were generated (e.g. by Liquid), so they
+    # aren't fetched or cached. Raises MarkupError, naming the page, if the HTML's elements aren't
+    # properly closed and nested.
+    def self.annotate(html, previews, page: nil, source: nil)
       edits = []
+      untitled_generated_hrefs = []
       each_element(html, page) do |name, start, opening_tag_end, finish, in_article|
         next unless name == 'a' && in_article
 
         link = Nokogiri::HTML5.fragment(html[start...finish]).at_css('a')
         next unless link && external?(link['href']) && text_only?(link)
 
-        edits << [start, opening_tag_end, annotated_opening_tag(link, previews)]
+        generated = !source.nil? && !literal_in_source?(source, link['href'], html[start...opening_tag_end])
+        untitled_generated_hrefs << link['href'] if generated && squish(link['title']).empty?
+        edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated)]
+      end
+      untitled_generated_hrefs.uniq.each do |href|
+        Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which the page generates; " \
+                                            'give the link an inline title, e.g. [text](url "Title")')
       end
       apply_edits(html, edits)
+    end
+
+    # Whether a link's href is written in the page's source as-is or HTML-escaped, rather than generated.
+    def self.literal_in_source?(source, href, opening_tag)
+      written = opening_tag.match(/\shref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i)
+      source.include?(href) || (!written.nil? && source.include?(written.captures.compact.first))
+    end
+
+    def self.squish(text)
+      text.to_s.gsub(/\s+/, ' ').strip
     end
 
     # Yields each element as it closes: its name, the offsets of its start, the end of its opening
@@ -166,14 +185,19 @@ module Jekyll
 
     # A link's own title attribute overrides the cached page title, and is removed so its
     # native tooltip doesn't compete with the popover.
-    def self.annotated_opening_tag(link, previews)
+    def self.annotated_opening_tag(link, previews, generated: false)
       href = link['href']
-      inline_title = link.remove_attribute('title')&.value.to_s.gsub(/\s+/, ' ').strip
-      title = inline_title.empty? ? previews.title(href) : inline_title
+      inline_title = squish(link.remove_attribute('title')&.value)
+      if generated
+        title = inline_title unless inline_title.empty?
+      else
+        title = inline_title.empty? ? previews.title(href) : inline_title
+        favicon = previews.favicon(href)
+      end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       link['target'] ||= '_blank'
       link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
-      link['data-bs-content'] = popover_content(href, title || href, previews.favicon(href))
+      link['data-bs-content'] = popover_content(href, title || href, favicon)
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
@@ -188,7 +212,9 @@ module Jekyll
       (site.pages + site.documents).each do |item|
         next unless item.output && item.output_ext == '.html'
 
-        item.output = annotate(item.output, previews, page: item.relative_path)
+        source_path = File.join(site.source, item.relative_path)
+        source = File.read(source_path) if File.file?(source_path)
+        item.output = annotate(item.output, previews, page: item.relative_path, source: source)
       end
       previews.report
       previews.save

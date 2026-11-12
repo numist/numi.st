@@ -748,6 +748,65 @@ describe Jekyll::LinkPreviews do
       expect { build }.to raise_error(Jekyll::LinkPreviews::MarkupError, 'broken.html:1: <div> is never closed')
     end
 
+    describe 'generated links' do
+      before do
+        FileUtils.mkdir_p(File.join(@source, '_layouts'))
+        File.write(File.join(@source, '_layouts/post.html'), "<article>{{ content }}</article>\n")
+        File.write(File.join(@source, 'post.md'), <<~MARKDOWN)
+          ---
+          layout: post
+          ---
+          An [inline link](#{@base}/page?a=1&b=2), a [reference link][ref], an autolink <#{@base}/latin1>,
+          <a href="#{@base}/meta-charset?x=1&amp;y=2">raw HTML</a>,
+          a [generated link]({{ site.generated }}/empty-title),
+          and a [titled generated link]({{ site.generated }}/untitled "Titled By Hand").
+
+          [ref]: #{@base}/og
+        MARKDOWN
+      end
+
+      def build_post
+        config = Jekyll.configuration(
+          'source' => @source, 'destination' => File.join(@dir, '_site'),
+          'url' => 'http://example.com', 'generated' => @base
+        )
+        Jekyll::Site.new(config).process
+        File.read(File.join(@dir, '_site/post.html'))
+      end
+
+      it 'previews literal links from the source' do
+        output = build_post
+        expect(output.scan('class="link-preview"').size).to eq(6)
+        expect(YAML.load_file(File.join(@source, '_link_previews/links.yml')).keys).to contain_exactly(
+          "#{@base}/page?a=1&b=2", "#{@base}/og", "#{@base}/latin1", "#{@base}/meta-charset?x=1&y=2",
+          "#{@base}/page" # from index.html
+        )
+      end
+
+      it 'does not fetch or cache links built by the page' do
+        build_post
+        expect(@requests).not_to include('/empty-title', '/untitled')
+      end
+
+      it 'shows the URL without a favicon and warns on every build when a generated link has no title' do
+        2.times { build_post }
+        expect(@log.string.scan(
+          "Link preview: post.md links to #{@base}/empty-title, which the page generates; " \
+          'give the link an inline title, e.g. [text](url "Title")'
+        ).size).to eq(2)
+        expect(build_post).to include(
+          %(data-bs-content="&lt;a href=&quot;#{@base}/empty-title&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;#{@base}/empty-title&lt;/a&gt;")
+        )
+      end
+
+      it 'uses the inline title of a generated link without a favicon' do
+        expect(build_post).to include(
+          %(data-bs-content="&lt;a href=&quot;#{@base}/untitled&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Titled By Hand&lt;/a&gt;")
+        )
+        expect(@log.string).not_to include('/untitled')
+      end
+    end
+
     it 'annotates HTML pages, leaves other outputs alone, and publishes favicons' do
       build
       site = File.join(@dir, '_site')
