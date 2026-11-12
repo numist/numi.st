@@ -3,6 +3,8 @@ layout: page
 title: Labelling External Links
 ---
 
+TKTK: rewrite for build-time link previews (`_plugins/link_previews.rb`, `assets/js/link-preview.js`); the icon approach below has been removed.
+
 This website labels external links by executing some javascript when the window loads:
 
 ``` javascript
