@@ -9,12 +9,12 @@ require 'logger'
 require_relative '../_plugins/link_previews'
 
 describe Jekyll::LinkPreviews do
-  PNG_BYTES = "\x89PNG\r\n\x1a\nfake png".b
-  ICO_BYTES = "\x00\x00\x01\x00fake ico".b
-  GIF_BYTES = "GIF89afake gif".b
-  JPG_BYTES = "\xFF\xD8\xFF\xE0fake jpg".b
-  WEBP_BYTES = "RIFF\x10\x00\x00\x00WEBPVP8 fake".b
-  SVG_BYTES = '<svg xmlns="http://www.w3.org/2000/svg"></svg>'.b
+  def png_bytes = "\x89PNG\r\n\x1a\nfake png".b
+  def ico_bytes = "\x00\x00\x01\x00fake ico".b
+  def gif_bytes = "GIF89afake gif".b
+  def jpg_bytes = "\xFF\xD8\xFF\xE0fake jpg".b
+  def webp_bytes = "RIFF\x10\x00\x00\x00WEBPVP8 fake".b
+  def svg_bytes = '<svg xmlns="http://www.w3.org/2000/svg"></svg>'.b
 
   before(:all) do
     @requests = []
@@ -47,17 +47,17 @@ describe Jekyll::LinkPreviews do
     serve.('/redirect-loop', 'text/html', '', 302, 'Location' => '/redirect-loop')
     serve.('/paper.pdf', 'application/pdf', '%PDF-1.4 fake')
     serve.('/missing', 'text/html', '<html><head><title>Not Found</title></head></html>', 404)
-    serve.('/static/icon.png', 'image/png', PNG_BYTES)
-    serve.('/favicon.ico', 'image/x-icon', ICO_BYTES)
-    { 'ico' => ICO_BYTES, 'png' => PNG_BYTES, 'gif' => GIF_BYTES, 'jpg' => JPG_BYTES, 'webp' => WEBP_BYTES }
+    serve.('/static/icon.png', 'image/png', png_bytes)
+    serve.('/favicon.ico', 'image/x-icon', ico_bytes)
+    { 'ico' => ico_bytes, 'png' => png_bytes, 'gif' => gif_bytes, 'jpg' => jpg_bytes, 'webp' => webp_bytes }
       .each do |extension, bytes|
         serve.("/generic-#{extension}", 'text/html', icon_page.("/static/generic.#{extension}"))
         serve.("/static/generic.#{extension}", 'application/octet-stream', bytes)
       end
     serve.('/svg-icon', 'text/html', icon_page.('/static/icon.svg'))
-    serve.('/static/icon.svg', 'image/svg+xml', SVG_BYTES)
+    serve.('/static/icon.svg', 'image/svg+xml', svg_bytes)
     serve.('/generic-svg', 'text/html', icon_page.('/static/generic.svg'))
-    serve.('/static/generic.svg', 'application/octet-stream', SVG_BYTES)
+    serve.('/static/generic.svg', 'application/octet-stream', svg_bytes)
     serve.('/junk-icon', 'text/html', icon_page.('/static/junk'))
     serve.('/markup-title', 'text/html',
            %(<html><head><title>&lt;img src=x onerror=alert(1)&gt;"'</title></head></html>))
@@ -80,13 +80,13 @@ describe Jekyll::LinkPreviews do
     Dir.mktmpdir do |dir|
       @dir = dir
       @log = StringIO.new
-      original_logger = Jekyll.logger
-      Jekyll.instance_variable_set(:@logger, Jekyll::LogAdapter.new(Logger.new(@log), :info))
+      original_writer = Jekyll.logger.writer
+      Jekyll.logger = Logger.new(@log)
       begin
         @requests.clear
         example.run
       ensure
-        Jekyll.instance_variable_set(:@logger, original_logger)
+        Jekyll.logger = original_writer
       end
     end
   end
@@ -297,12 +297,12 @@ describe Jekyll::LinkPreviews do
 
     it 'downloads the favicon declared by the page' do
       expect(previews.favicon("#{@base}/page")).to eq('127.0.0.1.png')
-      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.png'))).to eq(PNG_BYTES)
+      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.png'))).to eq(png_bytes)
     end
 
     it 'falls back to /favicon.ico' do
       expect(previews.favicon("#{@base}/untitled")).to eq('127.0.0.1.ico')
-      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.ico'))).to eq(ICO_BYTES)
+      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.ico'))).to eq(ico_bytes)
     end
 
     %w[ico png gif jpg webp].each do |extension|
@@ -474,18 +474,18 @@ describe Jekyll::LinkPreviews do
     end
 
     describe 'escaping' do
-      MARKUP = %(<img src=x onerror=alert(1)>"')
-      ESCAPED_MARKUP_IN_ATTRIBUTE = '&amp;lt;img src=x onerror=alert(1)&amp;gt;&amp;quot;&amp;#39;'
+      let(:markup) { %(<img src=x onerror=alert(1)>"') }
+      let(:escaped_markup_in_attribute) { '&amp;lt;img src=x onerror=alert(1)&amp;gt;&amp;quot;&amp;#39;' }
 
       it 'escapes markup in fetched titles' do
         output = annotate(article(%(<a href="#{@base}/markup-title">x</a>)))
-        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{ESCAPED_MARKUP_IN_ATTRIBUTE}&lt;/a&gt;">x</a>))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;">x</a>))
         expect(output).not_to include('<img')
       end
 
       it 'escapes markup in inline titles' do
-        output = annotate(article(%(<a href="#{@base}/page" title="#{CGI.escapeHTML(MARKUP)}">x</a>)))
-        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{ESCAPED_MARKUP_IN_ATTRIBUTE}&lt;/a&gt;">x</a>))
+        output = annotate(article(%(<a href="#{@base}/page" title="#{CGI.escapeHTML(markup)}">x</a>)))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;">x</a>))
         expect(output).not_to include('<img')
       end
     end
@@ -630,7 +630,7 @@ describe Jekyll::LinkPreviews do
       expect(File.read(File.join(site, 'feed.xml'))).to eq(
         %(<feed><article><a href="#{@base}/page">external</a></article></feed>\n)
       )
-      expect(File.binread(File.join(site, 'assets/img/favicons/127.0.0.1.png'))).to eq(PNG_BYTES)
+      expect(File.binread(File.join(site, 'assets/img/favicons/127.0.0.1.png'))).to eq(png_bytes)
       expect(YAML.load_file(File.join(@source, '_link_previews/titles.yml'))).to eq(
         "#{@base}/page" => { 'title' => 'Fish & Chips: “A History”' }
       )
