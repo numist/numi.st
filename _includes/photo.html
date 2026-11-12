@@ -24,7 +24,7 @@
             <span style="white-space: nowrap;">
                 in
                 {% if photo.location.lat and photo.location.long %}
-                    <a href="https://www.openstreetmap.org/?mlat={{ photo.location.lat }}&mlon={{ photo.location.long }}#map=18/{{ photo.location.lat }}/{{ photo.location.long }}">
+                    <a href="https://www.openstreetmap.org/?mlat={{ photo.location.lat }}&mlon={{ photo.location.long }}#map=18/{{ photo.location.lat }}/{{ photo.location.long }}" title="{{ photo.location.string | escape }} ({{ photo.location.lat }}, {{ photo.location.long }}) on OpenStreetMap">
                         {{ photo.location.string }}
                     </a>
                     {% else %}
