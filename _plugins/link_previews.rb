@@ -12,8 +12,7 @@ module Jekyll
   module LinkPreviews
     CACHE_DIR = '_link_previews'
     CACHE_FILE = 'links.yml'
-    FIX_HINT = "set title:/favicon: in #{CACHE_DIR}/#{CACHE_FILE} (drop images in #{CACHE_DIR}/favicons/), " \
-               'or delete the entry to retry'
+    FIX_HINT = "set title: and remove error: in #{CACHE_DIR}/#{CACHE_FILE}, or delete the entry to retry"
     FAVICON_URL_DIR = '/assets/img/favicons'
     USER_AGENT = 'numi.st link preview builder'
     TIMEOUT = 5
@@ -263,7 +262,7 @@ module Jekyll
       def title(href)
         url = cache_key(href)
         @title_needed[url] = true
-        entry(url)['title']&.to_s
+        usable_title(entry(url))
       end
 
       def favicon(href)
@@ -277,21 +276,19 @@ module Jekyll
         @entries.values.map { |entry| entry['favicon'] }.compact.uniq.select { |name| File.file?(favicon_path(name)) }
       end
 
-      # Warns once for each URL used in this build whose preview is missing anything.
+      # Warns once for each URL used in this build whose title was needed but is unusable, or whose
+      # entry names a favicon file that doesn't exist.
       def report
         @title_needed.each do |url, title_needed|
           entry = @entries[url]
-          problems = []
-          problems << 'no title' if title_needed && entry['title'].nil?
-          if entry['favicon'].nil?
-            problems << 'no favicon'
-          elsif !File.file?(favicon_path(entry['favicon']))
-            problems << "favicon #{entry['favicon']} not found in #{CACHE_DIR}/favicons/"
+          if title_needed && usable_title(entry).nil?
+            reason = blank?(entry['error']) ? '' : " (#{entry['error']})"
+            Jekyll.logger.warn('Link preview:', "#{url}: no title#{reason}; #{FIX_HINT}")
           end
-          next if problems.empty?
+          name = entry['favicon']
+          next if name.nil? || File.file?(favicon_path(name))
 
-          reason = entry['error'] ? " (#{entry['error']})" : ''
-          Jekyll.logger.warn('Link preview:', "#{url}: #{problems.join(', ')}#{reason}; #{FIX_HINT}")
+          Jekyll.logger.warn('Link preview:', "#{url}: favicon #{name} not found in #{CACHE_DIR}/favicons/")
         end
       end
 
@@ -314,16 +311,23 @@ module Jekyll
         @entries[url]
       end
 
+      # An entry's error is about its title: when there is one, the popover shows the URL instead,
+      # whatever title the entry has.
+      def usable_title(entry)
+        title = entry['title']&.to_s
+        title unless blank?(title) || !blank?(entry['error'])
+      end
+
+      def blank?(value)
+        value.to_s.strip.empty?
+      end
+
       def fetch_entry(url)
         page = fetch_page(url)
         title = page[:body] && LinkPreviews.extract_title(page[:body], page[:charset])
-        favicon, favicon_error = discover_favicon(page)
-        errors = {
-          'title' => page[:error] || (title ? nil : 'no title found'),
-          'favicon' => favicon_error
-        }.compact.map { |part, error| "#{part}: #{error}" }
-        entry = { 'title' => title, 'favicon' => favicon }
-        entry['error'] = errors.join('; ') unless errors.empty?
+        entry = { 'title' => title, 'favicon' => discover_favicon(page) }
+        error = page[:error] || (title ? nil : 'no title found')
+        entry['error'] = error if error
         entry
       end
 
@@ -339,16 +343,13 @@ module Jekyll
         end
       end
 
-      # Returns the first of the page's candidate favicons that downloads, or nil and the last failure.
+      # Returns the file name of the first of the page's candidate favicons that downloads, if any.
       def discover_favicon(page)
-        error = nil
         LinkPreviews.icon_urls(page[:body], page[:charset], page[:url]).each do |url|
-          download = (@downloads[url] ||= download_favicon(url))
-          return [download[:name], nil] if download[:name]
-
-          error = download[:error]
+          @downloads[url] = download_favicon(url) unless @downloads.key?(url)
+          return @downloads[url] if @downloads[url]
         end
-        [nil, error]
+        nil
       end
 
       def download_favicon(url)
@@ -359,14 +360,14 @@ module Jekyll
         raise 'too large' if body.bytesize > FAVICON_SIZE_LIMIT
 
         extension = !body.empty? && favicon_extension(response.content_type, body)
-        return { error: "not an image (#{response.content_type})" } unless extension
+        return nil unless extension
 
         name = "#{Digest::SHA256.hexdigest(body)[0, 16]}.#{extension}"
         FileUtils.mkdir_p(File.join(@directory, 'favicons'))
         File.binwrite(favicon_path(name), body) unless File.file?(favicon_path(name))
-        { name: name }
-      rescue StandardError => e
-        { error: error_message(e) }
+        name
+      rescue StandardError
+        nil
       end
 
       def favicon_extension(content_type, body)

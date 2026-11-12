@@ -289,8 +289,23 @@ describe Jekyll::LinkPreviews do
     end
 
     def fix_hint
-      'set title:/favicon: in _link_previews/links.yml (drop images in _link_previews/favicons/), ' \
-        'or delete the entry to retry'
+      'set title: and remove error: in _link_previews/links.yml, or delete the entry to retry'
+    end
+
+    # Serves a titled page from a host with no favicon at all.
+    def with_iconless_server
+      server = WEBrick::HTTPServer.new(
+        BindAddress: '127.0.0.1', Port: 0, Logger: WEBrick::Log.new(StringIO.new), AccessLog: []
+      )
+      server.mount_proc('/titled') do |_, response|
+        response['Content-Type'] = 'text/html'
+        response.body = '<html><head><title>Iconless</title></head></html>'
+      end
+      thread = Thread.new { server.start }
+      yield "http://127.0.0.1:#{server.config[:Port]}"
+    ensure
+      server.shutdown
+      thread.join
     end
 
     it 'fetches page titles' do
@@ -320,7 +335,7 @@ describe Jekyll::LinkPreviews do
     }.each do |path, reason|
       it "returns nil and explains how to fix a missing title (#{reason})" do
         expect(previews.title("#{@base}#{path}")).to be_nil
-        expect(report).to include("Link preview: #{@base}#{path}: no title (title: #{reason}); #{fix_hint}")
+        expect(report).to include("Link preview: #{@base}#{path}: no title (#{reason}); #{fix_hint}")
       end
     end
 
@@ -329,13 +344,25 @@ describe Jekyll::LinkPreviews do
       expect(@requests.count('/redirect-loop')).to eq(6)
     end
 
-    it 'records why both the title and favicon are missing for unreachable hosts' do
+    it 'records why the title is missing for unreachable hosts' do
       url = "http://127.0.0.1:#{unused_port}/"
       expect(previews.title(url)).to be_nil
       expect(previews.favicon(url)).to be_nil
-      expect(report).to match(
-        %r{Link preview: #{Regexp.escape(url)}: no title, no favicon \(title: Failed to open TCP connection to [^;]+; favicon: Failed to open TCP connection to [^;]+\); #{Regexp.escape(fix_hint)}}
+      warnings = report
+      expect(warnings.lines.size).to eq(1)
+      expect(warnings).to match(
+        %r{Link preview: #{Regexp.escape(url)}: no title \(Failed to open TCP connection to .+\); #{Regexp.escape(fix_hint)}\n\z}
       )
+    end
+
+    it 'does not track favicons that cannot be found' do
+      with_iconless_server do |base|
+        expect(previews.title("#{base}/titled")).to eq('Iconless')
+        expect(previews.favicon("#{base}/titled")).to be_nil
+        previews.save
+        expect(YAML.load_file(links_path).fetch("#{base}/titled")).to eq('title' => 'Iconless', 'favicon' => nil)
+        expect(report).to be_empty
+      end
     end
 
     it 'gives up on pages that respond too slowly, recording a clean error' do
@@ -343,9 +370,9 @@ describe Jekyll::LinkPreviews do
       expect(slow.title("#{@base}/slow")).to be_nil
       slow.save
       expect(YAML.load_file(links_path).fetch("#{@base}/slow")).to eq(
-        'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'title: Net::ReadTimeout'
+        'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'Net::ReadTimeout'
       )
-      expect(report(slow)).to include("Link preview: #{@base}/slow: no title (title: Net::ReadTimeout); #{fix_hint}")
+      expect(report(slow)).to include("Link preview: #{@base}/slow: no title (Net::ReadTimeout); #{fix_hint}")
     end
 
     it 'fetches IRIs percent-encoded, caching them under the href as written' do
@@ -363,7 +390,7 @@ describe Jekyll::LinkPreviews do
       it 'does not download the body of a non-HTML link' do
         expect(previews.title("#{@base}/video.mp4")).to be_nil
         previews.save
-        expect(YAML.load_file(links_path).fetch("#{@base}/video.mp4")['error']).to start_with('title: not HTML (video/mp4)')
+        expect(YAML.load_file(links_path).fetch("#{@base}/video.mp4")['error']).to eq('not HTML (video/mp4)')
         expect(streamed_megabytes('/video.mp4')).to be < 16
       end
 
@@ -384,10 +411,10 @@ describe Jekyll::LinkPreviews do
       previews.title(href)
       previews.save
       expect(YAML.load_file(links_path).keys).to eq(["https:#{href}"])
-      expect(report).to include("Link preview: https:#{href}: no title, no favicon (")
+      expect(report).to include("Link preview: https:#{href}: no title (")
     end
 
-    it 'warns once per URL per build, covering everything missing' do
+    it 'warns once per URL per build' do
       3.times do
         previews.title("#{@base}/missing")
         previews.favicon("#{@base}/missing")
@@ -473,7 +500,7 @@ describe Jekyll::LinkPreviews do
           #{@base}/missing:
             title:
             favicon: #{favicon_name(ico_bytes, 'ico')}
-            error: 'title: HTTP 404'
+            error: HTTP 404
           #{@base}/page:
             title: 'Fish & Chips: “A History”'
             favicon: #{favicon_name(png_bytes, 'png')}
@@ -505,7 +532,7 @@ describe Jekyll::LinkPreviews do
         cached = described_class.new(cache_dir)
         expect(cached.title("#{@base}/missing")).to be_nil
         expect(@requests).to be_empty
-        expect(report(cached)).to include("Link preview: #{@base}/missing: no title (title: HTTP 404); #{fix_hint}")
+        expect(report(cached)).to include("Link preview: #{@base}/missing: no title (HTTP 404); #{fix_hint}")
       end
 
       it 'uses hand-filled titles and favicons without fetching or warning' do
@@ -513,7 +540,6 @@ describe Jekyll::LinkPreviews do
           #{@base}/missing:
             title: Filled In By Hand
             favicon: by-hand.png
-            error: 'title: HTTP 404'
         YAML
         File.binwrite(File.join(cache_dir, 'favicons', 'by-hand.png'), png_bytes)
         expect(previews.title("#{@base}/missing")).to eq('Filled In By Hand')
@@ -554,8 +580,26 @@ describe Jekyll::LinkPreviews do
         expect(previews.favicon("#{@base}/page")).to be_nil
         expect(previews.favicon_files).to be_empty
         expect(report).to include(
-          "Link preview: #{@base}/page: favicon gone.png not found in _link_previews/favicons/; #{fix_hint}"
+          "Link preview: #{@base}/page: favicon gone.png not found in _link_previews/favicons/\n"
         )
+      end
+
+      it 'treats an entry with an error as having no title, keeping the title in the file' do
+        hand_written = "#{@base}/walled:\n  title: Browser Verification\n  favicon:\n  error: bot wall\n"
+        write_links(hand_written)
+        expect(previews.title("#{@base}/walled")).to be_nil
+        previews.save
+        expect(File.read(links_path)).to eq(hand_written)
+        expect(@requests).to be_empty
+        warnings = report
+        expect(warnings.lines.size).to eq(1)
+        expect(warnings).to end_with("Link preview: #{@base}/walled: no title (bot wall); #{fix_hint}\n")
+      end
+
+      it 'does not warn about entries with a blank favicon' do
+        write_links("#{@base}/page:\n  title: Page\n  favicon:\n")
+        expect(previews.favicon("#{@base}/page")).to be_nil
+        expect(report).to be_empty
       end
 
       it 'treats a favicon name that is a directory as missing' do
@@ -609,6 +653,18 @@ describe Jekyll::LinkPreviews do
       ))
     end
 
+    it 'shows the URL, and any favicon, for a link whose entry has an error despite having a title' do
+      FileUtils.mkdir_p(File.join(cache_dir, 'favicons'))
+      File.binwrite(File.join(cache_dir, 'favicons', 'walled.png'), png_bytes)
+      File.write(links_path, "#{@base}/walled:\n  title: Browser Verification\n  favicon: walled.png\n  error: bot wall\n")
+      output = annotate(article(%(<a href="#{@base}/walled">x</a>)))
+      expect(output).to include(
+        %(rel=&quot;noopener&quot;&gt;#{@base}/walled&lt;/a&gt;" data-favicon="/assets/img/favicons/walled.png">x</a>)
+      )
+      expect(output).not_to include('Browser Verification')
+      expect(@requests).to be_empty
+    end
+
     it 'gives links with a favicon its URL, for previews built from copies of the link' do
       output = annotate(article(%(<a href="#{@base}/page">with</a><a href="http://127.0.0.1:#{unused_port}/">without</a>)))
       previews.report
@@ -623,7 +679,7 @@ describe Jekyll::LinkPreviews do
         %(data-bs-content="&lt;a href=&quot;#{url}&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;#{url}&lt;/a&gt;">gone</a>)
       ))
       previews.report
-      expect(@log.string).to include("Link preview: #{url}: no title, no favicon (")
+      expect(@log.string).to include("Link preview: #{url}: no title (")
     end
 
     it 'shows a title attribute instead of the page title, without caching it, while still fetching the URL for its favicon' do
