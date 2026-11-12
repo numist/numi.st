@@ -76,6 +76,29 @@ describe Jekyll::LinkPreviews do
       response['Content-Type'] = 'text/html'
       response.body = %(<html><head><title>IRI</title><link rel="icon" href="ícone.png"></head></html>)
     end
+    @streamed = {}
+    stream = lambda do |path, content_type, first_chunk|
+      @server.mount_proc(path) do |request, response|
+        @requests << request.path
+        response['Content-Type'] = content_type
+        response.chunked = true
+        response.body = proc do |out|
+          @streamed[path] = 0
+          [first_chunk, *Array.new(1024) { 'x' * 65_536 }].each do |chunk|
+            out.write(chunk)
+            @streamed[path] += chunk.bytesize
+          end
+        rescue Errno::EPIPE, Errno::ECONNRESET, IOError
+          nil
+        end
+      end
+    end
+    stream.('/video.mp4', 'video/mp4', 'fake video')
+    stream.('/huge.html', 'text/html', '<html><head><title>Huge</title></head><body>')
+    serve.('/huge-icon', 'text/html', icon_page.('/static/huge.png'))
+    stream.('/static/huge.png', 'image/png', png_bytes)
+    serve.('/big-icon', 'text/html', icon_page.('/static/big.png'))
+    serve.('/static/big.png', 'image/png', png_bytes + ('x' * 600_000))
     @thread = Thread.new { @server.start }
     @base = "http://127.0.0.1:#{@server.config[:Port]}"
   end
@@ -312,6 +335,30 @@ describe Jekyll::LinkPreviews do
       previews.save
       expect(@requests).to eq(['/iri/caf%C3%A9', '/iri/%C3%ADcone.png', '/favicon.ico'])
       expect(YAML.load_file(links_path).keys).to eq(["#{@base}/iri/café"])
+    end
+
+    describe 'large responses' do
+      def streamed_megabytes(path)
+        @streamed.fetch(path) / 1_048_576.0
+      end
+
+      it 'does not download the body of a non-HTML link' do
+        expect(previews.title("#{@base}/video.mp4")).to be_nil
+        previews.save
+        expect(YAML.load_file(links_path).fetch("#{@base}/video.mp4")['error']).to start_with('title: not HTML (video/mp4)')
+        expect(streamed_megabytes('/video.mp4')).to be < 16
+      end
+
+      it 'reads only the start of a huge page' do
+        expect(previews.title("#{@base}/huge.html")).to eq('Huge')
+        expect(streamed_megabytes('/huge.html')).to be < 16
+      end
+
+      it 'rejects favicons that are too large, whether or not their size is declared' do
+        expect(previews.favicon("#{@base}/big-icon")).to eq(favicon_name(ico_bytes, 'ico'))
+        expect(previews.favicon("#{@base}/huge-icon")).to eq(favicon_name(ico_bytes, 'ico'))
+        expect(streamed_megabytes('/static/huge.png')).to be < 16
+      end
     end
 
     it 'caches protocol-relative links under their https URL' do

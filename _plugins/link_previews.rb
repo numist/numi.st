@@ -18,6 +18,8 @@ module Jekyll
     USER_AGENT = 'numi.st link preview builder'
     TIMEOUT = 5
     MAX_REDIRECTS = 5
+    PAGE_SIZE_LIMIT = 1024 * 1024
+    FAVICON_SIZE_LIMIT = 512 * 1024
 
     # Elements that may appear inside a link without it ceasing to be a text link.
     TEXT_ELEMENTS = %w[abbr b bdi bdo br cite code del dfn em i ins kbd mark q s samp small span strong sub sup time u var wbr].freeze
@@ -308,10 +310,10 @@ module Jekyll
       def fetch_page(url)
         url = LinkPreviews.ascii_url(url)
         @pages[url] ||= begin
-          response, final_url = get(url)
-          raise "not HTML (#{response.content_type})" unless %w[text/html application/xhtml+xml].include?(response.content_type)
-
-          { url: final_url, body: response.body, charset: response.type_params['charset'] }
+          response, body, final_url = get(url, PAGE_SIZE_LIMIT) do |headers|
+            raise "not HTML (#{headers.content_type})" unless %w[text/html application/xhtml+xml].include?(headers.content_type)
+          end
+          { url: final_url, body: body, charset: response.type_params['charset'] }
         rescue StandardError => e
           { url: url, error: error_message(e) }
         end
@@ -330,8 +332,12 @@ module Jekyll
       end
 
       def download_favicon(url)
-        response, = get(url)
-        body = response.body.to_s.b
+        response, body, = get(url, FAVICON_SIZE_LIMIT) do |headers|
+          raise "not an image (#{headers.content_type})" if headers.content_type.to_s.match?(%r{\Atext/|svg})
+          raise 'too large' if headers.content_length.to_i > FAVICON_SIZE_LIMIT
+        end
+        raise 'too large' if body.bytesize > FAVICON_SIZE_LIMIT
+
         extension = !body.empty? && favicon_extension(response.content_type, body)
         return { error: "not an image (#{response.content_type})" } unless extension
 
@@ -355,22 +361,34 @@ module Jekyll
         error.is_a?(Timeout::Error) ? error.class.name : error.message
       end
 
-      def get(url, redirects = MAX_REDIRECTS)
+      # Fetches a URL, following redirects, and returns the response, up to just over limit bytes of
+      # its body, and the final URL. The block can raise to reject a response before its body is read.
+      def get(url, limit, redirects = MAX_REDIRECTS, &check)
         uri = URI(url)
         options = { use_ssl: uri.scheme == 'https', open_timeout: @timeout, read_timeout: @timeout }
-        response = Net::HTTP.start(uri.host, uri.port, **options) do |http|
-          http.get(uri.request_uri, 'User-Agent' => USER_AGENT)
-        end
-        case response
-        when Net::HTTPRedirection
-          raise 'too many redirects' if redirects.zero?
+        # Breaking out of request_get skips reading the rest of the body; leaving start closes the connection.
+        response, body = Net::HTTP.start(uri.host, uri.port, **options) do |http|
+          http.request_get(uri.request_uri, 'User-Agent' => USER_AGENT) do |response|
+            break [response] if response.is_a?(Net::HTTPRedirection)
+            raise "HTTP #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-          get(URI.join(url, LinkPreviews.ascii_url(response['location'])).to_s, redirects - 1)
-        when Net::HTTPSuccess
-          [response, url]
-        else
-          raise "HTTP #{response.code}"
+            check.call(response)
+            break [response, read_body(response, limit)]
+          end
         end
+        return [response, body, url] unless response.is_a?(Net::HTTPRedirection)
+        raise 'too many redirects' if redirects.zero?
+
+        get(URI.join(url, LinkPreviews.ascii_url(response['location'])).to_s, limit, redirects - 1, &check)
+      end
+
+      def read_body(response, limit)
+        body = +''.b
+        response.read_body do |chunk|
+          body << chunk
+          break if body.bytesize > limit
+        end
+        body
       end
 
       def load
