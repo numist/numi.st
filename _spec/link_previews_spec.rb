@@ -6,6 +6,7 @@ require 'webrick'
 require 'tmpdir'
 require 'stringio'
 require 'logger'
+require 'digest'
 require_relative '../_plugins/link_previews'
 
 describe Jekyll::LinkPreviews do
@@ -44,6 +45,9 @@ describe Jekyll::LinkPreviews do
     serve.('/meta-charset', 'text/html',
            "<html><head><meta charset=\"windows-1252\"><title>\x93Quoted\x94</title></head></html>".b)
     serve.('/redirect', 'text/html', '', 302, 'Location' => '/page')
+    serve.('/moved', 'text/html', '', 302, 'Location' => '/nested/page')
+    serve.('/nested/page', 'text/html', icon_page.('icon.gif'))
+    serve.('/nested/icon.gif', 'image/gif', gif_bytes)
     serve.('/redirect-loop', 'text/html', '', 302, 'Location' => '/redirect-loop')
     serve.('/paper.pdf', 'application/pdf', '%PDF-1.4 fake')
     serve.('/missing', 'text/html', '<html><head><title>Not Found</title></head></html>', 404)
@@ -95,8 +99,12 @@ describe Jekyll::LinkPreviews do
     File.join(@dir, '_link_previews')
   end
 
-  def titles_path
-    File.join(cache_dir, 'titles.yml')
+  def links_path
+    File.join(cache_dir, 'links.yml')
+  end
+
+  def favicon_name(bytes, extension)
+    "#{Digest::SHA256.hexdigest(bytes)[0, 16]}.#{extension}"
   end
 
   def unused_port
@@ -225,13 +233,23 @@ describe Jekyll::LinkPreviews do
   describe Jekyll::LinkPreviews::Previews do
     subject(:previews) { described_class.new(cache_dir) }
 
+    def report(previews_to_report = previews)
+      previews_to_report.report
+      @log.string
+    end
+
+    def fix_hint
+      'set title:/favicon: in _link_previews/links.yml (drop images in _link_previews/favicons/), ' \
+        'or delete the entry to retry'
+    end
+
     it 'fetches page titles' do
       expect(previews.title("#{@base}/page")).to eq('Fish & Chips: “A History”')
       expect(previews.title("#{@base}/og")).to eq('OG & Title')
       expect(previews.title("#{@base}/empty-title")).to eq('From OG')
       expect(previews.title("#{@base}/latin1")).to eq('Café')
       expect(previews.title("#{@base}/meta-charset")).to eq('“Quoted”')
-      expect(@log.string).to be_empty
+      expect(report).to be_empty
     end
 
     it 'follows redirects' do
@@ -241,7 +259,7 @@ describe Jekyll::LinkPreviews do
     it 'ignores the fragment when fetching' do
       expect(previews.title("#{@base}/page#section")).to eq('Fish & Chips: “A History”')
       expect(previews.title("#{@base}/page")).to eq('Fish & Chips: “A History”')
-      expect(@requests).to eq(['/page'])
+      expect(@requests).to eq(['/page', '/static/icon.png'])
     end
 
     {
@@ -252,9 +270,7 @@ describe Jekyll::LinkPreviews do
     }.each do |path, reason|
       it "returns nil and explains how to fix a missing title (#{reason})" do
         expect(previews.title("#{@base}#{path}")).to be_nil
-        expect(@log.string).to include(
-          "Link preview: no title for #{@base}#{path} (#{reason}); set one in _link_previews/titles.yml"
-        )
+        expect(report).to include("Link preview: #{@base}#{path}: no title (title: #{reason}); #{fix_hint}")
       end
     end
 
@@ -263,105 +279,140 @@ describe Jekyll::LinkPreviews do
       expect(@requests.count('/redirect-loop')).to eq(6)
     end
 
-    it 'returns nil and warns for unreachable hosts' do
-      port = unused_port
-      expect(previews.title("http://127.0.0.1:#{port}/")).to be_nil
-      expect(@log.string).to match(
-        %r{Link preview: no title for http://127\.0\.0\.1:#{port}/ \(.+\); set one in _link_previews/titles\.yml}
+    it 'records why both the title and favicon are missing for unreachable hosts' do
+      url = "http://127.0.0.1:#{unused_port}/"
+      expect(previews.title(url)).to be_nil
+      expect(previews.favicon(url)).to be_nil
+      expect(report).to match(
+        %r{Link preview: #{Regexp.escape(url)}: no title, no favicon \(title: Failed to open TCP connection to [^;]+; favicon: Failed to open TCP connection to [^;]+\); #{Regexp.escape(fix_hint)}}
       )
     end
 
-    it 'gives up on pages that respond too slowly' do
+    it 'gives up on pages that respond too slowly, recording a clean error' do
       slow = described_class.new(cache_dir, timeout: 0.1)
       expect(slow.title("#{@base}/slow")).to be_nil
       slow.save
-      error = YAML.load_file(titles_path).fetch("#{@base}/slow").fetch('error')
-      expect(error).to start_with('Net::ReadTimeout')
-      expect(@log.string).to include(
-        "Link preview: no title for #{@base}/slow (#{error}); set one in _link_previews/titles.yml"
+      expect(YAML.load_file(links_path).fetch("#{@base}/slow")).to eq(
+        'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'title: Net::ReadTimeout'
       )
+      expect(report(slow)).to include("Link preview: #{@base}/slow: no title (title: Net::ReadTimeout); #{fix_hint}")
     end
 
     it 'caches protocol-relative links under their https URL' do
       href = "//127.0.0.1:#{@server.config[:Port]}/page"
       previews.title(href)
       previews.save
-      expect(YAML.load_file(titles_path).keys).to eq(["https:#{href}"])
-      expect(@log.string).to include("Link preview: no title for https:#{href} (")
+      expect(YAML.load_file(links_path).keys).to eq(["https:#{href}"])
+      expect(report).to include("Link preview: https:#{href}: no title, no favicon (")
     end
 
-    it 'warns about a missing title once per URL' do
-      3.times { previews.title("#{@base}/missing") }
-      expect(@log.string.scan('no title for').size).to eq(1)
+    it 'warns once per URL per build, covering everything missing' do
+      3.times do
+        previews.title("#{@base}/missing")
+        previews.favicon("#{@base}/missing")
+      end
+      expect(report.scan('Link preview:').size).to eq(1)
     end
 
-    it 'downloads the favicon declared by the page' do
-      expect(previews.favicon("#{@base}/page")).to eq('127.0.0.1.png')
-      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.png'))).to eq(png_bytes)
+    it 'only warns about a missing title when the title was needed' do
+      previews.favicon("#{@base}/missing")
+      expect(report).to be_empty
     end
 
-    it 'falls back to /favicon.ico' do
-      expect(previews.favicon("#{@base}/untitled")).to eq('127.0.0.1.ico')
-      expect(File.binread(File.join(cache_dir, 'favicons', '127.0.0.1.ico'))).to eq(ico_bytes)
-    end
+    describe 'favicons' do
+      it "downloads the favicon declared by the page, named by its content" do
+        expect(previews.favicon("#{@base}/page")).to eq(favicon_name(png_bytes, 'png'))
+        expect(File.binread(File.join(cache_dir, 'favicons', favicon_name(png_bytes, 'png')))).to eq(png_bytes)
+      end
 
-    %w[ico png gif jpg webp].each do |extension|
-      it "recognizes #{extension} favicons served with a generic content type" do
-        expect(previews.favicon("#{@base}/generic-#{extension}")).to eq("127.0.0.1.#{extension}")
-        expect(@requests).to eq(["/generic-#{extension}", "/static/generic.#{extension}"])
+      it 'falls back to /favicon.ico' do
+        expect(previews.favicon("#{@base}/untitled")).to eq(favicon_name(ico_bytes, 'ico'))
+        expect(File.binread(File.join(cache_dir, 'favicons', favicon_name(ico_bytes, 'ico')))).to eq(ico_bytes)
+      end
+
+      it 'discovers a favicon for each URL, resolving it against the final URL after redirects' do
+        expect(previews.favicon("#{@base}/moved")).to eq(favicon_name(gif_bytes, 'gif'))
+        expect(previews.favicon("#{@base}/page")).to eq(favicon_name(png_bytes, 'png'))
+        expect(@requests).to eq(['/moved', '/nested/page', '/nested/icon.gif', '/page', '/static/icon.png'])
+      end
+
+      it 'downloads each favicon URL once per build' do
+        previews.favicon("#{@base}/untitled")
+        previews.favicon("#{@base}/og")
+        expect(@requests.count('/favicon.ico')).to eq(1)
+      end
+
+      it 'stores identical favicons once' do
+        expect(previews.favicon("#{@base}/generic-png")).to eq(previews.favicon("#{@base}/page"))
+        expect(Dir.children(File.join(cache_dir, 'favicons'))).to eq([favicon_name(png_bytes, 'png')])
+      end
+
+      %w[ico png gif jpg webp].each do |extension|
+        it "recognizes #{extension} favicons served with a generic content type" do
+          bytes = send("#{extension}_bytes")
+          expect(previews.favicon("#{@base}/generic-#{extension}")).to eq(favicon_name(bytes, extension))
+          expect(@requests).to eq(["/generic-#{extension}", "/static/generic.#{extension}"])
+        end
+      end
+
+      it 'rejects SVG favicons whatever their content type' do
+        expect(previews.favicon("#{@base}/svg-icon")).to eq(favicon_name(ico_bytes, 'ico'))
+        expect(previews.favicon("#{@base}/generic-svg")).to eq(favicon_name(ico_bytes, 'ico'))
+      end
+
+      it 'rejects favicons that are not recognizable images' do
+        expect(previews.favicon("#{@base}/junk-icon")).to eq(favicon_name(ico_bytes, 'ico'))
+      end
+
+      it 'fetches each page only once when asked for both its title and favicon' do
+        previews.title("#{@base}/page")
+        previews.favicon("#{@base}/page")
+        expect(@requests).to eq(['/page', '/static/icon.png'])
+      end
+
+      it 'lists the favicon files that cache entries name' do
+        previews.favicon("#{@base}/page")
+        previews.favicon("#{@base}/untitled")
+        expect(previews.favicon_files).to contain_exactly(favicon_name(png_bytes, 'png'), favicon_name(ico_bytes, 'ico'))
       end
     end
 
-    it 'rejects SVG favicons whatever their content type' do
-      expect(previews.favicon("#{@base}/svg-icon")).to eq('127.0.0.1.ico')
-      expect(described_class.new(File.join(@dir, 'other')).favicon("#{@base}/generic-svg")).to eq('127.0.0.1.ico')
-    end
-
-    it 'rejects favicons that are not recognizable images' do
-      expect(previews.favicon("#{@base}/junk-icon")).to eq('127.0.0.1.ico')
-    end
-
-    it 'fetches each page only once when asked for both its title and favicon' do
-      previews.title("#{@base}/page")
-      previews.favicon("#{@base}/page")
-      expect(@requests).to eq(['/page', '/static/icon.png'])
-    end
-
-    it 'returns nil and warns when no favicon can be obtained' do
-      expect(previews.favicon("http://127.0.0.1:#{unused_port}/")).to be_nil
-      expect(@log.string).to include('Link preview: no favicon found for 127.0.0.1')
-    end
-
     describe 'caching' do
+      def write_links(yaml)
+        FileUtils.mkdir_p(File.join(cache_dir, 'favicons'))
+        File.write(links_path, yaml)
+      end
+
       it 'writes one hand-editable entry per URL, sorted' do
         previews.title("#{@base}/page")
         previews.title("#{@base}/missing")
         previews.save
-        expect(File.read(titles_path)).to eq(<<~YAML)
+        expect(File.read(links_path)).to eq(<<~YAML)
           ---
           #{@base}/missing:
             title:
-            error: HTTP 404
+            favicon: #{favicon_name(ico_bytes, 'ico')}
+            error: 'title: HTTP 404'
           #{@base}/page:
             title: 'Fish & Chips: “A History”'
+            favicon: #{favicon_name(png_bytes, 'png')}
         YAML
       end
 
       it 'keeps long titles on one line' do
         previews.title("#{@base}/long-title")
         previews.save
-        expect(File.read(titles_path)).to include("  title: #{('Long words ' * 12).strip}\n")
+        expect(File.read(links_path)).to include("  title: #{('Long words ' * 12).strip}\n")
       end
 
-      it 'persists titles and favicons so a later build makes no requests' do
+      it 'persists entries so a later build makes no requests' do
         previews.title("#{@base}/page")
-        previews.favicon("#{@base}/page")
         previews.save
         @requests.clear
 
         cached = described_class.new(cache_dir)
         expect(cached.title("#{@base}/page")).to eq('Fish & Chips: “A History”')
-        expect(cached.favicon("#{@base}/page")).to eq('127.0.0.1.png')
+        expect(cached.favicon("#{@base}/page")).to eq(favicon_name(png_bytes, 'png'))
         expect(@requests).to be_empty
       end
 
@@ -369,63 +420,64 @@ describe Jekyll::LinkPreviews do
         previews.title("#{@base}/missing")
         previews.save
         @requests.clear
-        @log.truncate(0)
-        @log.rewind
 
         cached = described_class.new(cache_dir)
         expect(cached.title("#{@base}/missing")).to be_nil
         expect(@requests).to be_empty
-        expect(@log.string).to include("no title for #{@base}/missing (HTTP 404); set one in _link_previews/titles.yml")
+        expect(report(cached)).to include("Link preview: #{@base}/missing: no title (title: HTTP 404); #{fix_hint}")
       end
 
-      it 'uses hand-filled titles without fetching or warning' do
-        FileUtils.mkdir_p(cache_dir)
-        File.write(titles_path, <<~YAML)
+      it 'uses hand-filled titles and favicons without fetching or warning' do
+        write_links(<<~YAML)
           #{@base}/missing:
             title: Filled In By Hand
-            error: HTTP 404
+            favicon: by-hand.png
+            error: 'title: HTTP 404'
         YAML
+        File.binwrite(File.join(cache_dir, 'favicons', 'by-hand.png'), png_bytes)
         expect(previews.title("#{@base}/missing")).to eq('Filled In By Hand')
+        expect(previews.favicon("#{@base}/missing")).to eq('by-hand.png')
+        expect(previews.favicon_files).to eq(['by-hand.png'])
         expect(@requests).to be_empty
-        expect(@log.string).to be_empty
+        expect(report).to be_empty
       end
 
-      it 'caches favicons per host' do
-        previews.favicon("#{@base}/page")
-        @requests.clear
-        expect(previews.favicon("#{@base}/og")).to eq('127.0.0.1.png')
-        expect(@requests).to be_empty
+      it 'warns when an entry names a favicon file that does not exist' do
+        write_links("#{@base}/page:\n  title: Page\n  favicon: gone.png\n")
+        expect(previews.favicon("#{@base}/page")).to be_nil
+        expect(previews.favicon_files).to be_empty
+        expect(report).to include(
+          "Link preview: #{@base}/page: favicon gone.png not found in _link_previews/favicons/; #{fix_hint}"
+        )
       end
 
-      it 'does not rewrite the cache files when nothing changed' do
+      it 'does not rewrite the cache file when nothing changed' do
         previews.title("#{@base}/page")
-        previews.favicon("#{@base}/page")
         previews.save
-        files = Dir.glob(File.join(cache_dir, '*.yml'))
-        expect(files.size).to eq(2)
         past = Time.now - 3600
-        File.utime(past, past, *files)
+        File.utime(past, past, links_path)
 
         cached = described_class.new(cache_dir)
         cached.title("#{@base}/page")
         cached.save
-        files.each { |file| expect(File.mtime(file).to_i).to eq(past.to_i) }
+        expect(File.mtime(links_path).to_i).to eq(past.to_i)
       end
 
       it 'does not reformat a hand-edited cache file when nothing changed' do
-        FileUtils.mkdir_p(cache_dir)
-        hand_written = "#{@base}/missing:\n  error: HTTP 404\n  title: \"By Hand\"\n"
-        File.write(titles_path, hand_written)
+        hand_written = "#{@base}/missing:\n  error: HTTP 404\n  favicon:\n  title: \"By Hand\"\n"
+        write_links(hand_written)
         previews.title("#{@base}/missing")
         previews.save
-        expect(File.read(titles_path)).to eq(hand_written)
+        expect(File.read(links_path)).to eq(hand_written)
       end
     end
   end
 
   describe '.annotate' do
+    let(:previews) { Jekyll::LinkPreviews::Previews.new(cache_dir) }
+
     def annotate(html)
-      described_class.annotate(html, Jekyll::LinkPreviews::Previews.new(cache_dir))
+      described_class.annotate(html, previews)
     end
 
     def article(html)
@@ -436,7 +488,7 @@ describe Jekyll::LinkPreviews do
       output = annotate(article(%(<p>See <a href="#{@base}/page">this</a>.</p>)))
       expect(output).to eq(article(
         %(<p>See <a href="#{@base}/page" class="link-preview" target="_blank" rel="noopener" ) +
-        %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/127.0.0.1.png&quot; alt=&quot;&quot;&gt;) +
+        %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/#{favicon_name(png_bytes, 'png')}&quot; alt=&quot;&quot;&gt;) +
         %(&lt;a href=&quot;#{@base}/page&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
         %(Fish &amp;amp; Chips: “A History”&lt;/a&gt;">this</a>.</p>)
       ))
@@ -449,28 +501,22 @@ describe Jekyll::LinkPreviews do
         %(<a href="#{url}" class="link-preview" target="_blank" rel="noopener" ) +
         %(data-bs-content="&lt;a href=&quot;#{url}&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;#{url}&lt;/a&gt;">gone</a>)
       ))
-      expect(@log.string).to include("no title for #{url}")
-      expect(@log.string).to include('no favicon found for 127.0.0.1')
+      previews.report
+      expect(@log.string).to include("Link preview: #{url}: no title, no favicon (")
     end
 
-    it 'uses a title attribute as the popover title without fetching or caching it' do
-      Jekyll::LinkPreviews::Previews.new(cache_dir).tap { |cached| cached.favicon("#{@base}/og") }.save
-      FileUtils.rm(titles_path)
-      @requests.clear
-      previews = Jekyll::LinkPreviews::Previews.new(cache_dir)
-      output = described_class.annotate(
-        article(%(<a href="#{@base}/missing" title="  Inline &amp;  Title ">x</a>)), previews
-      )
+    it 'uses a title attribute as the popover title, without caching it or warning about the page title' do
+      output = annotate(article(%(<a href="#{@base}/missing" title="  Inline &amp;  Title ">x</a>)))
+      previews.report
       previews.save
       expect(output).to eq(article(
         %(<a href="#{@base}/missing" class="link-preview" target="_blank" rel="noopener" ) +
-        %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/127.0.0.1.ico&quot; alt=&quot;&quot;&gt;) +
+        %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/#{favicon_name(ico_bytes, 'ico')}&quot; alt=&quot;&quot;&gt;) +
         %(&lt;a href=&quot;#{@base}/missing&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
         %(Inline &amp;amp; Title&lt;/a&gt;">x</a>)
       ))
-      expect(@requests).to be_empty
       expect(@log.string).to be_empty
-      expect(YAML.load_file(titles_path)).to be_empty
+      expect(YAML.load_file(links_path).fetch("#{@base}/missing")['title']).to be_nil
     end
 
     describe 'escaping' do
@@ -696,9 +742,9 @@ describe Jekyll::LinkPreviews do
       expect(File.read(File.join(site, 'feed.xml'))).to eq(
         %(<feed><article><a href="#{@base}/page">external</a></article></feed>\n)
       )
-      expect(File.binread(File.join(site, 'assets/img/favicons/127.0.0.1.png'))).to eq(png_bytes)
-      expect(YAML.load_file(File.join(@source, '_link_previews/titles.yml'))).to eq(
-        "#{@base}/page" => { 'title' => 'Fish & Chips: “A History”' }
+      expect(File.binread(File.join(site, 'assets/img/favicons', favicon_name(png_bytes, 'png')))).to eq(png_bytes)
+      expect(YAML.load_file(File.join(@source, '_link_previews/links.yml'))).to eq(
+        "#{@base}/page" => { 'title' => 'Fish & Chips: “A History”', 'favicon' => favicon_name(png_bytes, 'png') }
       )
     end
 
@@ -707,7 +753,7 @@ describe Jekyll::LinkPreviews do
       @requests.clear
       build
       expect(@requests).to be_empty
-      expect(File.exist?(File.join(@dir, '_site/assets/img/favicons/127.0.0.1.png'))).to be true
+      expect(File.exist?(File.join(@dir, '_site/assets/img/favicons', favicon_name(png_bytes, 'png')))).to be true
     end
   end
 end

@@ -4,13 +4,16 @@ require 'jekyll'
 require 'net/http'
 require 'nokogiri'
 require 'cgi'
+require 'digest'
 require 'fileutils'
-require 'set'
 require 'yaml'
 
 module Jekyll
   module LinkPreviews
     CACHE_DIR = '_link_previews'
+    CACHE_FILE = 'links.yml'
+    FIX_HINT = "set title:/favicon: in #{CACHE_DIR}/#{CACHE_FILE} (drop images in #{CACHE_DIR}/favicons/), " \
+               'or delete the entry to retry'
     FAVICON_URL_DIR = '/assets/img/favicons'
     USER_AGENT = 'numi.st link preview builder'
     TIMEOUT = 5
@@ -186,65 +189,90 @@ module Jekyll
 
         item.output = annotate(item.output, previews, page: item.relative_path)
       end
+      previews.report
       previews.save
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }
     end
 
-    # Page titles (by URL) and favicons (by host), fetched on demand and cached on disk.
-    # Cached entries are never refetched, so titles that couldn't be fetched can be filled in by hand.
+    # Each linked URL's page title and favicon, fetched on demand and cached on disk. Cached entries
+    # are never refetched, so anything that couldn't be fetched can be filled in by hand.
     class Previews
       def initialize(directory, timeout: TIMEOUT)
         @directory = directory
         @timeout = timeout
-        @titles = load('titles.yml')
-        @favicons = load('favicons.yml')
+        @entries = load
         @pages = {}
-        @untitled_urls_reported = Set.new
+        @downloads = {}
+        @title_needed = {}
       end
 
       def title(href)
-        url = page_url(href)
-        @titles[url] = fetch_title(url) unless @titles.key?(url)
-        entry = @titles[url] || {}
-        if entry['title'].nil? && @untitled_urls_reported.add?(url)
-          reason = entry['error'] ? " (#{entry['error']})" : ''
-          Jekyll.logger.warn('Link preview:', "no title for #{url}#{reason}; set one in #{CACHE_DIR}/titles.yml")
-        end
-        entry['title']&.to_s
+        url = cache_key(href)
+        @title_needed[url] = true
+        entry(url)['title']&.to_s
       end
 
       def favicon(href)
-        url = page_url(href)
-        host = URI(url).host.downcase
-        return @favicons[host] if @favicons.key?(host)
-
-        page = fetch_page(url)
-        @favicons[host] = download_favicon(host, LinkPreviews.icon_urls(page[:body], page[:charset], page[:url]))
+        url = cache_key(href)
+        @title_needed[url] ||= false
+        name = entry(url)['favicon']
+        name if name && File.exist?(favicon_path(name))
       end
 
       def favicon_files
-        @favicons.values.compact
+        @entries.values.map { |entry| entry['favicon'] }.compact.uniq.select { |name| File.exist?(favicon_path(name)) }
+      end
+
+      # Warns once for each URL used in this build whose preview is missing anything.
+      def report
+        @title_needed.each do |url, title_needed|
+          entry = @entries[url]
+          problems = []
+          problems << 'no title' if title_needed && entry['title'].nil?
+          if entry['favicon'].nil?
+            problems << 'no favicon'
+          elsif !File.exist?(favicon_path(entry['favicon']))
+            problems << "favicon #{entry['favicon']} not found in #{CACHE_DIR}/favicons/"
+          end
+          next if problems.empty?
+
+          reason = entry['error'] ? " (#{entry['error']})" : ''
+          Jekyll.logger.warn('Link preview:', "#{url}: #{problems.join(', ')}#{reason}; #{FIX_HINT}")
+        end
       end
 
       def save
-        write('titles.yml', @titles)
-        write('favicons.yml', @favicons)
+        path = File.join(@directory, CACHE_FILE)
+        return if File.exist?(path) && YAML.safe_load_file(path) == @entries
+
+        FileUtils.mkdir_p(@directory)
+        File.write(path, @entries.sort.to_h.to_yaml(line_width: -1))
       end
 
       private
 
-      def page_url(href)
+      def cache_key(href)
         uri = URI(href.start_with?('//') ? "https:#{href}" : href)
         uri.fragment = nil
         uri.to_s
       end
 
-      def fetch_title(url)
-        page = fetch_page(url)
-        return { 'title' => nil, 'error' => page[:error] } if page[:error]
+      def entry(url)
+        @entries[url] = fetch_entry(url) unless @entries.key?(url)
+        @entries[url]
+      end
 
-        title = LinkPreviews.extract_title(page[:body], page[:charset])
-        title ? { 'title' => title } : { 'title' => nil, 'error' => 'no title found' }
+      def fetch_entry(url)
+        page = fetch_page(url)
+        title = page[:body] && LinkPreviews.extract_title(page[:body], page[:charset])
+        favicon, favicon_error = discover_favicon(page)
+        errors = {
+          'title' => page[:error] || (title ? nil : 'no title found'),
+          'favicon' => favicon_error
+        }.compact.map { |part, error| "#{part}: #{error}" }
+        entry = { 'title' => title, 'favicon' => favicon }
+        entry['error'] = errors.join('; ') unless errors.empty?
+        entry
       end
 
       def fetch_page(url)
@@ -254,8 +282,46 @@ module Jekyll
 
           { url: final_url, body: response.body, charset: response.type_params['charset'] }
         rescue StandardError => e
-          { url: url, error: e.message }
+          { url: url, error: error_message(e) }
         end
+      end
+
+      # Returns the first of the page's candidate favicons that downloads, or nil and the last failure.
+      def discover_favicon(page)
+        error = nil
+        LinkPreviews.icon_urls(page[:body], page[:charset], page[:url]).each do |url|
+          download = (@downloads[url] ||= download_favicon(url))
+          return [download[:name], nil] if download[:name]
+
+          error = download[:error]
+        end
+        [nil, error]
+      end
+
+      def download_favicon(url)
+        response, = get(url)
+        body = response.body.to_s.b
+        extension = !body.empty? && favicon_extension(response.content_type, body)
+        return { error: "not an image (#{response.content_type})" } unless extension
+
+        name = "#{Digest::SHA256.hexdigest(body)[0, 16]}.#{extension}"
+        FileUtils.mkdir_p(File.join(@directory, 'favicons'))
+        File.binwrite(favicon_path(name), body) unless File.exist?(favicon_path(name))
+        { name: name }
+      rescue StandardError => e
+        { error: error_message(e) }
+      end
+
+      def favicon_extension(content_type, body)
+        FAVICON_EXTENSIONS[content_type] || FAVICON_SIGNATURES.find { |_, signature| signature.match?(body) }&.first
+      end
+
+      def favicon_path(name)
+        File.join(@directory, 'favicons', name)
+      end
+
+      def error_message(error)
+        error.is_a?(Timeout::Error) ? error.class.name : error.message
       end
 
       def get(url, redirects = MAX_REDIRECTS)
@@ -276,42 +342,9 @@ module Jekyll
         end
       end
 
-      def download_favicon(host, urls)
-        urls.each do |url|
-          response, = get(url)
-          extension = favicon_extension(response)
-          next unless extension
-
-          name = "#{host}.#{extension}"
-          FileUtils.mkdir_p(File.join(@directory, 'favicons'))
-          File.binwrite(File.join(@directory, 'favicons', name), response.body)
-          return name
-        rescue StandardError
-          next
-        end
-        Jekyll.logger.warn('Link preview:', "no favicon found for #{host}")
-        nil
-      end
-
-      def favicon_extension(response)
-        body = response.body.to_s.b
-        return nil if body.empty?
-
-        FAVICON_EXTENSIONS[response.content_type] ||
-          FAVICON_SIGNATURES.find { |_, signature| signature.match?(body) }&.first
-      end
-
-      def load(name)
-        path = File.join(@directory, name)
+      def load
+        path = File.join(@directory, CACHE_FILE)
         File.exist?(path) ? YAML.safe_load_file(path) || {} : {}
-      end
-
-      def write(name, data)
-        path = File.join(@directory, name)
-        return if File.exist?(path) && YAML.safe_load_file(path) == data
-
-        FileUtils.mkdir_p(@directory)
-        File.write(path, data.sort.to_h.to_yaml(line_width: -1))
       end
     end
 
