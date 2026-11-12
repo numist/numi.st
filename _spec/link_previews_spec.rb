@@ -38,6 +38,7 @@ describe Jekyll::LinkPreviews do
     serve.('/og', 'text/html', '<html><head><meta property="og:title" content="OG &amp; Title"></head></html>')
     serve.('/empty-title', 'text/html',
            '<html><head><title> </title><meta property="og:title" content="From OG"></head></html>')
+    serve.('/long-title', 'text/html', "<html><head><title>#{'Long words ' * 12}</title></head></html>")
     serve.('/untitled', 'text/html', '<html><head></head><body>No title here</body></html>')
     serve.('/latin1', 'text/html; charset=iso-8859-1', "<html><head><title>Caf\xE9</title></head></html>".b)
     serve.('/meta-charset', 'text/html',
@@ -318,6 +319,12 @@ describe Jekyll::LinkPreviews do
           #{@base}/page:
             title: 'Fish & Chips: “A History”'
         YAML
+      end
+
+      it 'keeps long titles on one line' do
+        previews.title("#{@base}/long-title")
+        previews.save
+        expect(File.read(titles_path)).to include("  title: #{('Long words ' * 12).strip}\n")
       end
 
       it 'persists titles and favicons so a later build makes no requests' do

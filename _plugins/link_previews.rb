@@ -248,7 +248,7 @@ module Jekyll
         return if File.exist?(path) && YAML.safe_load_file(path) == data
 
         FileUtils.mkdir_p(@directory)
-        File.write(path, data.sort.to_h.to_yaml)
+        File.write(path, data.sort.to_h.to_yaml(line_width: -1))
       end
     end
 
