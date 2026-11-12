@@ -57,6 +57,7 @@ module Jekyll
     }mix
 
     class MarkupError < StandardError; end
+    class CacheError < StandardError; end
 
     def self.external?(href)
       uri = URI.parse(href.to_s)
@@ -344,7 +345,15 @@ module Jekyll
 
       def load
         path = File.join(@directory, CACHE_FILE)
-        File.exist?(path) ? YAML.safe_load_file(path) || {} : {}
+        entries = File.exist?(path) ? YAML.safe_load_file(path) || {} : {}
+        raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE} must be a mapping of URLs to entries" unless entries.is_a?(Hash)
+
+        entries.each do |url, entry|
+          next if entry.is_a?(Hash)
+
+          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
+                            "not #{entry.inspect}"
+        end
       end
     end
 

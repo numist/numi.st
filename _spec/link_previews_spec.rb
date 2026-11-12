@@ -442,6 +442,21 @@ describe Jekyll::LinkPreviews do
         expect(report).to be_empty
       end
 
+      it 'fails on entries that are not mappings' do
+        write_links("#{@base}/page: Some Title\n")
+        expect { previews }.to raise_error(
+          Jekyll::LinkPreviews::CacheError,
+          %(_link_previews/links.yml: the entry for #{@base}/page must be a mapping with title: and favicon:, not "Some Title")
+        )
+      end
+
+      it 'fails on a cache file that is not a mapping' do
+        write_links("- #{@base}/page\n")
+        expect { previews }.to raise_error(
+          Jekyll::LinkPreviews::CacheError, '_link_previews/links.yml must be a mapping of URLs to entries'
+        )
+      end
+
       it 'warns when an entry names a favicon file that does not exist' do
         write_links("#{@base}/page:\n  title: Page\n  favicon: gone.png\n")
         expect(previews.favicon("#{@base}/page")).to be_nil
