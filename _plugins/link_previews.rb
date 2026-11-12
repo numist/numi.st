@@ -124,7 +124,8 @@ module Jekyll
       end
       untitled_generated_hrefs.uniq.each do |href|
         Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which the page generates; " \
-                                            'give the link an inline title, e.g. [text](url "Title")')
+                                            'give the link an inline title, e.g. [text](url "Title") in Markdown, ' \
+                                            'or a title attribute in the layout or include that generates it')
       end
       apply_edits(html, edits)
     end

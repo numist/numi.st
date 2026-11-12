@@ -904,7 +904,8 @@ describe Jekyll::LinkPreviews do
         2.times { build_post }
         expect(@log.string.scan(
           "Link preview: post.md links to #{@base}/empty-title, which the page generates; " \
-          'give the link an inline title, e.g. [text](url "Title")'
+          'give the link an inline title, e.g. [text](url "Title") in Markdown, ' \
+          'or a title attribute in the layout or include that generates it'
         ).size).to eq(2)
         expect(build_post).to include(
           %(data-bs-content="&lt;a href=&quot;#{@base}/empty-title&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;#{@base}/empty-title&lt;/a&gt;")
