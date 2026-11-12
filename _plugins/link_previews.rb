@@ -37,13 +37,16 @@ module Jekyll
       'image/webp' => 'webp'
     }.freeze
 
+    # The rest of an opening tag after its name, where quoted attribute values may contain '>'.
+    TAG_ATTRIBUTES = %q{(?:[^>"']|"[^"]*"|'[^']*')*}
+
     # Matches links and article boundaries, plus comments and raw text elements so that tags inside them are ignored.
     LINK_PATTERN = %r{
       <!--.*?--> |
-      <(?<raw>script|style|textarea)\b.*?</\k<raw>\s*> |
-      (?<article_start><article\b[^>]*>) |
+      <(?<raw>script|style|textarea)\b#{TAG_ATTRIBUTES}>.*?</\k<raw>\s*> |
+      (?<article_start><article\b#{TAG_ATTRIBUTES}>) |
       (?<article_end></article\s*>) |
-      (?<open><a\s[^>]*>).*?</a\s*>
+      (?<open><a\s#{TAG_ATTRIBUTES}>).*?</a\s*>
     }mix
 
     def self.external?(href)
@@ -131,8 +134,9 @@ module Jekyll
     # Page titles (by URL) and favicons (by host), fetched on demand and cached on disk.
     # Cached entries are never refetched, so titles that couldn't be fetched can be filled in by hand.
     class Previews
-      def initialize(directory)
+      def initialize(directory, timeout: TIMEOUT)
         @directory = directory
+        @timeout = timeout
         @titles = load('titles.yml')
         @favicons = load('favicons.yml')
         @pages = {}
@@ -197,7 +201,7 @@ module Jekyll
 
       def get(url, redirects = MAX_REDIRECTS)
         uri = URI(url)
-        options = { use_ssl: uri.scheme == 'https', open_timeout: TIMEOUT, read_timeout: TIMEOUT }
+        options = { use_ssl: uri.scheme == 'https', open_timeout: @timeout, read_timeout: @timeout }
         response = Net::HTTP.start(uri.host, uri.port, **options) do |http|
           http.get(uri.request_uri, 'User-Agent' => USER_AGENT)
         end

@@ -59,6 +59,13 @@ describe Jekyll::LinkPreviews do
     serve.('/generic-svg', 'text/html', icon_page.('/static/generic.svg'))
     serve.('/static/generic.svg', 'application/octet-stream', SVG_BYTES)
     serve.('/junk-icon', 'text/html', icon_page.('/static/junk'))
+    serve.('/markup-title', 'text/html',
+           %(<html><head><title>&lt;img src=x onerror=alert(1)&gt;"'</title></head></html>))
+    @server.mount_proc('/slow') do |request, response|
+      @requests << request.path
+      sleep 0.5
+      response.body = '<title>Too Late</title>'
+    end
     serve.('/static/junk', 'application/octet-stream', 'not an image')
     @thread = Thread.new { @server.start }
     @base = "http://127.0.0.1:#{@server.config[:Port]}"
@@ -264,6 +271,25 @@ describe Jekyll::LinkPreviews do
       )
     end
 
+    it 'gives up on pages that respond too slowly' do
+      slow = described_class.new(cache_dir, timeout: 0.1)
+      expect(slow.title("#{@base}/slow")).to be_nil
+      slow.save
+      error = YAML.load_file(titles_path).fetch("#{@base}/slow").fetch('error')
+      expect(error).to start_with('Net::ReadTimeout')
+      expect(@log.string).to include(
+        "Link preview: no title for #{@base}/slow (#{error}); set one in _link_previews/titles.yml"
+      )
+    end
+
+    it 'caches protocol-relative links under their https URL' do
+      href = "//127.0.0.1:#{@server.config[:Port]}/page"
+      previews.title(href)
+      previews.save
+      expect(YAML.load_file(titles_path).keys).to eq(["https:#{href}"])
+      expect(@log.string).to include("Link preview: no title for https:#{href} (")
+    end
+
     it 'warns about a missing title once per URL' do
       3.times { previews.title("#{@base}/missing") }
       expect(@log.string.scan('no title for').size).to eq(1)
@@ -445,6 +471,75 @@ describe Jekyll::LinkPreviews do
       expect(@requests).to be_empty
       expect(@log.string).to be_empty
       expect(YAML.load_file(titles_path)).to be_empty
+    end
+
+    describe 'escaping' do
+      MARKUP = %(<img src=x onerror=alert(1)>"')
+      ESCAPED_MARKUP_IN_ATTRIBUTE = '&amp;lt;img src=x onerror=alert(1)&amp;gt;&amp;quot;&amp;#39;'
+
+      it 'escapes markup in fetched titles' do
+        output = annotate(article(%(<a href="#{@base}/markup-title">x</a>)))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{ESCAPED_MARKUP_IN_ATTRIBUTE}&lt;/a&gt;">x</a>))
+        expect(output).not_to include('<img')
+      end
+
+      it 'escapes markup in inline titles' do
+        output = annotate(article(%(<a href="#{@base}/page" title="#{CGI.escapeHTML(MARKUP)}">x</a>)))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{ESCAPED_MARKUP_IN_ATTRIBUTE}&lt;/a&gt;">x</a>))
+        expect(output).not_to include('<img')
+      end
+    end
+
+    describe 'scanning' do
+      def annotated_links(output)
+        output.scan(/<a [^>]*class="link-preview"/).size
+      end
+
+      it 'handles > inside quoted link attributes' do
+        output = annotate(article(%(<a href="#{@base}/page" title="a > b" data-x='c > d'>text</a>)))
+        expect(output).to match(%r{\A<article class="post"><a href="#{@base}/page" data-x="c &gt; d" class="link-preview" target="_blank" rel="noopener" data-bs-content="[^"]*">text</a></article>\z})
+        expect(output).to include('a &amp;gt; b')
+      end
+
+      it 'handles > inside quoted article attributes' do
+        output = annotate(%(<article data-x="a > b"><a href="#{@base}/page">in</a></article>))
+        expect(annotated_links(output)).to eq(1)
+      end
+
+      it 'recognizes uppercase tags' do
+        output = annotate(%(<ARTICLE><A HREF="#{@base}/page">in</A></ARTICLE><A HREF="#{@base}/page">out</A>))
+        expect(annotated_links(output)).to eq(1)
+        expect(output).to end_with(%(<A HREF="#{@base}/page">out</A>))
+      end
+
+      it 'tracks nested articles' do
+        output = annotate(
+          %(<article><article><a href="#{@base}/page">inner</a></article>) +
+          %(<a href="#{@base}/page">outer</a></article><a href="#{@base}/page">outside</a>)
+        )
+        expect(annotated_links(output)).to eq(2)
+        expect(output).to end_with(%(</article><a href="#{@base}/page">outside</a>))
+      end
+
+      it 'skips links inside style and textarea elements' do
+        html = article(
+          %(<style>/* <a href="#{@base}/page">styled</a> */</style>) +
+          %(<textarea><a href="#{@base}/page">typed</a></textarea>)
+        )
+        expect(annotate(html)).to eq(html)
+        expect(@requests).to be_empty
+      end
+
+      it 'treats an unclosed link as running to the next </a>, hiding any </article> in between' do
+        output = annotate(
+          %(<article><a href="#{@base}/page">unclosed</article>) +
+          %(<footer><a href="#{@base}/page">footer</a></footer>) +
+          %(<a href="#{@base}/page">after</a>)
+        )
+        expect(output).to start_with(%(<article><a href="#{@base}/page" class="link-preview"))
+        expect(output).to include(%(<footer><a href="#{@base}/page">footer</a></footer>))
+        expect(output).to match(%r{</footer><a href="#{@base}/page" class="link-preview"})
+      end
     end
 
     it 'preserves existing attributes, classes, targets, and rel values' do
