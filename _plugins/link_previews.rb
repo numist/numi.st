@@ -48,7 +48,7 @@ module Jekyll
     # The rest of a tag after its name: attributes, whose quoted values may contain '>' or '<!--' and whose
     # unquoted values may contain quotes, and slashes. Each attribute is matched atomically, so a tag
     # that doesn't parse fails quickly.
-    TAG_ATTRIBUTES = %q{(?>\s*(?:[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>][^\s>]*))?|/))*\s*}
+    TAG_ATTRIBUTES = %q{(?>\s*(?:[^\s"'<>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>][^\s>]*))?|/))*\s*}
 
     # Matches the markup that matters for tracking open elements: comments, doctypes and CDATA
     # (all skipped), and start and end tags.
@@ -57,7 +57,7 @@ module Jekyll
       (?<unterminated_comment><!--) |
       <!\[CDATA\[.*?\]\]> |
       <![^>]*> |
-      <(?<end>/)?(?<name>[a-z][^\s/>]*)(?<attributes>#{TAG_ATTRIBUTES})> |
+      <(?<end>/)?(?<name>[a-z][^\s/<>]*)(?<attributes>#{TAG_ATTRIBUTES})> |
       (?<unparseable_tag></?[a-z])
     }mix
 

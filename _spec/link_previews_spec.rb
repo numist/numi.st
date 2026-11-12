@@ -793,6 +793,12 @@ describe Jekyll::LinkPreviews do
         )
       end
 
+      it 'fails at a stray < in text, rather than treating it as part of a tag name' do
+        expect { annotate_page(%(<article><p>\nx<y</p></article>)) }.to raise_error(
+          markup_error, 'notes/page.md:2: unparseable tag'
+        )
+      end
+
       it 'fails on a link inside a link' do
         expect { annotate_page(%(<a href="#{@base}/page">o\n<a href="#{@base}/og">i</a></a>)) }.to raise_error(
           markup_error, 'notes/page.md:2: <a> inside <a> from line 1'
