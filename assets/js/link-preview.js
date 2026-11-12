@@ -57,7 +57,7 @@ window.addEventListener("load", function () {
             });
     });
 
-    // A first tap shows the preview; tapping the link again (or the title in the popover) navigates
+    // A first tap (with a finger or pen) shows the preview; tapping the link again (or the title in the popover) navigates
     links.on("pointerdown", function (e) {
         pressPointerType = e.pointerType;
         pressFoundPreviewShown = current === this;
@@ -68,7 +68,7 @@ window.addEventListener("load", function () {
     });
     links.on("click", function (e) {
         // Keyboard activation clicks with a detail of 0
-        var tapped = e.detail !== 0 && pressPointerType === "touch";
+        var tapped = e.detail !== 0 && (pressPointerType === "touch" || pressPointerType === "pen");
         pressPointerType = null;
         if (tapped && !pressFoundPreviewShown) {
             e.preventDefault();
