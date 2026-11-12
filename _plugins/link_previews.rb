@@ -270,11 +270,11 @@ module Jekyll
         url = cache_key(href)
         @title_needed[url] ||= false
         name = entry(url)['favicon']
-        name if name && File.exist?(favicon_path(name))
+        name if name && File.file?(favicon_path(name))
       end
 
       def favicon_files
-        @entries.values.map { |entry| entry['favicon'] }.compact.uniq.select { |name| File.exist?(favicon_path(name)) }
+        @entries.values.map { |entry| entry['favicon'] }.compact.uniq.select { |name| File.file?(favicon_path(name)) }
       end
 
       # Warns once for each URL used in this build whose preview is missing anything.
@@ -285,7 +285,7 @@ module Jekyll
           problems << 'no title' if title_needed && entry['title'].nil?
           if entry['favicon'].nil?
             problems << 'no favicon'
-          elsif !File.exist?(favicon_path(entry['favicon']))
+          elsif !File.file?(favicon_path(entry['favicon']))
             problems << "favicon #{entry['favicon']} not found in #{CACHE_DIR}/favicons/"
           end
           next if problems.empty?
@@ -363,7 +363,7 @@ module Jekyll
 
         name = "#{Digest::SHA256.hexdigest(body)[0, 16]}.#{extension}"
         FileUtils.mkdir_p(File.join(@directory, 'favicons'))
-        File.binwrite(favicon_path(name), body) unless File.exist?(favicon_path(name))
+        File.binwrite(favicon_path(name), body) unless File.file?(favicon_path(name))
         { name: name }
       rescue StandardError => e
         { error: error_message(e) }
@@ -422,7 +422,7 @@ module Jekyll
                               "not #{entry.inspect}"
           end
           name = entry['favicon']
-          next if name.nil? || (File.basename(name.to_s) == name.to_s && !name.to_s.start_with?('.'))
+          next if name.nil? || (name.is_a?(String) && !name.empty? && File.basename(name) == name && !name.start_with?('.'))
 
           raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url} must be a file name in " \
                             "#{CACHE_DIR}/favicons/, not #{name.inspect}"

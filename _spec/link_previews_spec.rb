@@ -514,11 +514,12 @@ describe Jekyll::LinkPreviews do
       end
 
       it 'fails on favicon names that are not plain file names in the favicons directory' do
-        ['../outside.png', 'sub/inside.png', '.hidden.png'].each do |name|
+        ['../outside.png', 'sub/inside.png', '.hidden.png', '', 123].each do |name|
           write_links({ "#{@base}/page" => { 'title' => 'Page', 'favicon' => name } }.to_yaml)
           expect { described_class.new(cache_dir) }.to raise_error(
             Jekyll::LinkPreviews::CacheError,
-            %(_link_previews/links.yml: the favicon for #{@base}/page must be a file name in _link_previews/favicons/, not "#{name}")
+            "_link_previews/links.yml: the favicon for #{@base}/page must be a file name in _link_previews/favicons/, " \
+            "not #{name.inspect}"
           )
         end
       end
@@ -537,6 +538,14 @@ describe Jekyll::LinkPreviews do
         expect(report).to include(
           "Link preview: #{@base}/page: favicon gone.png not found in _link_previews/favicons/; #{fix_hint}"
         )
+      end
+
+      it 'treats a favicon name that is a directory as missing' do
+        write_links("#{@base}/page:\n  title: Page\n  favicon: folder\n")
+        FileUtils.mkdir_p(File.join(cache_dir, 'favicons', 'folder'))
+        expect(previews.favicon("#{@base}/page")).to be_nil
+        expect(previews.favicon_files).to be_empty
+        expect(report).to include("Link preview: #{@base}/page: favicon folder not found in _link_previews/favicons/")
       end
 
       it 'does not rewrite the cache file when nothing changed' do
