@@ -20,7 +20,7 @@ Discrete things I've written (or at least adapted) in the making of this site in
 
 * Sidebar/popover footnotes[^footnotes].
 * <abbr title="Abbreviation">Abbr</abbr>s use popovers, [similar to footnotes](https://github.com/numist/numi.st/blob/df03820b253b22937a6b7be033e247cc13311676/assets/js/abbr.js)
-* Labels on [external links](external-links)
+* Labels on [external links](external-links) TKTK: describe build-time link previews
 * [Repository](https://github.com/numist/highlight-css) of CSS files for syntax highlighting
 * Plugin for [generating graphviz SVGs from DOT](/post/2023/graphviz/)
 * Plugin for making git metadata available to liquid (not quite ready to share yet)

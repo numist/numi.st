@@ -48,7 +48,7 @@ Also, this allows me to use a real git repo.
 
 ### Web
 
-* Some [CSS and JS for decorating external links](/colophon/external-links) on a page.
+* Some [CSS and JS for decorating external links](/colophon/external-links) on a page. TKTK: describe build-time link previews
 * Automatic [copy buttons](/code/copy-buttons/) for all elements with `class="copyable"`.
 * A [page](https://numist.github.io/highlight-css/) hosting various code highlighting themes[^highlight]
 
