@@ -204,13 +204,15 @@ module Jekyll
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       link['target'] ||= '_blank'
       link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
-      link['data-bs-content'] = popover_content(href, title || href, favicon)
+      favicon_url = "#{FAVICON_URL_DIR}/#{favicon}" if favicon
+      link['data-bs-content'] = popover_content(href, title || href, favicon_url)
+      link['data-favicon'] = favicon_url if favicon_url
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
 
-    def self.popover_content(href, title, favicon)
-      image = favicon ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML("#{FAVICON_URL_DIR}/#{favicon}")}" alt="">) : ''
+    def self.popover_content(href, title, favicon_url)
+      image = favicon_url ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML(favicon_url)}" alt="">) : ''
       %(#{image}<a href="#{CGI.escapeHTML(href)}" target="_blank" rel="noopener">#{CGI.escapeHTML(title)}</a>)
     end
 

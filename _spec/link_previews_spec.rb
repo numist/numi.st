@@ -568,8 +568,14 @@ describe Jekyll::LinkPreviews do
         %(<p>See <a href="#{@base}/page" class="link-preview" target="_blank" rel="noopener" ) +
         %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/#{favicon_name(png_bytes, 'png')}&quot; alt=&quot;&quot;&gt;) +
         %(&lt;a href=&quot;#{@base}/page&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
-        %(Fish &amp;amp; Chips: “A History”&lt;/a&gt;">this</a>.</p>)
+        %(Fish &amp;amp; Chips: “A History”&lt;/a&gt;" data-favicon="/assets/img/favicons/#{favicon_name(png_bytes, 'png')}">this</a>.</p>)
       ))
+    end
+
+    it 'gives links with a favicon its URL, for previews built from copies of the link' do
+      output = annotate(article(%(<a href="#{@base}/page">with</a><a href="http://127.0.0.1:#{unused_port}/">without</a>)))
+      previews.report
+      expect(output.scan(/ data-favicon="([^"]*)"/)).to eq([["/assets/img/favicons/#{favicon_name(png_bytes, 'png')}"]])
     end
 
     it 'falls back to the URL as the title and omits a missing favicon' do
@@ -591,7 +597,7 @@ describe Jekyll::LinkPreviews do
         %(<a href="#{@base}/missing" class="link-preview" target="_blank" rel="noopener" ) +
         %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/#{favicon_name(ico_bytes, 'ico')}&quot; alt=&quot;&quot;&gt;) +
         %(&lt;a href=&quot;#{@base}/missing&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
-        %(Inline &amp;amp; Title&lt;/a&gt;">x</a>)
+        %(Inline &amp;amp; Title&lt;/a&gt;" data-favicon="/assets/img/favicons/#{favicon_name(ico_bytes, 'ico')}">x</a>)
       ))
       expect(@log.string).to be_empty
       expect(YAML.load_file(links_path).fetch("#{@base}/missing")['title']).to be_nil
@@ -603,7 +609,7 @@ describe Jekyll::LinkPreviews do
 
       it 'escapes markup in fetched titles' do
         output = annotate(article(%(<a href="#{@base}/markup-title">x</a>)))
-        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;">x</a>))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;"))
         expect(output).not_to include('<img')
       end
 
@@ -617,7 +623,7 @@ describe Jekyll::LinkPreviews do
 
       it 'escapes markup in inline titles' do
         output = annotate(article(%(<a href="#{@base}/page" title="#{CGI.escapeHTML(markup)}">x</a>)))
-        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;">x</a>))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;"))
         expect(output).not_to include('<img')
       end
     end
@@ -629,7 +635,7 @@ describe Jekyll::LinkPreviews do
 
       it 'handles > inside quoted link attributes' do
         output = annotate(article(%(<a href="#{@base}/page" title="a > b" data-x='c > d'>text</a>)))
-        expect(output).to match(%r{\A<article class="post"><a href="#{@base}/page" data-x="c &gt; d" class="link-preview" target="_blank" rel="noopener" data-bs-content="[^"]*">text</a></article>\z})
+        expect(output).to match(%r{\A<article class="post"><a href="#{@base}/page" data-x="c &gt; d" class="link-preview" target="_blank" rel="noopener" data-bs-content="[^"]*" data-favicon="[^"]*">text</a></article>\z})
         expect(output).to include('a &amp;gt; b')
       end
 
