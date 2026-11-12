@@ -203,7 +203,7 @@ module Jekyll
     end
 
     def self.popover_content(href, title, favicon)
-      image = favicon ? %(<img class="link-preview-favicon" src="#{FAVICON_URL_DIR}/#{favicon}" alt="">) : ''
+      image = favicon ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML("#{FAVICON_URL_DIR}/#{favicon}")}" alt="">) : ''
       %(#{image}<a href="#{CGI.escapeHTML(href)}" target="_blank" rel="noopener">#{CGI.escapeHTML(title)}</a>)
     end
 

@@ -544,6 +544,14 @@ describe Jekyll::LinkPreviews do
         expect(output).not_to include('<img')
       end
 
+      it 'escapes favicon file names' do
+        FileUtils.mkdir_p(File.join(cache_dir, 'favicons'))
+        File.binwrite(File.join(cache_dir, 'favicons', 'a"b&c.png'), png_bytes)
+        File.write(links_path, { "#{@base}/page" => { 'title' => 'Page', 'favicon' => 'a"b&c.png' } }.to_yaml)
+        output = annotate(article(%(<a href="#{@base}/page">x</a>)))
+        expect(output).to include('src=&quot;/assets/img/favicons/a&amp;quot;b&amp;amp;c.png&quot;')
+      end
+
       it 'escapes markup in inline titles' do
         output = annotate(article(%(<a href="#{@base}/page" title="#{CGI.escapeHTML(markup)}">x</a>)))
         expect(output).to include(%(rel=&quot;noopener&quot;&gt;#{escaped_markup_in_attribute}&lt;/a&gt;">x</a>))
