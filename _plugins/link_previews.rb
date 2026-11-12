@@ -5,6 +5,7 @@ require 'net/http'
 require 'nokogiri'
 require 'cgi'
 require 'fileutils'
+require 'set'
 require 'yaml'
 
 module Jekyll
@@ -18,6 +19,15 @@ module Jekyll
     # Elements that may appear inside a link without it ceasing to be a text link.
     TEXT_ELEMENTS = %w[abbr b bdi bdo br cite code del dfn em i ins kbd mark q s samp small span strong sub sup time u var wbr].freeze
 
+    # Leading bytes of the favicon formats accepted when the content type doesn't identify one.
+    FAVICON_SIGNATURES = {
+      'ico' => /\A\x00\x00\x01\x00/n,
+      'png' => /\A\x89PNG\r\n\x1a\n/n,
+      'gif' => /\AGIF8[79]a/n,
+      'jpg' => /\A\xFF\xD8\xFF/n,
+      'webp' => /\ARIFF.{4}WEBP/mn
+    }.freeze
+
     FAVICON_EXTENSIONS = {
       'image/png' => 'png',
       'image/x-icon' => 'ico',
@@ -27,14 +37,18 @@ module Jekyll
       'image/webp' => 'webp'
     }.freeze
 
-    # Matches links, plus comments and raw text elements so that links inside them are left alone.
-    LINK_PATTERN = %r{<!--.*?-->|<(?<raw>script|style|textarea)\b.*?</\k<raw>\s*>|(?<open><a\s[^>]*>).*?</a\s*>}mi
+    # Matches links and article boundaries, plus comments and raw text elements so that tags inside them are ignored.
+    LINK_PATTERN = %r{
+      <!--.*?--> |
+      <(?<raw>script|style|textarea)\b.*?</\k<raw>\s*> |
+      (?<article_start><article\b[^>]*>) |
+      (?<article_end></article\s*>) |
+      (?<open><a\s[^>]*>).*?</a\s*>
+    }mix
 
-    def self.external?(href, site_host)
+    def self.external?(href)
       uri = URI.parse(href.to_s)
-      return false unless uri.host && [nil, 'http', 'https'].include?(uri.scheme&.downcase)
-
-      !uri.host.casecmp?(site_host)
+      !uri.host.nil? && [nil, 'http', 'https'].include?(uri.scheme&.downcase)
     rescue URI::InvalidURIError
       false
     end
@@ -68,22 +82,32 @@ module Jekyll
       (urls.compact.grep(%r{\Ahttps?://}) + [URI.join(page_url, '/favicon.ico').to_s]).uniq
     end
 
-    def self.annotate(html, site_host, previews)
+    # Annotates external text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
+    def self.annotate(html, previews)
+      article_depth = 0
       html.gsub(LINK_PATTERN) do |match|
-        opening_tag = Regexp.last_match[:open]
-        link = opening_tag && Nokogiri::HTML5.fragment(match).at_css('a')
-        next match unless link && external?(link['href'], site_host) && text_only?(link)
+        found = Regexp.last_match
+        article_depth += 1 if found[:article_start]
+        article_depth -= 1 if found[:article_end] && article_depth.positive?
+        next match unless found[:open] && article_depth.positive?
 
-        annotated_opening_tag(link, previews) + match[opening_tag.length..]
+        link = Nokogiri::HTML5.fragment(match).at_css('a')
+        next match unless link && external?(link['href']) && text_only?(link)
+
+        annotated_opening_tag(link, previews) + match[found[:open].length..]
       end
     end
 
+    # A link's own title attribute overrides the cached page title, and is removed so its
+    # native tooltip doesn't compete with the popover.
     def self.annotated_opening_tag(link, previews)
       href = link['href']
+      inline_title = link.remove_attribute('title')&.value.to_s.gsub(/\s+/, ' ').strip
+      title = inline_title.empty? ? previews.title(href) : inline_title
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       link['target'] ||= '_blank'
       link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
-      link['data-bs-content'] = popover_content(href, previews.title(href) || href, previews.favicon(href))
+      link['data-bs-content'] = popover_content(href, title || href, previews.favicon(href))
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
@@ -94,35 +118,36 @@ module Jekyll
     end
 
     def self.process(site)
-      site_host = URI(site.config['url'].to_s).host.to_s
       previews = Previews.new(File.join(site.source, CACHE_DIR))
       (site.pages + site.documents).each do |item|
         next unless item.output && item.output_ext == '.html'
 
-        item.output = annotate(item.output, site_host, previews)
+        item.output = annotate(item.output, previews)
       end
       previews.save
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }
     end
 
     # Page titles (by URL) and favicons (by host), fetched on demand and cached on disk.
-    # Failures are cached as nil so they are not retried on every build.
+    # Cached entries are never refetched, so titles that couldn't be fetched can be filled in by hand.
     class Previews
       def initialize(directory)
         @directory = directory
         @titles = load('titles.yml')
         @favicons = load('favicons.yml')
         @pages = {}
+        @untitled_urls_reported = Set.new
       end
 
       def title(href)
         url = page_url(href)
-        return @titles[url] if @titles.key?(url)
-
-        page = fetch_page(url)
-        title = page[:body] && LinkPreviews.extract_title(page[:body], page[:charset])
-        Jekyll.logger.warn('Link previews:', "No title found for #{url}") if page[:body] && title.nil?
-        @titles[url] = title
+        @titles[url] = fetch_title(url) unless @titles.key?(url)
+        entry = @titles[url] || {}
+        if entry['title'].nil? && @untitled_urls_reported.add?(url)
+          reason = entry['error'] ? " (#{entry['error']})" : ''
+          Jekyll.logger.warn('Link preview:', "no title for #{url}#{reason}; set one in #{CACHE_DIR}/titles.yml")
+        end
+        entry['title']&.to_s
       end
 
       def favicon(href)
@@ -151,6 +176,14 @@ module Jekyll
         uri.to_s
       end
 
+      def fetch_title(url)
+        page = fetch_page(url)
+        return { 'title' => nil, 'error' => page[:error] } if page[:error]
+
+        title = LinkPreviews.extract_title(page[:body], page[:charset])
+        title ? { 'title' => title } : { 'title' => nil, 'error' => 'no title found' }
+      end
+
       def fetch_page(url)
         @pages[url] ||= begin
           response, final_url = get(url)
@@ -158,8 +191,7 @@ module Jekyll
 
           { url: final_url, body: response.body, charset: response.type_params['charset'] }
         rescue StandardError => e
-          Jekyll.logger.warn('Link previews:', "Could not fetch #{url}: #{e.message}")
-          { url: url }
+          { url: url, error: e.message }
         end
       end
 
@@ -184,8 +216,8 @@ module Jekyll
       def download_favicon(host, urls)
         urls.each do |url|
           response, = get(url)
-          extension = FAVICON_EXTENSIONS[response.content_type]
-          next unless extension && !response.body.to_s.empty?
+          extension = favicon_extension(response)
+          next unless extension
 
           name = "#{host}.#{extension}"
           FileUtils.mkdir_p(File.join(@directory, 'favicons'))
@@ -194,8 +226,16 @@ module Jekyll
         rescue StandardError
           next
         end
-        Jekyll.logger.warn('Link previews:', "No favicon found for #{host}")
+        Jekyll.logger.warn('Link preview:', "no favicon found for #{host}")
         nil
+      end
+
+      def favicon_extension(response)
+        body = response.body.to_s.b
+        return nil if body.empty?
+
+        FAVICON_EXTENSIONS[response.content_type] ||
+          FAVICON_SIGNATURES.find { |_, signature| signature.match?(body) }&.first
       end
 
       def load(name)
@@ -205,11 +245,10 @@ module Jekyll
 
       def write(name, data)
         path = File.join(@directory, name)
-        yaml = data.sort.to_h.to_yaml
-        return if File.exist?(path) && File.binread(path) == yaml.b
+        return if File.exist?(path) && YAML.safe_load_file(path) == data
 
         FileUtils.mkdir_p(@directory)
-        File.write(path, yaml)
+        File.write(path, data.sort.to_h.to_yaml)
       end
     end
 
