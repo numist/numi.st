@@ -417,10 +417,15 @@ module Jekyll
         raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE} must be a mapping of URLs to entries" unless entries.is_a?(Hash)
 
         entries.each do |url, entry|
-          next if entry.is_a?(Hash)
+          unless entry.is_a?(Hash)
+            raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
+                              "not #{entry.inspect}"
+          end
+          name = entry['favicon']
+          next if name.nil? || (File.basename(name.to_s) == name.to_s && !name.to_s.start_with?('.'))
 
-          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
-                            "not #{entry.inspect}"
+          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url} must be a file name in " \
+                            "#{CACHE_DIR}/favicons/, not #{name.inspect}"
         end
       end
     end

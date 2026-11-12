@@ -513,6 +513,16 @@ describe Jekyll::LinkPreviews do
         )
       end
 
+      it 'fails on favicon names that are not plain file names in the favicons directory' do
+        ['../outside.png', 'sub/inside.png', '.hidden.png'].each do |name|
+          write_links({ "#{@base}/page" => { 'title' => 'Page', 'favicon' => name } }.to_yaml)
+          expect { described_class.new(cache_dir) }.to raise_error(
+            Jekyll::LinkPreviews::CacheError,
+            %(_link_previews/links.yml: the favicon for #{@base}/page must be a file name in _link_previews/favicons/, not "#{name}")
+          )
+        end
+      end
+
       it 'fails on a cache file that is not a mapping' do
         write_links("- #{@base}/page\n")
         expect { previews }.to raise_error(
