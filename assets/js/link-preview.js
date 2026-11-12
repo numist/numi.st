@@ -18,15 +18,14 @@ window.addEventListener("load", function () {
         animation: false
     });
 
+    // Records why the preview is showing, so a preview that keyboard focus took over from a hover
+    // isn't hidden by the mouse moving away
     function show(link, byHover) {
         cancelHide();
-        if (current === link) {
-            shownByHover = shownByHover || byHover;
-            return;
-        }
+        shownByHover = byHover;
+        if (current === link) return;
         hide();
         current = link;
-        shownByHover = byHover;
         $(link).popover("show");
     }
 
