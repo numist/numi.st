@@ -77,16 +77,17 @@ window.addEventListener("load", function () {
         pressPointerType = null;
     });
     links.on("click", function (e) {
-        // Browsers can deliver a click to a link the pointer isn't over (seen in Safari after missed
-        // pointer events), so a pointer click only follows the link if the pointer is really on it.
-        // Keyboard activation clicks with a detail of 0 and has no pointer position.
-        if (e.detail !== 0 && !this.contains(document.elementFromPoint(e.clientX, e.clientY))) {
+        var pointerType = pressPointerType;
+        pressPointerType = null;
+        // Keyboard activation clicks with a detail of 0 and has no pointer position
+        var tapped = e.detail !== 0 && (pointerType === "touch" || pointerType === "pen");
+        // Browsers can deliver a mouse click to a link the pointer isn't over (seen in Safari after
+        // missed pointer events), so a mouse click only follows the link if the pointer is really on it.
+        if (e.detail !== 0 && !tapped && !this.contains(document.elementFromPoint(e.clientX, e.clientY))) {
             e.preventDefault();
             hide();
             return;
         }
-        var tapped = e.detail !== 0 && (pressPointerType === "touch" || pressPointerType === "pen");
-        pressPointerType = null;
         if (tapped && !pressFoundPreviewShown) {
             e.preventDefault();
             show(this, false);
