@@ -360,7 +360,7 @@ describe Jekyll::LinkPreviews do
         expect(previews.title("#{base}/titled")).to eq('Iconless')
         expect(previews.favicon("#{base}/titled")).to be_nil
         previews.save
-        expect(YAML.load_file(links_path).fetch("#{base}/titled")).to eq('title' => 'Iconless', 'favicon' => nil)
+        expect(YAML.load_file(links_path).fetch("#{base}/titled")).to eq('title' => 'Iconless')
         expect(report).to be_empty
       end
     end
@@ -558,7 +558,7 @@ describe Jekyll::LinkPreviews do
       end
 
       it 'fails on favicon names that are not plain file names in the favicons directory' do
-        ['../outside.png', 'sub/inside.png', '.hidden.png', '', 123].each do |name|
+        ['../outside.png', 'sub/inside.png', '.hidden.png', 123].each do |name|
           write_links({ "#{@base}/page" => { 'title' => 'Page', 'favicon' => name } }.to_yaml)
           expect { described_class.new(cache_dir) }.to raise_error(
             Jekyll::LinkPreviews::CacheError,
@@ -575,12 +575,11 @@ describe Jekyll::LinkPreviews do
         )
       end
 
-      it 'warns when an entry names a favicon file that does not exist' do
+      it 'fails on an entry naming a favicon file that does not exist' do
         write_links("#{@base}/page:\n  title: Page\n  favicon: gone.png\n")
-        expect(previews.favicon("#{@base}/page")).to be_nil
-        expect(previews.favicon_files).to be_empty
-        expect(report).to include(
-          "Link preview: #{@base}/page: favicon gone.png not found in _link_previews/favicons/\n"
+        expect { previews }.to raise_error(
+          Jekyll::LinkPreviews::CacheError,
+          "_link_previews/links.yml: the favicon for #{@base}/page, gone.png, is not a file in _link_previews/favicons/"
         )
       end
 
@@ -596,18 +595,22 @@ describe Jekyll::LinkPreviews do
         expect(warnings).to end_with("Link preview: #{@base}/walled: no title (bot wall); #{fix_hint}\n")
       end
 
-      it 'does not warn about entries with a blank favicon' do
-        write_links("#{@base}/page:\n  title: Page\n  favicon:\n")
+      it 'treats a blank or null favicon as no favicon' do
+        write_links("#{@base}/page:\n  title: Page\n  favicon:\n#{@base}/og:\n  title: OG\n  favicon: ''\n")
         expect(previews.favicon("#{@base}/page")).to be_nil
+        expect(previews.favicon("#{@base}/og")).to be_nil
+        expect(previews.favicon_files).to be_empty
+        expect(@requests).to be_empty
         expect(report).to be_empty
       end
 
-      it 'treats a favicon name that is a directory as missing' do
+      it 'fails on an entry naming a directory as its favicon' do
         write_links("#{@base}/page:\n  title: Page\n  favicon: folder\n")
         FileUtils.mkdir_p(File.join(cache_dir, 'favicons', 'folder'))
-        expect(previews.favicon("#{@base}/page")).to be_nil
-        expect(previews.favicon_files).to be_empty
-        expect(report).to include("Link preview: #{@base}/page: favicon folder not found in _link_previews/favicons/")
+        expect { previews }.to raise_error(
+          Jekyll::LinkPreviews::CacheError,
+          "_link_previews/links.yml: the favicon for #{@base}/page, folder, is not a file in _link_previews/favicons/"
+        )
       end
 
       it 'does not rewrite the cache file when nothing changed' do

@@ -269,26 +269,21 @@ module Jekyll
         url = cache_key(href)
         @title_needed[url] ||= false
         name = entry(url)['favicon']
-        name if name && File.file?(favicon_path(name))
+        name unless blank?(name)
       end
 
       def favicon_files
-        @entries.values.map { |entry| entry['favicon'] }.compact.uniq.select { |name| File.file?(favicon_path(name)) }
+        @entries.values.map { |entry| entry['favicon'] }.reject { |name| blank?(name) }.uniq
       end
 
-      # Warns once for each URL used in this build whose title was needed but is unusable, or whose
-      # entry names a favicon file that doesn't exist.
+      # Warns once for each URL used in this build whose title was needed but is unusable.
       def report
         @title_needed.each do |url, title_needed|
           entry = @entries[url]
-          if title_needed && usable_title(entry).nil?
-            reason = blank?(entry['error']) ? '' : " (#{entry['error']})"
-            Jekyll.logger.warn('Link preview:', "#{url}: no title#{reason}; #{FIX_HINT}")
-          end
-          name = entry['favicon']
-          next if name.nil? || File.file?(favicon_path(name))
+          next unless title_needed && usable_title(entry).nil?
 
-          Jekyll.logger.warn('Link preview:', "#{url}: favicon #{name} not found in #{CACHE_DIR}/favicons/")
+          reason = blank?(entry['error']) ? '' : " (#{entry['error']})"
+          Jekyll.logger.warn('Link preview:', "#{url}: no title#{reason}; #{FIX_HINT}")
         end
       end
 
@@ -325,7 +320,9 @@ module Jekyll
       def fetch_entry(url)
         page = fetch_page(url)
         title = page[:body] && LinkPreviews.extract_title(page[:body], page[:charset])
-        entry = { 'title' => title, 'favicon' => discover_favicon(page) }
+        entry = { 'title' => title }
+        favicon = discover_favicon(page)
+        entry['favicon'] = favicon if favicon
         error = page[:error] || (title ? nil : 'no title found')
         entry['error'] = error if error
         entry
@@ -423,10 +420,16 @@ module Jekyll
                               "not #{entry.inspect}"
           end
           name = entry['favicon']
-          next if name.nil? || (name.is_a?(String) && !name.empty? && File.basename(name) == name && !name.start_with?('.'))
+          next if name.is_a?(String) ? blank?(name) : name.nil?
 
-          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url} must be a file name in " \
-                            "#{CACHE_DIR}/favicons/, not #{name.inspect}"
+          unless name.is_a?(String) && File.basename(name) == name && !name.start_with?('.')
+            raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url} must be a file name in " \
+                              "#{CACHE_DIR}/favicons/, not #{name.inspect}"
+          end
+          next if File.file?(favicon_path(name))
+
+          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url}, #{name}, is not a file in " \
+                            "#{CACHE_DIR}/favicons/"
         end
       end
     end
