@@ -19,4 +19,5 @@ group :development do
   gem "rack-livereload", "~> 0.6.1"
   gem "webrick", "~> 1.9"
   gem "capybara"
+  gem "rspec", "~> 3.13"
 end
