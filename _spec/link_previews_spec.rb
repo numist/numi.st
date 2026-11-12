@@ -599,7 +599,7 @@ describe Jekyll::LinkPreviews do
       expect(@log.string).to include("Link preview: #{url}: no title, no favicon (")
     end
 
-    it 'uses a title attribute as the popover title, without caching it or warning about the page title' do
+    it 'shows a title attribute instead of the page title, without caching it, while still fetching the URL for its favicon' do
       output = annotate(article(%(<a href="#{@base}/missing" title="  Inline &amp;  Title ">x</a>)))
       previews.report
       previews.save
