@@ -103,9 +103,10 @@ describe Jekyll::LinkPreviews do
     @base = "http://127.0.0.1:#{@server.config[:Port]}"
   end
 
+  # Starting the server may have failed, and that failure should be what's reported
   after(:all) do
-    @server.shutdown
-    @thread.join
+    @server&.shutdown
+    @thread&.join
   end
 
   around(:each) do |example|
@@ -302,10 +303,12 @@ describe Jekyll::LinkPreviews do
         response.body = '<html><head><title>Iconless</title></head></html>'
       end
       thread = Thread.new { server.start }
-      yield "http://127.0.0.1:#{server.config[:Port]}"
-    ensure
-      server.shutdown
-      thread.join
+      begin
+        yield "http://127.0.0.1:#{server.config[:Port]}"
+      ensure
+        server.shutdown
+        thread.join
+      end
     end
 
     it 'fetches page titles' do
