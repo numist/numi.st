@@ -377,7 +377,10 @@ module Jekyll
       # What pages commonly put before or after a heading's text to link to it.
       PERMALINK_GLYPHS = %w[¶ # § 🔗].freeze
 
-      # A position that isn't between two characters of a word, in any script.
+      # A position that isn't between two word characters: Unicode letters, marks, digits, and connector
+      # punctuation. Text isn't segmented into words as a browser does with ICU, so in scripts written
+      # without spaces between words, such as Chinese or Thai, the only boundaries are at spaces and
+      # punctuation.
       WORD_BOUNDARY = '(?:(?<!\p{Word})|(?!\p{Word}))'
 
       # The percent-encodings of '%', ',', '-', and '&', which keys keep.

@@ -474,7 +474,7 @@ describe Jekyll::LinkPreviews do
         expect(resolve('#:~:text=alpha,beta,-delta', '<p>alpha beta gamma beta delta</p>')).to eq('alpha beta gamma beta')
       end
 
-      it 'matches only whole words, in any script, at the edges of the text it quotes and of its prefix and suffix' do
+      it 'matches only whole words, of letters from any alphabet, at the edges of the text it quotes and of its prefix and suffix' do
         expect(resolve('#:~:text=cat', '<p>conCATenate a Cat</p>')).to eq('Cat')
         expect(resolve('#:~:text=caf', '<p>café</p>')).to be_nil
         expect(resolve('#:~:text=jumps,do', body)).to be_nil
