@@ -119,7 +119,7 @@ module Jekyll
 
         generated = !source.nil? && !literal_in_source?(source, link['href'], html[start...opening_tag_end])
         untitled_generated_hrefs << link['href'] if generated && squish(link['title']).empty?
-        edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated)]
+        edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
       end
       untitled_generated_hrefs.uniq.each do |href|
         Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which the page generates; " \
@@ -208,15 +208,20 @@ module Jekyll
     end
 
     # A link's own title attribute overrides the cached page title, and is removed so its
-    # native tooltip doesn't compete with the popover.
-    def self.annotated_opening_tag(link, previews, generated: false)
+    # native tooltip doesn't compete with the popover. Likewise, its data-preview-favicon names a
+    # file in the favicons directory that overrides the cached favicon.
+    def self.annotated_opening_tag(link, previews, generated: false, page: nil)
       href = link['href']
       inline_title = squish(link.remove_attribute('title')&.value)
+      inline_favicon = squish(link.remove_attribute('data-preview-favicon')&.value)
+      unless inline_favicon.empty?
+        favicon = previews.inline_favicon(inline_favicon, [page, "the data-preview-favicon for #{href}"].compact.join(': '))
+      end
       if generated
         title = inline_title unless inline_title.empty?
       else
         title = inline_title.empty? ? previews.title(href) : inline_title
-        favicon = previews.favicon(href)
+        favicon ||= previews.favicon(href)
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       link['target'] ||= '_blank'
@@ -257,6 +262,7 @@ module Jekyll
         @pages = {}
         @downloads = {}
         @title_needed = {}
+        @inline_favicons = []
       end
 
       def title(href)
@@ -272,8 +278,16 @@ module Jekyll
         name unless blank?(name)
       end
 
+      # Returns the name of a favicon that a link names itself, after checking that it exists, so it
+      # gets published. owner describes where the name came from, for errors.
+      def inline_favicon(name, owner)
+        check_favicon(name, owner)
+        @inline_favicons << name
+        name
+      end
+
       def favicon_files
-        @entries.values.map { |entry| entry['favicon'] }.reject { |name| blank?(name) }.uniq
+        (@entries.values.map { |entry| entry['favicon'] }.reject { |name| blank?(name) } + @inline_favicons).uniq
       end
 
       # Warns once for each URL used in this build whose title was needed but is unusable.
@@ -425,15 +439,17 @@ module Jekyll
           name = entry['favicon']
           next if name.is_a?(String) ? blank?(name) : name.nil?
 
-          unless name.is_a?(String) && File.basename(name) == name && !name.start_with?('.')
-            raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url} must be a file name in " \
-                              "#{CACHE_DIR}/favicons/, not #{name.inspect}"
-          end
-          next if File.file?(favicon_path(name))
-
-          raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url}, #{name}, is not a file in " \
-                            "#{CACHE_DIR}/favicons/"
+          check_favicon(name, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url}")
         end
+      end
+
+      def check_favicon(name, owner)
+        unless name.is_a?(String) && File.basename(name) == name && !name.start_with?('.')
+          raise CacheError, "#{owner} must be a file name in #{CACHE_DIR}/favicons/, not #{name.inspect}"
+        end
+        return if File.file?(favicon_path(name))
+
+        raise CacheError, "#{owner}, #{name}, is not a file in #{CACHE_DIR}/favicons/"
       end
     end
 

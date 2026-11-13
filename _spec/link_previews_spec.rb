@@ -702,6 +702,43 @@ describe Jekyll::LinkPreviews do
       expect(YAML.load_file(links_path).fetch("#{@base}/missing")['title']).to be_nil
     end
 
+    describe 'data-preview-favicon' do
+      before do
+        FileUtils.mkdir_p(File.join(cache_dir, 'favicons'))
+        File.binwrite(File.join(cache_dir, 'favicons', 'inline.png'), png_bytes)
+      end
+
+      it 'shows the named favicon instead of the cached favicon, without caching it, and removes the attribute' do
+        output = annotate(article(%(<a href="#{@base}/page" data-preview-favicon=" inline.png ">x</a>)))
+        previews.save
+        expect(output).to eq(article(
+          %(<a href="#{@base}/page" class="link-preview" target="_blank" rel="noopener" ) +
+          %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/inline.png&quot; alt=&quot;&quot;&gt;) +
+          %(&lt;a href=&quot;#{@base}/page&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
+          %(Fish &amp;amp; Chips: “A History”&lt;/a&gt;" data-favicon="/assets/img/favicons/inline.png">x</a>)
+        ))
+        expect(YAML.load_file(links_path).fetch("#{@base}/page")['favicon']).to eq(favicon_name(png_bytes, 'png'))
+        expect(previews.favicon_files).to include('inline.png')
+      end
+
+      it 'fails on a name that is not a file in the favicons directory, naming the page' do
+        annotate_with_favicon = lambda do |name|
+          described_class.annotate(
+            article(%(<a href="#{@base}/page" data-preview-favicon="#{name}">x</a>)), previews, page: 'notes/page.md'
+          )
+        end
+        expect { annotate_with_favicon.('gone.png') }.to raise_error(
+          Jekyll::LinkPreviews::CacheError,
+          "notes/page.md: the data-preview-favicon for #{@base}/page, gone.png, is not a file in _link_previews/favicons/"
+        )
+        expect { annotate_with_favicon.('../inline.png') }.to raise_error(
+          Jekyll::LinkPreviews::CacheError,
+          "notes/page.md: the data-preview-favicon for #{@base}/page must be a file name in _link_previews/favicons/, " \
+          'not "../inline.png"'
+        )
+      end
+    end
+
     describe 'escaping' do
       let(:markup) { %(<img src=x onerror=alert(1)>"') }
       let(:escaped_markup_in_attribute) { '&amp;lt;img src=x onerror=alert(1)&amp;gt;&amp;quot;&amp;#39;' }
@@ -1022,6 +1059,27 @@ describe Jekyll::LinkPreviews do
           %(data-bs-content="&lt;a href=&quot;#{@base}/untitled&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Titled By Hand&lt;/a&gt;")
         )
         expect(@log.string).not_to include('/untitled')
+      end
+
+      it 'shows and publishes the favicon named by a generated link, removing the attribute' do
+        FileUtils.mkdir_p(File.join(@source, '_link_previews/favicons'))
+        File.binwrite(File.join(@source, '_link_previews/favicons/inline.png'), png_bytes)
+        File.write(File.join(@source, 'iconic.html'), <<~HTML)
+          ---
+          layout: post
+          ---
+          <a href="{{ site.generated }}/untitled" title="Iconic" data-preview-favicon="inline.png">iconic</a>
+        HTML
+        build_post
+        output = File.read(File.join(@dir, '_site/iconic.html'))
+        expect(output).to include(
+          %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/assets/img/favicons/inline.png&quot; alt=&quot;&quot;&gt;) +
+          %(&lt;a href=&quot;#{@base}/untitled&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Iconic&lt;/a&gt;" ) +
+          %(data-favicon="/assets/img/favicons/inline.png">iconic</a>)
+        )
+        expect(output).not_to include('data-preview-favicon')
+        expect(File.binread(File.join(@dir, '_site/assets/img/favicons/inline.png'))).to eq(png_bytes)
+        expect(@requests).not_to include('/untitled')
       end
     end
 
