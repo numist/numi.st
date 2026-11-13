@@ -764,6 +764,17 @@ describe Jekyll::LinkPreviews do
         end
       end
 
+      it 'fails on a title or error that is not text' do
+        %w[title error].product(['2020-01-02 10:00:00', '1984', 'true', '[Page]']).each do |key, value|
+          write_links("#{@base}/page:\n  #{key}: #{value}\n")
+          loaded = YAML.safe_load_file(links_path, permitted_classes: [Date, Time]).fetch("#{@base}/page")[key]
+          expect { described_class.new(cache_dir) }.to raise_error(
+            Jekyll::LinkPreviews::PreviewDataError,
+            "_link_previews/links.yml: the #{key} for #{@base}/page must be text, not #{loaded.inspect}"
+          )
+        end
+      end
+
       it 'keeps long titles on one line' do
         previews.title("#{@base}/long-title")
         previews.save

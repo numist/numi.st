@@ -626,7 +626,7 @@ module Jekyll
       # An entry's error is about its title: when there is one, the popover shows the URL instead,
       # whatever title the entry has.
       def usable_title(entry)
-        title = entry['title']&.to_s
+        title = entry['title']
         title unless blank?(title) || !blank?(entry['error'])
       end
 
@@ -753,6 +753,7 @@ module Jekyll
             raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
                                     "not #{entry.inspect}"
           end
+          %w[title error].each { |key| check_text(entry[key], key, url) }
           check_fragments(entry['fragments'], url)
           check_fetched(entry['fetched'], url)
           name = entry['favicon']
@@ -773,6 +774,12 @@ module Jekyll
 
         raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fetched date for #{url} must be a date, e.g. 2020-01-02, " \
                                 "not #{fetched.inspect}"
+      end
+
+      def check_text(text, key, url)
+        return if text.nil? || text.is_a?(String)
+
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the #{key} for #{url} must be text, not #{text.inspect}"
       end
 
       def check_fragments(fragments, url)
