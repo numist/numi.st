@@ -27,6 +27,15 @@ module Jekyll
     # Elements that may appear inside a link without it ceasing to be a text link.
     TEXT_ELEMENTS = %w[abbr b bdi bdo br cite code del dfn em i ins kbd mark q s samp small span strong sub sup time u var wbr].freeze
 
+    # Elements whose text a reader doesn't see.
+    HIDDEN_ELEMENTS = %w[head script style noscript template].freeze
+
+    # Elements whose text a reader sees apart from the text around them: blocks, table cells, and line breaks.
+    BLOCK_ELEMENTS = %w[
+      address article aside blockquote br caption dd details dialog div dl dt fieldset figcaption figure footer form
+      h1 h2 h3 h4 h5 h6 header hgroup hr li main nav ol p pre section summary table tbody td tfoot th thead tr ul
+    ].freeze
+
     # Leading bytes of the favicon formats accepted when the content type doesn't identify one.
     FAVICON_SIGNATURES = {
       'ico' => /\A\x00\x00\x01\x00/n,
@@ -338,10 +347,22 @@ module Jekyll
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }
     end
 
-    # A page's text as a reader sees it, with runs of whitespace collapsed to a single space.
+    # A page's text as a reader sees it, with blocks and lines separated and runs of whitespace collapsed
+    # to a single space.
     def self.visible_text(document)
-      hidden = %w[head script style noscript template].map { |name| "ancestor::#{name}" }.join(' or ')
-      document.xpath("//text()[not(#{hidden})]").map(&:content).join.gsub(/[[:space:]]+/, ' ').strip
+      text = +''
+      append_visible_text(document.root, text) if document.root
+      text.gsub(/[[:space:]]+/, ' ').strip
+    end
+
+    def self.append_visible_text(node, text)
+      return text << node.content if node.is_a?(Nokogiri::XML::Text)
+      return unless node.element? && !HIDDEN_ELEMENTS.include?(node.name)
+
+      separated = BLOCK_ELEMENTS.include?(node.name)
+      text << ' ' if separated
+      node.children.each { |child| append_visible_text(child, text) }
+      text << ' ' if separated
     end
 
     # The part of a link's URL after '#': the id of an element, or a text directive that quotes the

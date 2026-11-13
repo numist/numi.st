@@ -393,6 +393,13 @@ describe Jekyll::LinkPreviews do
         expect(resolve('#:~:text=lazy%20dog', body)).to eq('lazy dog')
       end
 
+      it 'separates the text of blocks and lines, but not of inline elements, however tightly the page is written' do
+        page = '<div><p>end of one</p><p>Start of <b>t</b>wo</p></div><ul><li>three</li><li>four<br>five</li></ul>'
+        expect(resolve('#:~:text=one%20start%20of%20two', page)).to eq('one Start of two')
+        expect(resolve('#:~:text=two%20three%20four%20five', page)).to eq('two three four five')
+        expect(resolve('#:~:text=onestart', page)).to be_nil
+      end
+
       it 'quotes a range from the start of its first text through the end of its last' do
         expect(resolve('#:~:text=quick,dog', body)).to eq('quick brown fox jumps over the lazy dog')
         expect(resolve('#:~:text=jumps,naps', body)).to eq('jumps over the lazy dog. The quick red fox naps')
