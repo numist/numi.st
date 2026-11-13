@@ -635,13 +635,15 @@ module Jekyll
         entry
       end
 
-      # Dates an entry by today's fetch of its page, where the entry has a date already, or else before
-      # its fragments.
+      # Dates an entry by today's fetch of its page, where the entry has a date already, or else just
+      # before its fragments, or last if it has none, leaving its other keys in place.
       def date_fetch(entry)
-        after = entry.key?('fetched') ? {} : entry.slice('fragments')
-        after.each_key { |key| entry.delete(key) }
-        entry['fetched'] = Time.now.utc.to_date
-        entry.merge!(after)
+        today = Time.now.utc.to_date
+        return entry['fetched'] = today if entry.key?('fetched')
+
+        pairs = entry.to_a
+        pairs.insert(pairs.index { |key, _| key == 'fragments' } || pairs.size, ['fetched', today])
+        entry.replace(pairs.to_h)
       end
 
       def fetch_page(url)

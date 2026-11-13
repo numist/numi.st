@@ -972,6 +972,22 @@ describe Jekyll::LinkPreviews do
           YAML
         end
 
+        it 'dates an undated entry just before its fragments, leaving its other keys where they are written' do
+          write_links("#{@base}/sections:\n  title: Before\n  fragments:\n    note: note\n  favicon:\n")
+          fragment("#{@base}/sections#intro")
+          previews.save
+          expect(File.read(links_path)).to eq(<<~YAML)
+            ---
+            #{@base}/sections:
+              title: Before
+              fetched: #{today}
+              fragments:
+                intro: The Introduction
+                note: note
+              favicon:
+          YAML
+        end
+
         it 'does not cache a fragment of a page that cannot be fetched, warning why once per link on every build' do
           hand_written = "#{@base}/missing:\n  title: By Hand\n"
           write_links(hand_written)
