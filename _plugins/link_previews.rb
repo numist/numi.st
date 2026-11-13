@@ -349,9 +349,9 @@ module Jekyll
       # collapsed to a single space.
       def text
         @text ||= begin
-          text = +''
-          append_visible_text(@document.root, text) if @document.root
-          LinkPreviews.squish(text)
+          visible = +''
+          append_visible_text(@document.root, visible) if @document.root
+          LinkPreviews.squish(visible)
         end
       end
 
