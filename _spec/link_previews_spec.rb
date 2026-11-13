@@ -721,6 +721,37 @@ describe Jekyll::LinkPreviews do
         expect(previews.favicon_files).to include('inline.png')
       end
 
+      it 'removes an empty or blank attribute and shows the cached favicon' do
+        ['', '  '].each do |name|
+          output = annotate(article(%(<a href="#{@base}/page" data-preview-favicon="#{name}">x</a>)))
+          expect(output).not_to include('data-preview-favicon')
+          expect(output).to include(%( data-favicon="/assets/img/favicons/#{favicon_name(png_bytes, 'png')}">x</a>))
+        end
+      end
+
+      it 'lists a favicon named both inline and by a cache entry once' do
+        File.write(links_path, "#{@base}/page:\n  title: Page\n  favicon: inline.png\n")
+        annotate(article(%(<a href="#{@base}/page" data-preview-favicon="inline.png">x</a>)))
+        expect(previews.favicon_files).to eq(['inline.png'])
+      end
+
+      it 'shows the named favicon for a link whose cache entry has no favicon' do
+        File.write(links_path, "#{@base}/page:\n  title: Page\n  favicon:\n")
+        output = annotate(article(%(<a href="#{@base}/page" data-preview-favicon="inline.png">x</a>)))
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;Page&lt;/a&gt;" data-favicon="/assets/img/favicons/inline.png">x</a>))
+        expect(@requests).to be_empty
+      end
+
+      it 'neither fetches nor caches a link that names its own title and favicon' do
+        output = annotate(article(%(<a href="#{@base}/page" title="Inline" data-preview-favicon="inline.png">x</a>)))
+        previews.report
+        previews.save
+        expect(output).to include(%(rel=&quot;noopener&quot;&gt;Inline&lt;/a&gt;" data-favicon="/assets/img/favicons/inline.png">x</a>))
+        expect(@requests).to be_empty
+        expect(YAML.load_file(links_path)).not_to have_key("#{@base}/page")
+        expect(@log.string).to be_empty
+      end
+
       it 'fails on a name that is not a file in the favicons directory, naming the page' do
         annotate_with_favicon = lambda do |name|
           described_class.annotate(
