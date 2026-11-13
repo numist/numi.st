@@ -1495,6 +1495,31 @@ describe Jekyll::LinkPreviews do
       end
     end
 
+    describe 'data-no-preview' do
+      it 'leaves a link with the attribute, whatever its value, as a plain link without fetching or caching it' do
+        html = article(
+          %(<p><a class="u-url" href="#{@base}/page" data-no-preview>bare</a> ) +
+          %(<a href="#{@base}/og" data-no-preview="no" title="Kept">valued</a></p>)
+        )
+        output = annotate(html)
+        previews.report
+        previews.save
+        expect(output).to eq(article(
+          %(<p><a class="u-url" href="#{@base}/page">bare</a> <a href="#{@base}/og" title="Kept">valued</a></p>)
+        ))
+        expect(@requests).to be_empty
+        expect(load_links).to be_empty
+        expect(@log.string).to be_empty
+      end
+
+      it 'leaves links without the attribute previewed' do
+        output = annotate(article(%(<a href="#{@base}/page" data-no-preview>plain</a> <a href="#{@base}/page">previewed</a>)))
+        expect(output).to include(%(<a href="#{@base}/page">plain</a>))
+        expect(output.scan('class="link-preview"').size).to eq(1)
+        expect(@requests).to include('/page')
+      end
+    end
+
     it 'preserves existing attributes, classes, targets, and rel values' do
       output = annotate(article(%(<a class="u-url" href="#{@base}/page" target="_self" rel="me">x</a>)))
       expect(output).to start_with(
@@ -1667,6 +1692,19 @@ describe Jekyll::LinkPreviews do
         expect(@log.string).not_to include('/sections')
       end
 
+      it 'neither fetches nor warns about a generated link without a preview' do
+        File.write(File.join(@source, 'unpreviewed.md'), <<~MARKDOWN)
+          ---
+          layout: post
+          ---
+          A [plain link]({{ site.generated }}/empty-title){: data-no-preview="" }.
+        MARKDOWN
+        build_post
+        output = File.read(File.join(@dir, '_site/unpreviewed.html'))
+        expect(output).to include(%(<a href="#{@base}/empty-title">plain link</a>))
+        expect(@log.string).not_to include('unpreviewed.md')
+      end
+
       it 'shows and publishes the favicon named by a generated link, removing the attribute' do
         FileUtils.mkdir_p(File.join(@source, '_link_previews/favicons'))
         File.binwrite(File.join(@source, '_link_previews/favicons/inline.png'), png_bytes)
@@ -1833,6 +1871,20 @@ describe Jekyll::LinkPreviews do
           expect(popover_link(link_named(output, 'titled quote')).text).to eq('Inline')
           expect(popover_quote(link_named(output, 'titled quote'))).to eq('naps')
         end
+      end
+
+      it 'leaves internal links without a preview as plain links, without checking their targets' do
+        write_post(<<~MARKDOWN)
+          A [page](/target/){: data-no-preview="" }, a [file](/files/paper.pdf){: data-no-preview="" },
+          and a [broken link](/nowhere/){: data-no-preview="" }.
+        MARKDOWN
+        output = build_site
+        expect(output).to include('<a href="/target/">page</a>')
+        expect(output).to include('<a href="/files/paper.pdf">file</a>')
+        expect(output).to include('<a href="/nowhere/">broken link</a>')
+        expect(output).not_to include('link-preview')
+        expect(links_yml).to be_empty
+        expect(@log.string).not_to include('Link preview:')
       end
 
       it 'leaves footnote references and back-references to the footnotes script' do

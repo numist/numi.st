@@ -136,6 +136,7 @@ module Jekyll
     end
 
     # Annotates text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
+    # Links with a data-no-preview attribute are left as plain links, with the attribute removed.
     # External links whose href isn't written out in the page's source were generated (e.g. by Liquid),
     # so they aren't fetched or cached. Internal links are annotated when the site's targets are given,
     # with the page's url to resolve them against; links to the page itself are left as they are. Raises
@@ -150,6 +151,11 @@ module Jekyll
 
         link = Nokogiri::HTML5.fragment(html[start...finish]).at_css('a')
         next unless link && text_only?(link) && !footnote?(link)
+
+        if link.remove_attribute('data-no-preview')
+          edits << [start, opening_tag_end, opening_tag(link)]
+          next
+        end
 
         href = link['href']
         if external?(href)
@@ -295,6 +301,11 @@ module Jekyll
       favicon_url = favicon ? "#{FAVICON_URL_DIR}/#{favicon}" : target&.favicon_url
       link['data-bs-content'] = popover_content(href, title || href, favicon_url, quote, new_tab: target.nil?)
       link['data-favicon'] = favicon_url if favicon_url
+      opening_tag(link)
+    end
+
+    # A link's opening tag, with each attribute's value double-quoted and HTML-escaped.
+    def self.opening_tag(link)
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
