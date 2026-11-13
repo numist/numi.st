@@ -45,9 +45,8 @@ https://arko.net:
   title: André Arko
   favicon: decc88a7dca418ea.ico
 https://arxiv.org/pdf/2304.03271:
-  title:
+  title: 'Making AI Less “Thirsty”: Uncovering and Addressing the Secret Water Footprint of AI Models - arXiv'
   favicon: 59ebf37bd06e0b93.ico
-  error: not HTML (application/pdf)
 https://blacker.caltech.edu:
   title:
   error: Failed to open TCP connection to blacker.caltech.edu:443 (Operation timed out - user specified timeout)
@@ -317,9 +316,8 @@ https://stephaniekelton.com/book/:
   title: Book - Stephanie Kelton
   favicon: 26e5b06ebf38cad3.jpg
 https://storage.courtlistener.com/recap/gov.uscourts.cand.364265/gov.uscourts.cand.364265.1508.0_2.pdf:
-  title:
+  title: Epic Games, Inc. v Apple Inc., Document 1508 - Order Granting Epic Games, Inc.’s Motion to Enforce Injunction; Denying Apple Inc.’s Motion to Set Aside Judgment; Denying Apple Inc.’s Motion Under Federal Rule of Evidence 502(d); Denying Apple Inc.’s Motion for Entry of Judgment on Its Indemnification Counterclaim Without Prejudice; and Referral to the United States Attorney re Criminal Contempt - Filed 04/30/25
   favicon: d4f0906fc604917c.ico
-  error: not HTML (application/pdf)
 https://sw-motech.us/products/luggage/tank+bags/EVO+tank+ring/4052572027516.htm:
   title:
   favicon: b3a2a4820f507213.ico
@@ -518,8 +516,7 @@ https://www.sqlite.org/walformat.html:
   title: WAL-mode File Format
   favicon: 76d60ff1eb9596a1.ico
 https://www.steel.org/wp-content/uploads/2021/11/AISI_FactSheet_SteelSustainability-11-3-21.pdf:
-  title:
-  error: not HTML (application/pdf)
+  title: Facts About American Steel Sustainability - American Iron and Steel Institute
 https://www.strava.com/activities/8018303622:
   title: Another perfect Tuesday | Strava
   favicon: '0890398f716f2832.png'
