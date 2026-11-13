@@ -1081,10 +1081,6 @@ describe Jekyll::LinkPreviews do
         described_class.annotate(article(html), cache, page: 'notes/page.md')
       end
 
-      def fix_hint
-        'set its value under fragments: in _link_previews/links.yml, or delete it to retry'
-      end
-
       it 'appends the heading text or id that an element fragment names to the title' do
         heading = popover(annotate(article(%(<a href="#{@base}/sections#intro">x</a>))))
         expect(heading.at_css('a').text).to eq('Sections # The Introduction')
@@ -1094,15 +1090,12 @@ describe Jekyll::LinkPreviews do
         expect(@log.string).to be_empty
       end
 
-      it 'appends the id and warns on every build, naming the page and link, when the id is not on the page' do
+      it 'appends the id, without warning, when the id is not on the page' do
         output = annotate_page(%(<a href="#{@base}/sections#gone">x</a>))
         previews.save
         annotate_page(%(<a href="#{@base}/sections#gone">x</a>), Jekyll::LinkPreviews::Previews.new(cache_dir))
         expect(popover(output).at_css('a').text).to eq('Sections # gone')
-        expect(@log.string.scan(
-          "Link preview: notes/page.md links to #{@base}/sections#gone, " \
-          "but an element with the id \"gone\" could not be found on the page it links to; #{fix_hint}"
-        ).size).to eq(2)
+        expect(@log.string).to be_empty
       end
 
       it 'quotes the text that a text fragment names below the title' do
@@ -1114,13 +1107,10 @@ describe Jekyll::LinkPreviews do
         expect(@log.string).to be_empty
       end
 
-      it 'quotes the start and end of a range that is not on the page, and warns' do
+      it 'quotes the start and end of a range that is not on the page, without warning' do
         output = annotate_page(%(<a href="#{@base}/sections#:~:text=quick,purple">x</a>))
         expect(popover(output).at_css('blockquote').text).to eq('quick … purple')
-        expect(@log.string).to include(
-          "Link preview: notes/page.md links to #{@base}/sections#:~:text=quick,purple, " \
-          "but the text it quotes could not be found on the page it links to; #{fix_hint}"
-        )
+        expect(@log.string).to be_empty
       end
 
       it 'shows the URL and the fragment as written for an entry with an error, without fetching or warning about it' do
@@ -1646,15 +1636,11 @@ describe Jekyll::LinkPreviews do
           expect(popover_link(link_named(output, 'aside')).text).to eq('Target & Co # aside')
           expect(popover_link(link_named(output, 'gone')).text).to eq('Target & Co # gone')
           expect(popover_quote(link_named(output, 'heading'))).to be_nil
-          expect(@log.string.scan('Link preview:').size).to eq(1)
-          expect(@log.string).to include(
-            'Link preview: post.md links to /target/#gone, ' \
-            'but an element with the id "gone" could not be found on the page it links to' + "\n"
-          )
+          expect(@log.string).not_to include('Link preview:')
           expect(links_yml).to be_empty
         end
 
-        it 'quotes the text that a text fragment names below the title, warning about text not on the page' do
+        it 'quotes the text that a text fragment names below the title, without warning about text not on the page' do
           write_post(<<~MARKDOWN)
             A [quote](/target/#:~:text=quick%20brown), a [range](/target/#:~:text=quick,naps),
             a [chosen](/target/#:~:text=fox.%20The-,quick,fox,-naps) one, and a [missing](/target/#:~:text=purple,fox) one.
@@ -1665,11 +1651,7 @@ describe Jekyll::LinkPreviews do
           expect(popover_quote(link_named(output, 'range'))).to eq('quick brown fox. The quick red fox naps')
           expect(popover_quote(link_named(output, 'chosen'))).to eq('quick red fox')
           expect(popover_quote(link_named(output, 'missing'))).to eq('purple … fox')
-          expect(@log.string.scan('Link preview:').size).to eq(1)
-          expect(@log.string).to include(
-            'Link preview: post.md links to /target/#:~:text=purple,fox, ' \
-            'but the text it quotes could not be found on the page it links to' + "\n"
-          )
+          expect(@log.string).not_to include('Link preview:')
           expect(links_yml).to be_empty
         end
 

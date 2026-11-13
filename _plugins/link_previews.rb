@@ -14,7 +14,6 @@ module Jekyll
     CACHE_DIR = '_link_previews'
     CACHE_FILE = 'links.yml'
     FIX_HINT = "set title: and remove error: in #{CACHE_DIR}/#{CACHE_FILE}, or delete the entry to retry"
-    FRAGMENT_FIX_HINT = "set its value under fragments: in #{CACHE_DIR}/#{CACHE_FILE}, or delete it to retry"
     FAVICON_URL_DIR = '/assets/img/favicons'
     # The site's own favicon, as _includes/head.html declares it, relative to the baseurl.
     SITE_FAVICON = '/favicon.png'
@@ -144,7 +143,6 @@ module Jekyll
       edits = []
       untitled_generated_hrefs = []
       untitled_target_hrefs = []
-      missing_fragments = []
       each_element(html, page) do |name, start, opening_tag_end, finish, in_article|
         next unless name == 'a' && in_article
 
@@ -155,10 +153,7 @@ module Jekyll
         if external?(href)
           generated = !source.nil? && !literal_in_source?(source, href, html[start...opening_tag_end])
           untitled_generated_hrefs << href if generated && squish(link['title']).empty?
-          tag = annotated_opening_tag(link, previews, generated: generated, page: page) do |fragment|
-            missing_fragments << [href, fragment.description, "; #{FRAGMENT_FIX_HINT}"]
-          end
-          edits << [start, opening_tag_end, tag]
+          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
         elsif targets && internal?(href)
           target = begin
             targets.find(href, url)
@@ -169,10 +164,7 @@ module Jekyll
           next if target.url == targets.find('', url)&.url
 
           untitled_target_hrefs << href if squish(link['title']).empty? && target.page? && target.title.nil?
-          tag = annotated_opening_tag(link, previews, target: target, page: page) do |fragment|
-            missing_fragments << [href, fragment.description, '']
-          end
-          edits << [start, opening_tag_end, tag]
+          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, target: target, page: page)]
         end
       end
       untitled_generated_hrefs.uniq.each do |href|
@@ -183,10 +175,6 @@ module Jekyll
       untitled_target_hrefs.uniq.each do |href|
         Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which has no title; give the page a <title>, " \
                                             'or give the link an inline title, e.g. [text](url "Title") in Markdown')
-      end
-      missing_fragments.uniq.each do |href, description, hint|
-        Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, but #{description} " \
-                                            "could not be found on the page it links to#{hint}")
       end
       apply_edits(html, edits)
     end
@@ -274,8 +262,8 @@ module Jekyll
     # file in the favicons directory that overrides the cached or site favicon. Links to other sites
     # open in a new tab; links to a target in this site open in the same one. A text fragment's quote
     # follows the title; an element fragment's heading text or id is appended to the linked page's
-    # title. Yields the fragment if the linked page doesn't have it.
-    def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil, &missing)
+    # title. A fragment that isn't found on the linked page is shown as it is written.
+    def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil)
       href = link['href']
       inline_title = squish(link.remove_attribute('title')&.value)
       inline_favicon = squish(link.remove_attribute('data-preview-favicon')&.value)
@@ -291,9 +279,9 @@ module Jekyll
       end
       fragment = Fragment.parse(href)
       if fragment&.quote?
-        quote = find_fragment(fragment, href, previews, generated: generated, target: target, &missing) || fragment.fallback
+        quote = find_fragment(fragment, href, previews, generated: generated, target: target) || fragment.fallback
       elsif fragment && title && inline_title.empty?
-        found = find_fragment(fragment, href, previews, generated: generated, target: target, &missing)
+        found = find_fragment(fragment, href, previews, generated: generated, target: target)
         title = "#{title} # #{found || fragment.fallback}"
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
@@ -310,19 +298,13 @@ module Jekyll
 
     # Returns what fragment names on the page that a link to href links to, or nil if that page isn't
     # searched (it isn't an HTML page in this site, is generated, or its cache entry has an error) or
-    # doesn't have it, yielding in the latter case.
+    # doesn't have it.
     def self.find_fragment(fragment, href, previews, generated:, target:)
       if target
-        return unless target.page?
-
-        found = target.fragment_text(fragment)
-      else
-        return if generated || previews.error?(href)
-
-        found = previews.fragment(href, fragment)
+        target.fragment_text(fragment) if target.page?
+      elsif !generated && !previews.error?(href)
+        previews.fragment(href, fragment)
       end
-      yield fragment unless found
-      found
     end
 
     def self.popover_content(href, title, favicon_url, quote = nil, new_tab: true)
@@ -455,11 +437,6 @@ module Jekyll
       # What to show when the fragment can't be resolved.
       def fallback
         quote? ? [@start, @finish].compact.join(' … ') : @id
-      end
-
-      # What a link names when the fragment can't be resolved, for warnings.
-      def description
-        quote? ? 'the text it quotes' : "an element with the id #{@id.inspect}"
       end
 
       private
