@@ -1,4 +1,4 @@
-# ABOUTME: Tests for the link previews plugin: link classification, HTML annotation, page title and favicon
+# ABOUTME: Tests for the link previews plugin: link classification, HTML annotation, page title, favicon, and fragment
 # ABOUTME: fetching against a local HTTP server, the on-disk cache, and previews of the site's own pages and files.
 require 'rspec'
 require 'jekyll'
@@ -37,6 +37,9 @@ describe Jekyll::LinkPreviews do
            "<html><head><title>\n  Fish &amp; Chips:\n\t&ldquo;A History&rdquo;  </title>" \
            '<link rel="icon" href="/static/icon.png"></head><body></body></html>')
     serve.('/og', 'text/html', '<html><head><meta property="og:title" content="OG &amp; Title"></head></html>')
+    serve.('/sections', 'text/html',
+           '<html><head><title>Sections</title><link rel="icon" href="/static/icon.png"></head><body>' \
+           '<h2 id="intro">The Introduction</h2><div id="note">A note</div><p>The quick brown fox.</p></body></html>')
     serve.('/empty-title', 'text/html',
            '<html><head><title> </title><meta property="og:title" content="From OG"></head></html>')
     serve.('/long-title', 'text/html', "<html><head><title>#{'Long words ' * 12}</title></head></html>")
@@ -303,6 +306,108 @@ describe Jekyll::LinkPreviews do
       expect(described_class.icon_urls(html.b, nil, 'https://example.com/')).to eq(
         ['https://example.com/favicon.ico']
       )
+    end
+  end
+
+  describe Jekyll::LinkPreviews::Fragment do
+    def fragment(href)
+      described_class.parse(href)
+    end
+
+    def resolve(href, body)
+      html = "<html><head><title>Page</title></head><body>#{body}</body></html>"
+      fragment(href).resolve(Jekyll::LinkPreviews.parse(html.b, 'UTF-8'))
+    end
+
+    describe '.parse' do
+      it 'finds no fragment in a URL without one' do
+        expect(fragment('https://e.com/a')).to be_nil
+        expect(fragment('https://e.com/a#')).to be_nil
+        expect(fragment('')).to be_nil
+      end
+
+      it 'keys an element fragment by its percent-decoded id' do
+        expect(fragment('/a/#caf%C3%A9%20menu').key).to eq('café menu')
+        expect(fragment('#fn:socials').key).to eq('fn:socials')
+        expect(fragment('#fn:socials').quote?).to be false
+      end
+
+      it 'keys a text fragment by its percent-decoded directives, keeping the :~: that marks them' do
+        expect(fragment('https://e.com/#:~:text=a%20b,-c').key).to eq(':~:text=a b,-c')
+        expect(fragment('https://e.com/#:~:text=a%20b,-c').quote?).to be true
+      end
+
+      it 'lets a text directive take precedence over an element id before it' do
+        expect(fragment('https://e.com/#intro:~:text=fox').key).to eq(':~:text=fox')
+        expect(fragment('https://e.com/#intro:~:text=fox').quote?).to be true
+      end
+
+      it 'uses the element id when the directives include no valid text directive' do
+        expect(fragment('#intro:~:other=x').key).to eq('intro')
+        expect(fragment('#intro:~:text=').key).to eq('intro')
+        expect(fragment('#:~:text=a,b,c')).to be_nil
+      end
+    end
+
+    describe '#fallback' do
+      it 'is the decoded id, quoted text, or start and end of a quoted range' do
+        expect(fragment('#fn%3Asocials').fallback).to eq('fn:socials')
+        expect(fragment('#:~:text=quick%20brown').fallback).to eq('quick brown')
+        expect(fragment('#:~:text=the-,quick%2C,lazy%2Ddog,-.').fallback).to eq('quick, … lazy-dog')
+      end
+
+      it 'uses the first of several text directives' do
+        expect(fragment('#:~:text=quick&text=lazy').fallback).to eq('quick')
+        expect(fragment('#:~:other=x&text=lazy').fallback).to eq('lazy')
+      end
+    end
+
+    describe '#resolve' do
+      let(:body) do
+        <<~HTML
+          <h2 id="intro">  The
+            <em>Introduction</em> </h2>
+          <div id="note">A note</div><h3 id="café">Menu</h3>
+          <p><a name="legacy"></a>The quick <em>brown</em> fox jumps over the lazy&nbsp;dog.</p>
+          <p>The quick red fox naps.</p>
+          <script>var words = "hidden text";</script><style>.hidden-style {}</style>
+        HTML
+      end
+
+      it 'names a heading by its text' do
+        expect(resolve('#intro', body)).to eq('The Introduction')
+        expect(resolve('#caf%C3%A9', body)).to eq('Menu')
+      end
+
+      it 'names other elements, including named anchors, by their id' do
+        expect(resolve('#note', body)).to eq('note')
+        expect(resolve('#legacy', body)).to eq('legacy')
+      end
+
+      it 'finds nothing for an id that is not on the page' do
+        expect(resolve('#gone', body)).to be_nil
+      end
+
+      it 'quotes text as the page writes it, ignoring differences in case and whitespace' do
+        expect(resolve('#:~:text=QUICK%20%20brown', body)).to eq('quick brown')
+        expect(resolve('#:~:text=lazy%20dog', body)).to eq('lazy dog')
+      end
+
+      it 'quotes a range from the start of its first text through the end of its last' do
+        expect(resolve('#:~:text=quick,dog', body)).to eq('quick brown fox jumps over the lazy dog')
+        expect(resolve('#:~:text=jumps,naps', body)).to eq('jumps over the lazy dog. The quick red fox naps')
+      end
+
+      it 'uses a prefix and suffix only to choose which text to quote' do
+        expect(resolve('#:~:text=dog.%20The-,quick,fox', body)).to eq('quick red fox')
+        expect(resolve('#:~:text=quick,fox,-naps', body)).to eq('quick red fox')
+      end
+
+      it 'finds nothing for text that is not on the page, or is only in its head, scripts, or styles' do
+        %w[purple quick,purple Page hidden].each do |text|
+          expect(resolve("#:~:text=#{text}", body)).to be_nil
+        end
+      end
     end
   end
 
@@ -660,6 +765,112 @@ describe Jekyll::LinkPreviews do
         previews.save
         expect(File.read(links_path)).to eq(hand_written)
       end
+
+      describe 'fragments' do
+        def fragment(href)
+          previews.fragment(href, Jekyll::LinkPreviews::Fragment.parse(href))
+        end
+
+        it 'finds fragments in the page fetched for its title, caching them sorted in its entry' do
+          expect(previews.title("#{@base}/sections#note")).to eq('Sections')
+          expect(fragment("#{@base}/sections#note")).to eq('note')
+          expect(fragment("#{@base}/sections#intro")).to eq('The Introduction')
+          expect(fragment("#{@base}/sections#:~:text=QUICK")).to eq('quick')
+          expect(@requests).to eq(['/sections', '/static/icon.png'])
+          previews.save
+          expect(File.read(links_path)).to eq(<<~YAML)
+            ---
+            #{@base}/sections:
+              title: Sections
+              favicon: #{favicon_name(png_bytes, 'png')}
+              fragments:
+                ":~:text=QUICK": quick
+                intro: The Introduction
+                note: note
+          YAML
+        end
+
+        it 'caches a fragment that is not on the page as null, and does not refetch it' do
+          expect(fragment("#{@base}/sections#gone")).to be_nil
+          previews.save
+          expect(YAML.load_file(links_path).fetch("#{@base}/sections")['fragments']).to eq('gone' => nil)
+          @requests.clear
+
+          cached = described_class.new(cache_dir)
+          expect(cached.fragment("#{@base}/sections#gone", Jekyll::LinkPreviews::Fragment.parse('#gone'))).to be_nil
+          expect(@requests).to be_empty
+        end
+
+        it 'fetches the page for a fragment not yet cached, keeping the title and favicon cached for it' do
+          write_links("#{@base}/sections:\n  title: By Hand\n  favicon:\n")
+          expect(fragment("#{@base}/sections#intro")).to eq('The Introduction')
+          expect(@requests).to eq(['/sections'])
+          previews.save
+          expect(YAML.load_file(links_path).fetch("#{@base}/sections")).to eq(
+            'title' => 'By Hand', 'favicon' => nil, 'fragments' => { 'intro' => 'The Introduction' }
+          )
+        end
+
+        it 'caches a fragment of a page that cannot be fetched as null' do
+          write_links("#{@base}/missing:\n  title: By Hand\n")
+          expect(fragment("#{@base}/missing#intro")).to be_nil
+          previews.save
+          expect(YAML.load_file(links_path).fetch("#{@base}/missing")).to eq(
+            'title' => 'By Hand', 'fragments' => { 'intro' => nil }
+          )
+        end
+
+        it 'uses hand-set fragments, treating blank ones as not on the page, without fetching' do
+          write_links(<<~YAML)
+            #{@base}/sections:
+              title: Sections
+              fragments:
+                intro: By Hand
+                note: ''
+                gone:
+          YAML
+          expect(fragment("#{@base}/sections#intro")).to eq('By Hand')
+          expect(fragment("#{@base}/sections#note")).to be_nil
+          expect(fragment("#{@base}/sections#gone")).to be_nil
+          expect(@requests).to be_empty
+        end
+
+        it 'leaves the other entries byte-for-byte unchanged when caching a fragment' do
+          other_entries = <<~YAML
+            #{@base}/missing:
+              title:
+              favicon: #{favicon_name(ico_bytes, 'ico')}
+              error: HTTP 404
+            #{@base}/page:
+              title: 'Fish & Chips: “A History”'
+              favicon: #{favicon_name(png_bytes, 'png')}
+          YAML
+          write_links("---\n#{other_entries}")
+          File.binwrite(File.join(cache_dir, 'favicons', favicon_name(ico_bytes, 'ico')), ico_bytes)
+          File.binwrite(File.join(cache_dir, 'favicons', favicon_name(png_bytes, 'png')), png_bytes)
+          fragment("#{@base}/sections#intro")
+          previews.save
+          expect(File.read(links_path)).to eq(<<~YAML)
+            ---
+            #{other_entries}#{@base}/sections:
+              title: Sections
+              favicon: #{favicon_name(png_bytes, 'png')}
+              fragments:
+                intro: The Introduction
+          YAML
+        end
+
+        it 'fails on fragments that are not a mapping to text' do
+          ['intro', { 'intro' => 2024 }].each do |fragments|
+            write_links({ "#{@base}/sections" => { 'title' => 'Sections', 'fragments' => fragments } }.to_yaml)
+            expect { described_class.new(cache_dir) }.to raise_error(
+              Jekyll::LinkPreviews::PreviewDataError,
+              "_link_previews/links.yml: the fragments for #{@base}/sections must be a mapping of fragments to text, " \
+              "not #{fragments.inspect}"
+            )
+          end
+        end
+      end
     end
   end
 
@@ -792,6 +1003,102 @@ describe Jekyll::LinkPreviews do
           "notes/page.md: the data-preview-favicon for #{@base}/page must be a file name in _link_previews/favicons/, " \
           'not "../inline.png"'
         )
+      end
+    end
+
+    describe 'fragments' do
+      before { FileUtils.mkdir_p(cache_dir) }
+
+      def popover(output)
+        Nokogiri::HTML5.fragment(Nokogiri::HTML5.fragment(output).at_css('a')['data-bs-content'])
+      end
+
+      def annotate_page(html, cache = previews)
+        described_class.annotate(article(html), cache, page: 'notes/page.md')
+      end
+
+      def fix_hint
+        'set its value under fragments: in _link_previews/links.yml, or delete it to retry'
+      end
+
+      it 'appends the heading text or id that an element fragment names to the title' do
+        heading = popover(annotate(article(%(<a href="#{@base}/sections#intro">x</a>))))
+        expect(heading.at_css('a').text).to eq('Sections # The Introduction')
+        expect(heading.at_css('a')['href']).to eq("#{@base}/sections#intro")
+        expect(heading.at_css('blockquote')).to be_nil
+        expect(popover(annotate(article(%(<a href="#{@base}/sections#note">x</a>)))).at_css('a').text).to eq('Sections # note')
+        expect(@log.string).to be_empty
+      end
+
+      it 'appends the id and warns on every build, naming the page and link, when the id is not on the page' do
+        output = annotate_page(%(<a href="#{@base}/sections#gone">x</a>))
+        previews.save
+        annotate_page(%(<a href="#{@base}/sections#gone">x</a>), Jekyll::LinkPreviews::Previews.new(cache_dir))
+        expect(popover(output).at_css('a').text).to eq('Sections # gone')
+        expect(@log.string.scan(
+          "Link preview: notes/page.md links to #{@base}/sections#gone, " \
+          "but an element with the id \"gone\" could not be found on the page it links to; #{fix_hint}"
+        ).size).to eq(2)
+      end
+
+      it 'quotes the text that a text fragment names below the title' do
+        output = annotate(article(%(<a href="#{@base}/sections#:~:text=QUICK%20brown">x</a>)))
+        expect(output).to include(
+          %(Sections&lt;/a&gt;&lt;blockquote class=&quot;link-preview-quote&quot;&gt;quick brown&lt;/blockquote&gt;")
+        )
+        expect(popover(output).at_css('a').text).to eq('Sections')
+        expect(@log.string).to be_empty
+      end
+
+      it 'quotes the start and end of a range that is not on the page, and warns' do
+        output = annotate_page(%(<a href="#{@base}/sections#:~:text=quick,purple">x</a>))
+        expect(popover(output).at_css('blockquote').text).to eq('quick … purple')
+        expect(@log.string).to include(
+          "Link preview: notes/page.md links to #{@base}/sections#:~:text=quick,purple, " \
+          "but the text it quotes could not be found on the page it links to; #{fix_hint}"
+        )
+      end
+
+      it 'shows the URL and the fragment as written for an entry with an error, without fetching or warning about it' do
+        File.write(links_path, "#{@base}/sections:\n  title: Walled\n  error: bot wall\n")
+        element = annotate_page(%(<a href="#{@base}/sections#intro">x</a>))
+        quote = annotate_page(%(<a href="#{@base}/sections#:~:text=quick">x</a>))
+        expect(popover(element).at_css('a').text).to eq("#{@base}/sections#intro")
+        expect(popover(quote).at_css('a').text).to eq("#{@base}/sections#:~:text=quick")
+        expect(popover(quote).at_css('blockquote').text).to eq('quick')
+        expect(@requests).to be_empty
+        expect(@log.string).to be_empty
+      end
+
+      it 'shows an inline title in place of the whole title, still quoting text' do
+        element = annotate(article(%(<a href="#{@base}/sections#intro" title="Inline">x</a>)))
+        quote = annotate(article(%(<a href="#{@base}/sections#:~:text=quick" title="Inline">x</a>)))
+        expect(popover(element).at_css('a').text).to eq('Inline')
+        expect(popover(quote).at_css('a').text).to eq('Inline')
+        expect(popover(quote).at_css('blockquote').text).to eq('quick')
+      end
+
+      it 'does not fetch for the element fragment of a link that names its own title and favicon' do
+        FileUtils.mkdir_p(File.join(cache_dir, 'favicons'))
+        File.binwrite(File.join(cache_dir, 'favicons', 'inline.png'), png_bytes)
+        annotate(article(%(<a href="#{@base}/sections#intro" title="Inline" data-preview-favicon="inline.png">x</a>)))
+        expect(@requests).to be_empty
+      end
+
+      it 'escapes markup in quotes and fragment text' do
+        File.write(links_path, <<~YAML)
+          #{@base}/sections:
+            title: Sections
+            fragments:
+              ":~:text=x": <img src=x>
+              intro: <img src=y>
+        YAML
+        quote = annotate(article(%(<a href="#{@base}/sections#:~:text=x">x</a>)))
+        element = annotate(article(%(<a href="#{@base}/sections#intro">x</a>)))
+        expect(popover(quote).at_css('blockquote').text).to eq('<img src=x>')
+        expect(popover(element).at_css('a').text).to eq('Sections # <img src=y>')
+        expect(popover(quote).at_css('img')).to be_nil
+        expect(popover(element).at_css('img')).to be_nil
       end
     end
 
@@ -1116,6 +1423,28 @@ describe Jekyll::LinkPreviews do
         expect(@log.string).not_to include('/untitled')
       end
 
+      it 'neither fetches nor warns about the fragments of links built by the page' do
+        File.write(File.join(@source, 'fragments.md'), <<~MARKDOWN)
+          ---
+          layout: post
+          ---
+          An [element]({{ site.generated }}/sections#intro "Element")
+          and a [quote]({{ site.generated }}/sections#:~:text=quick,fox "Quote").
+        MARKDOWN
+        build_post
+        output = Nokogiri::HTML5(File.read(File.join(@dir, '_site/fragments.html')))
+        element, quote = %w[element quote].map do |text|
+          link = output.css('article a').find { |a| a.text == text }
+          Nokogiri::HTML5.fragment(link['data-bs-content'])
+        end
+        expect(element.at_css('a').text).to eq('Element')
+        expect(element.at_css('blockquote')).to be_nil
+        expect(quote.at_css('a').text).to eq('Quote')
+        expect(quote.at_css('blockquote').text).to eq('quick … fox')
+        expect(@requests).not_to include('/sections')
+        expect(@log.string).not_to include('/sections')
+      end
+
       it 'shows and publishes the favicon named by a generated link, removing the attribute' do
         FileUtils.mkdir_p(File.join(@source, '_link_previews/favicons'))
         File.binwrite(File.join(@source, '_link_previews/favicons/inline.png'), png_bytes)
@@ -1145,7 +1474,20 @@ describe Jekyll::LinkPreviews do
           <html><head><title>{{ page.title }} &amp; Co</title></head><body><article>{{ content }}</article></body></html>
         HTML
         File.write(File.join(@source, 'index.html'), "---\n---\n<p>Index</p>\n")
-        File.write(File.join(@source, 'target.md'), "---\nlayout: titled\ntitle: Target\npermalink: /target/\n---\nTarget\n")
+        File.write(File.join(@source, 'target.md'), <<~MARKDOWN)
+          ---
+          layout: titled
+          title: Target
+          permalink: /target/
+          ---
+          Target
+
+          ## The Section
+
+          <p id="aside">An aside about the quick <em>brown</em> fox.</p>
+
+          The quick red fox naps.
+        MARKDOWN
         File.write(File.join(@source, 'plain.md'), "---\nlayout: titled\ntitle: Plain\npermalink: /plain\n---\nPlain\n")
         File.write(File.join(@source, 'untitled.html'), "---\n---\n<p>No head</p>\n")
         File.write(File.join(@source, 'generic.md'), "---\nlayout: titled\npermalink: /generic/\n---\nGeneric\n")
@@ -1205,23 +1547,75 @@ describe Jekyll::LinkPreviews do
       it 'resolves relative, index.html, extensionless, fragment, and query links to the page they name' do
         write_post(<<~MARKDOWN)
           [relative](../../target/) [dot](./../../target/) [index](/target/index.html) [unslashed](/target)
-          [fragment](/target/#section) [query](/target/?q=1) [plain](/plain) [plain.html](../../plain.html)
+          [fragment](/target/#the-section) [query](/target/?q=1) [plain](/plain) [plain.html](../../plain.html)
         MARKDOWN
         output = build_site
         titles = %w[relative dot index unslashed fragment query plain plain.html].map do |text|
           popover_link(link_named(output, text)).text
         end
-        expect(titles).to eq(['Target & Co'] * 6 + ['Plain & Co'] * 2)
+        expect(titles).to eq(['Target & Co'] * 4 + ['Target & Co # The Section', 'Target & Co'] + ['Plain & Co'] * 2)
         expect(@log.string).not_to include('Link preview:')
       end
 
-      it 'previews links within the page with its own title' do
-        write_post("A [section](#section) and the [page]().\n")
+      it 'leaves links to the page they are on untouched, however they name it' do
+        write_post(<<~MARKDOWN)
+          [section](#section) [page]() [query](?q=1#section) [path](/notes/post/) [index](/notes/post/index.html#section)
+          [relative](../post/#section) [dot](./) [quote](#:~:text=nowhere)
+        MARKDOWN
         output = build_site
-        expect(popover_link(link_named(output, 'section')).text).to eq('Post & Co')
-        expect(popover_link(link_named(output, 'section'))['href']).to eq('#section')
-        expect(popover_link(link_named(output, 'page')).text).to eq('Post & Co')
-        expect(popover_link(link_named(output, 'page'))['href']).to eq('')
+        %w[section page query path index relative dot quote].each do |text|
+          link = link_named(output, text)
+          expect(link.attributes.keys).to eq(['href']), "#{text}: #{link.to_html}"
+        end
+        expect(@log.string).not_to include('Link preview:')
+      end
+
+      describe 'fragments' do
+        def popover_quote(link)
+          Nokogiri::HTML5.fragment(link['data-bs-content']).at_css('blockquote.link-preview-quote')&.text
+        end
+
+        it 'appends the heading text or id that an element fragment names to the title, without caching it' do
+          write_post("A [heading](/target/#the-section), an [aside](../../target/#aside), and a [gone](/target/#gone) one.\n")
+          output = build_site
+          expect(popover_link(link_named(output, 'heading')).text).to eq('Target & Co # The Section')
+          expect(popover_link(link_named(output, 'aside')).text).to eq('Target & Co # aside')
+          expect(popover_link(link_named(output, 'gone')).text).to eq('Target & Co # gone')
+          expect(popover_quote(link_named(output, 'heading'))).to be_nil
+          expect(@log.string.scan('Link preview:').size).to eq(1)
+          expect(@log.string).to include(
+            'Link preview: post.md links to /target/#gone, ' \
+            'but an element with the id "gone" could not be found on the page it links to' + "\n"
+          )
+          expect(links_yml).to be_empty
+        end
+
+        it 'quotes the text that a text fragment names below the title, warning about text not on the page' do
+          write_post(<<~MARKDOWN)
+            A [quote](/target/#:~:text=quick%20brown), a [range](/target/#:~:text=quick,naps),
+            a [chosen](/target/#:~:text=The-,quick,fox,-naps) one, and a [missing](/target/#:~:text=purple,fox) one.
+          MARKDOWN
+          output = build_site
+          expect(popover_link(link_named(output, 'quote')).text).to eq('Target & Co')
+          expect(popover_quote(link_named(output, 'quote'))).to eq('quick brown')
+          expect(popover_quote(link_named(output, 'range'))).to eq('quick brown fox. The quick red fox naps')
+          expect(popover_quote(link_named(output, 'chosen'))).to eq('quick red fox')
+          expect(popover_quote(link_named(output, 'missing'))).to eq('purple … fox')
+          expect(@log.string.scan('Link preview:').size).to eq(1)
+          expect(@log.string).to include(
+            'Link preview: post.md links to /target/#:~:text=purple,fox, ' \
+            'but the text it quotes could not be found on the page it links to' + "\n"
+          )
+          expect(links_yml).to be_empty
+        end
+
+        it 'shows an inline title in place of the whole title, still quoting text' do
+          write_post(%([titled](/target/#the-section "Inline") and [titled quote](/target/#:~:text=naps "Inline").\n))
+          output = build_site
+          expect(popover_link(link_named(output, 'titled')).text).to eq('Inline')
+          expect(popover_link(link_named(output, 'titled quote')).text).to eq('Inline')
+          expect(popover_quote(link_named(output, 'titled quote'))).to eq('naps')
+        end
       end
 
       it 'leaves footnote references and back-references to the footnotes script' do

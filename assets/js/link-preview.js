@@ -1,4 +1,4 @@
-// ABOUTME: Shows the build-time preview (favicon and page title) of links as a popover:
+// ABOUTME: Shows the build-time preview (favicon, page title, and any quote) of links as a popover:
 // ABOUTME: on hover for mice, on first tap for touch, and on keyboard focus.
 
 window.addEventListener("load", function () {
@@ -10,12 +10,14 @@ window.addEventListener("load", function () {
     var pressPointerType = null;
     var pressFoundPreviewShown = false;
 
-    // Without animation, hiding finishes immediately, so showing a preview again can't race a fade-out
+    // Without animation, hiding finishes immediately, so showing a preview again can't race a fade-out.
+    // Previews quote text fragments in a blockquote, which the sanitizer otherwise removes.
     links.popover({
         trigger: "manual",
         placement: "auto",
         html: true,
-        animation: false
+        animation: false,
+        allowList: Object.assign({}, bootstrap.Popover.Default.allowList, { blockquote: [] })
     });
 
     // Records why the preview is showing, so a preview that keyboard focus took over from a hover

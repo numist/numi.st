@@ -1,4 +1,4 @@
-# ABOUTME: Annotates text links in rendered HTML with popover previews of the linked page's title and favicon:
+# ABOUTME: Annotates text links in rendered HTML with popover previews of the linked page's title, favicon, and fragment:
 # ABOUTME: fetched at build time and cached in _link_previews for other sites, taken from the build for this one.
 require 'jekyll'
 require 'net/http'
@@ -14,6 +14,7 @@ module Jekyll
     CACHE_DIR = '_link_previews'
     CACHE_FILE = 'links.yml'
     FIX_HINT = "set title: and remove error: in #{CACHE_DIR}/#{CACHE_FILE}, or delete the entry to retry"
+    FRAGMENT_FIX_HINT = "set its value under fragments: in #{CACHE_DIR}/#{CACHE_FILE}, or delete it to retry"
     FAVICON_URL_DIR = '/assets/img/favicons'
     # The site's own favicon, as _includes/head.html declares it, relative to the baseurl.
     SITE_FAVICON = '/favicon.png'
@@ -127,13 +128,14 @@ module Jekyll
     # Annotates text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
     # External links whose href isn't written out in the page's source were generated (e.g. by Liquid),
     # so they aren't fetched or cached. Internal links are annotated when the site's targets are given,
-    # with the page's url to resolve them against. Raises MarkupError, naming the page, if the HTML's
-    # elements aren't properly closed and nested, and BrokenLinkError if an internal link can't be parsed
-    # or its target isn't in the site.
+    # with the page's url to resolve them against; links to the page itself are left as they are. Raises
+    # MarkupError, naming the page, if the HTML's elements aren't properly closed and nested, and
+    # BrokenLinkError if an internal link can't be parsed or its target isn't in the site.
     def self.annotate(html, previews, page: nil, source: nil, targets: nil, url: nil)
       edits = []
       untitled_generated_hrefs = []
       untitled_target_hrefs = []
+      missing_fragments = []
       each_element(html, page) do |name, start, opening_tag_end, finish, in_article|
         next unless name == 'a' && in_article
 
@@ -144,7 +146,10 @@ module Jekyll
         if external?(href)
           generated = !source.nil? && !literal_in_source?(source, href, html[start...opening_tag_end])
           untitled_generated_hrefs << href if generated && squish(link['title']).empty?
-          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
+          tag = annotated_opening_tag(link, previews, generated: generated, page: page) do |fragment|
+            missing_fragments << [href, fragment.description, "; #{FRAGMENT_FIX_HINT}"]
+          end
+          edits << [start, opening_tag_end, tag]
         elsif targets && internal?(href)
           target = begin
             targets.find(href, url)
@@ -152,8 +157,13 @@ module Jekyll
             raise BrokenLinkError, "#{page} links to #{href}, which cannot be parsed as a URL"
           end
           raise BrokenLinkError, "#{page} links to #{href}, which is not in the site" unless target
+          next if target.url == targets.find('', url)&.url
+
           untitled_target_hrefs << href if squish(link['title']).empty? && target.page? && target.title.nil?
-          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, target: target, page: page)]
+          tag = annotated_opening_tag(link, previews, target: target, page: page) do |fragment|
+            missing_fragments << [href, fragment.description, '']
+          end
+          edits << [start, opening_tag_end, tag]
         end
       end
       untitled_generated_hrefs.uniq.each do |href|
@@ -164,6 +174,10 @@ module Jekyll
       untitled_target_hrefs.uniq.each do |href|
         Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which has no title; give the page a <title>, " \
                                             'or give the link an inline title, e.g. [text](url "Title") in Markdown')
+      end
+      missing_fragments.uniq.each do |href, description, hint|
+        Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, but #{description} " \
+                                            "could not be found on the page it links to#{hint}")
       end
       apply_edits(html, edits)
     end
@@ -249,8 +263,10 @@ module Jekyll
     # A link's own title attribute overrides the cached or target page title, and is removed so its
     # native tooltip doesn't compete with the popover. Likewise, its data-preview-favicon names a
     # file in the favicons directory that overrides the cached or site favicon. Links to other sites
-    # open in a new tab; links to a target in this site open in the same one.
-    def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil)
+    # open in a new tab; links to a target in this site open in the same one. A text fragment's quote
+    # follows the title; an element fragment's heading text or id is appended to the linked page's
+    # title. Yields the fragment if the linked page doesn't have it.
+    def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil, &missing)
       href = link['href']
       inline_title = squish(link.remove_attribute('title')&.value)
       inline_favicon = squish(link.remove_attribute('data-preview-favicon')&.value)
@@ -264,22 +280,47 @@ module Jekyll
         title ||= previews.title(href)
         favicon ||= previews.favicon(href)
       end
+      fragment = Fragment.parse(href)
+      if fragment&.quote?
+        quote = find_fragment(fragment, href, previews, generated: generated, target: target, &missing) || fragment.fallback
+      elsif fragment && title && inline_title.empty?
+        found = find_fragment(fragment, href, previews, generated: generated, target: target, &missing)
+        title = "#{title} # #{found || fragment.fallback}"
+      end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       unless target
         link['target'] ||= '_blank'
         link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
       end
       favicon_url = favicon ? "#{FAVICON_URL_DIR}/#{favicon}" : target&.favicon_url
-      link['data-bs-content'] = popover_content(href, title || href, favicon_url, new_tab: target.nil?)
+      link['data-bs-content'] = popover_content(href, title || href, favicon_url, quote, new_tab: target.nil?)
       link['data-favicon'] = favicon_url if favicon_url
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
 
-    def self.popover_content(href, title, favicon_url, new_tab: true)
+    # Returns what fragment names on the page that a link to href links to, or nil if that page isn't
+    # searched (it isn't an HTML page in this site, is generated, or its cache entry has an error) or
+    # doesn't have it, yielding in the latter case.
+    def self.find_fragment(fragment, href, previews, generated:, target:)
+      if target
+        return unless target.page?
+
+        found = target.fragment_text(fragment)
+      else
+        return if generated || previews.error?(href)
+
+        found = previews.fragment(href, fragment)
+      end
+      yield fragment unless found
+      found
+    end
+
+    def self.popover_content(href, title, favicon_url, quote = nil, new_tab: true)
       image = favicon_url ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML(favicon_url)}" alt="">) : ''
       new_tab_attributes = new_tab ? ' target="_blank" rel="noopener"' : ''
-      %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>)
+      blockquote = quote ? %(<blockquote class="link-preview-quote">#{CGI.escapeHTML(quote)}</blockquote>) : ''
+      %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>#{blockquote})
     end
 
     def self.process(site)
@@ -297,8 +338,111 @@ module Jekyll
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }
     end
 
-    # Each linked URL's page title and favicon, fetched on demand and cached on disk. Cached entries
-    # are never refetched, so anything that couldn't be fetched can be filled in by hand.
+    # A page's text as a reader sees it, with runs of whitespace collapsed to a single space.
+    def self.visible_text(document)
+      hidden = %w[head script style noscript template].map { |name| "ancestor::#{name}" }.join(' or ')
+      document.xpath("//text()[not(#{hidden})]").map(&:content).join.gsub(/[[:space:]]+/, ' ').strip
+    end
+
+    # The part of a link's URL after '#': the id of an element, or a text directive that quotes the
+    # page (https://wicg.github.io/scroll-to-text-fragment/), which takes precedence over an id before
+    # it. Of several text directives, the first is quoted.
+    class Fragment
+      HEADINGS = %w[h1 h2 h3 h4 h5 h6].freeze
+
+      # How the fragment is cached: percent-decoded, with directives keeping the ':~:' that marks them.
+      attr_reader :key
+
+      # Returns the fragment of href, or nil if it has none.
+      def self.parse(href)
+        id, directives = href.to_s[/#(.*)\z/m, 1].to_s.split(':~:', 2)
+        text = directives.to_s.split('&').find { |directive| directive.start_with?('text=') }
+        terms = text && quote_terms(text.delete_prefix('text='))
+        if terms
+          new(":~:#{decode(directives)}", **terms)
+        elsif !id.to_s.empty?
+          new(decode(id), id: decode(id))
+        end
+      end
+
+      # Splits a text directive's [prefix-,]start[,end][,-suffix] into its percent-decoded terms, or
+      # returns nil if it isn't of that form.
+      def self.quote_terms(directive)
+        parts = directive.split(',', -1)
+        prefix = parts.shift.delete_suffix('-') if parts.size > 1 && parts.first.end_with?('-')
+        suffix = parts.pop.delete_prefix('-') if parts.size > 1 && parts.last.start_with?('-')
+        return unless [1, 2].include?(parts.size) && parts.none?(&:empty?)
+
+        start, finish = parts.map { |part| decode(part) }
+        { prefix: prefix && decode(prefix), start: start, finish: finish, suffix: suffix && decode(suffix) }
+      end
+
+      def self.decode(text)
+        URI::DEFAULT_PARSER.unescape(text).scrub
+      end
+
+      def initialize(key, id: nil, prefix: nil, start: nil, finish: nil, suffix: nil)
+        @key = key
+        @id = id
+        @prefix = prefix
+        @start = start
+        @finish = finish
+        @suffix = suffix
+      end
+
+      def quote?
+        !@start.nil?
+      end
+
+      # Returns what the fragment names in a parsed page: the text it quotes, or the text of the heading
+      # with its id, or else the id itself. Returns nil if the page has no such text or element.
+      def resolve(document)
+        quote? ? quote_in(LinkPreviews.visible_text(document)) : element_text(document)
+      end
+
+      # What to show when the fragment can't be resolved.
+      def fallback
+        quote? ? [@start, @finish].compact.join(' … ') : @id
+      end
+
+      # What a link names when the fragment can't be resolved, for warnings.
+      def description
+        quote? ? 'the text it quotes' : "an element with the id #{@id.inspect}"
+      end
+
+      private
+
+      def element_text(document)
+        element = document.at_xpath('//*[@id=$id]', nil, id: @id) || document.at_xpath('//a[@name=$id]', nil, id: @id)
+        return unless element
+
+        HEADINGS.include?(element.name) ? LinkPreviews.squish(element.text) : @id
+      end
+
+      # Finds the first start, after the prefix, from which the end and then the suffix follow, matching
+      # case-insensitively, and returns the page's text from the start through the end.
+      def quote_in(text)
+        start = /#{"#{term(@prefix)} ?" if @prefix}(?<quote>#{term(@start)})/i
+        position = 0
+        while (match = text.match(start, position))
+          quote_end = match.end(0)
+          if @finish
+            finish = text.match(/#{term(@finish)}/i, quote_end) or return
+            quote_end = finish.end(0)
+          end
+          return text[match.begin(:quote)...quote_end] if @suffix.nil? || text.match?(/\G ?#{term(@suffix)}/i, quote_end)
+
+          position = match.begin(0) + 1
+        end
+      end
+
+      def term(text)
+        Regexp.escape(text.gsub(/[[:space:]]+/, ' ').strip)
+      end
+    end
+
+    # Each linked URL's page title, favicon, and fragments, fetched on demand and cached on disk. Nothing
+    # cached is ever refetched, so anything that couldn't be fetched can be filled in by hand.
     class Previews
       def initialize(directory, timeout: TIMEOUT)
         @directory = directory
@@ -321,6 +465,27 @@ module Jekyll
         @title_needed[url] ||= false
         name = entry(url)['favicon']
         name unless blank?(name)
+      end
+
+      # Whether the entry for href has an error, which means the page isn't searched for its fragments.
+      def error?(href)
+        !blank?(entry(cache_key(href))['error'])
+      end
+
+      # Returns what fragment names on the page at href (see Fragment#resolve), or nil if it isn't on the
+      # page. A fragment not yet in the entry's fragments is looked for on the page, fetched again if
+      # need be, and cached as null if the page doesn't have it or can't be fetched.
+      def fragment(href, fragment)
+        url = cache_key(href)
+        fragments = entry(url)['fragments'] || {}
+        unless fragments.key?(fragment.key)
+          page = fetch_page(url)
+          page[:document] ||= LinkPreviews.parse(page[:body], page[:charset]) if page[:body]
+          found = page[:document] && fragment.resolve(page[:document])
+          @entries[url]['fragments'] = fragments.merge(fragment.key => found).sort.to_h
+        end
+        text = @entries[url]['fragments'][fragment.key]
+        text unless blank?(text)
       end
 
       # Returns the name of a favicon that a link names itself, after checking that it exists, so it
@@ -489,11 +654,19 @@ module Jekyll
             raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
                                     "not #{entry.inspect}"
           end
+          check_fragments(entry['fragments'], url)
           name = entry['favicon']
           next if name.is_a?(String) ? blank?(name) : name.nil?
 
           check_favicon(name, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url}")
         end
+      end
+
+      def check_fragments(fragments, url)
+        return if fragments.nil? || (fragments.is_a?(Hash) && fragments.values.all? { |text| text.nil? || text.is_a?(String) })
+
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fragments for #{url} must be a mapping of fragments to text, " \
+                                "not #{fragments.inspect}"
       end
 
       def check_favicon(name, owner)
@@ -523,6 +696,10 @@ module Jekyll
         def favicon_url
           targets.favicon_url
         end
+
+        def fragment_text(fragment)
+          targets.fragment_text(self, fragment)
+        end
       end
 
       def initialize(site, previews)
@@ -532,6 +709,7 @@ module Jekyll
           [item.destination(site.dest).delete_prefix(site.dest), item]
         end
         @titles = {}
+        @documents = {}
       end
 
       # Returns the Target that href, on the page at page_url (excluding the baseurl), names, or nil if it
@@ -557,6 +735,12 @@ module Jekyll
 
       def favicon_url
         @baseurl + SITE_FAVICON
+      end
+
+      # Returns what fragment names on a page target (see Fragment#resolve), from the build's output.
+      def fragment_text(target, fragment)
+        @documents[target.url] ||= LinkPreviews.parse(page_html(target.item), 'UTF-8')
+        fragment.resolve(@documents[target.url])
       end
 
       private
