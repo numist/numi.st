@@ -345,6 +345,16 @@ describe Jekyll::LinkPreviews do
         expect(fragment('https://e.com/#:~:text=a%20b,-c').quote?).to be true
       end
 
+      it 'keeps encoded in keys what would otherwise read as directive syntax or a percent-encoding' do
+        expect(fragment('#:~:text=a,b').key).to eq(':~:text=a,b')
+        expect(fragment('#:~:text=a%2cb').key).to eq(':~:text=a%2Cb')
+        expect(fragment('#:~:text=a%2D%41,-b%26c').key).to eq(':~:text=a%2DA,-b%26c')
+        expect(fragment('#a%252Cb').key).to eq('a%252Cb')
+        expect(fragment('#a%2Cb').key).to eq('a%2Cb')
+        expect(fragment('#%3a~%3Atext=x').key).to eq('%3A~%3Atext=x')
+        expect(fragment('#%3a~%3Atext=x').quote?).to be false
+      end
+
       it 'lets a text directive take precedence over an element id before it' do
         expect(fragment('https://e.com/#intro:~:text=fox').key).to eq(':~:text=fox')
         expect(fragment('https://e.com/#intro:~:text=fox').quote?).to be true

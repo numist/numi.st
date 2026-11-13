@@ -388,7 +388,10 @@ module Jekyll
       # A position that isn't between two characters of a word, in any script.
       WORD_BOUNDARY = '(?:(?<!\p{Word})|(?!\p{Word}))'
 
-      # How the fragment is cached: percent-decoded, with directives keeping the ':~:' that marks them.
+      # The percent-encodings of '%', ',', '-', and '&', which keys keep.
+      KEY_ESCAPES = /(%2[5CD6])/i
+
+      # How the fragment is cached: percent-decoded (see .key), with directives keeping the ':~:' that marks them.
       attr_reader :key
 
       # Returns the fragment of href, or nil if it has none.
@@ -397,9 +400,9 @@ module Jekyll
         text = directives.to_s.split('&').find { |directive| directive.start_with?('text=') }
         terms = text && quote_terms(text.delete_prefix('text='))
         if terms
-          new(":~:#{decode(directives)}", **terms)
+          new(":~:#{key(directives)}", **terms)
         elsif !id.to_s.empty?
-          new(decode(id), id: decode(id))
+          new(key(id), id: decode(id))
         end
       end
 
@@ -417,6 +420,14 @@ module Jekyll
 
       def self.decode(text)
         URI::DEFAULT_PARSER.unescape(text).scrub
+      end
+
+      # Percent-decodes text for reading in the cache, keeping encoded what would otherwise read as the
+      # separators of text directives and their terms, as the ':~:' that starts directives, or as a
+      # percent-encoding, so that different fragments have different keys.
+      def self.key(text)
+        text.split(KEY_ESCAPES).each_with_index.map { |part, index| index.odd? ? part.upcase : decode(part) }
+            .join.gsub(':~:', '%3A~%3A')
       end
 
       def initialize(key, id: nil, prefix: nil, start: nil, finish: nil, suffix: nil)
