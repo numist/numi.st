@@ -1,5 +1,6 @@
 ---
 title: "Responding To Incentives"
+excerpt: "These people may be dumb, but they're not stupid"
 layout: page
 published_at: Thu Nov  5 11:32:53 PST 2026
 ---
