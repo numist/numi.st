@@ -453,7 +453,7 @@ module Jekyll
       end
     end
 
-    # Publishes a cached favicon from _link_previews/favicons at FAVICON_URL_DIR.
+    # Publishes a favicon from _link_previews/favicons at FAVICON_URL_DIR.
     class FaviconFile < StaticFile
       def initialize(site, name)
         super(site, site.source, File.join(CACHE_DIR, 'favicons'), name)
