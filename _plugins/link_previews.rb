@@ -284,19 +284,19 @@ module Jekyll
       unless inline_favicon.empty?
         favicon = previews.inline_favicon(inline_favicon, [page, "the data-preview-favicon for #{href}"].compact.join(': '))
       end
-      title = CGI.escapeHTML(inline_title) unless inline_title.empty?
+      title_html = CGI.escapeHTML(inline_title) unless inline_title.empty?
       if target
-        title ||= target.title_html
+        title_html ||= target.title_html
       elsif !generated
-        title ||= previews.title(href)&.then { |text| CGI.escapeHTML(text) }
+        title_html ||= previews.title(href)&.then { |text| CGI.escapeHTML(text) }
         favicon ||= previews.favicon(href)
       end
       fragment = Fragment.parse(href)
       if fragment&.quote?
         quote = find_fragment(fragment, href, previews, generated: generated, target: target, page: page) || fragment.fallback
-      elsif fragment && title && inline_title.empty?
+      elsif fragment && title_html && inline_title.empty?
         found = find_fragment(fragment, href, previews, generated: generated, target: target, page: page)
-        title = "#{title} # #{CGI.escapeHTML(found || fragment.fallback)}"
+        title_html = "#{title_html} # #{CGI.escapeHTML(found || fragment.fallback)}"
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       unless target
@@ -304,7 +304,7 @@ module Jekyll
         link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
       end
       favicon_url = favicon ? "#{FAVICON_URL_DIR}/#{favicon}" : target&.favicon_url
-      link['data-bs-content'] = popover_content(href, title || CGI.escapeHTML(href), favicon_url, quote, new_tab: target.nil?)
+      link['data-bs-content'] = popover_content(href, title_html || CGI.escapeHTML(href), favicon_url, quote, new_tab: target.nil?)
       link['data-favicon'] = favicon_url if favicon_url
       opening_tag(link)
     end
@@ -876,7 +876,8 @@ module Jekyll
       end
 
       # A target's title as HTML: a page's formatted title (see formatted_title) followed by the rest of
-      # its <title>, when the <title> starts with that title's text; otherwise its title, escaped.
+      # its <title>, when the <title> starts with that title's text and the rest is empty or starts with a
+      # character that isn't part of a word; otherwise its title, escaped.
       def title_html(target)
         @title_htmls[target.url] = build_title_html(target) unless @title_htmls.key?(target.url)
         @title_htmls[target.url]
@@ -916,9 +917,12 @@ module Jekyll
 
         formatted = formatted_title(target.item) if target.page? && target.item.respond_to?(:output)
         text = LinkPreviews.squish(formatted&.text)
-        return CGI.escapeHTML(title) unless formatted&.element_children&.any? && title.start_with?(text)
+        rest = title.delete_prefix(text)
+        unless formatted&.element_children&.any? && title.start_with?(text) && !rest.match?(/\A\p{Word}/)
+          return CGI.escapeHTML(title)
+        end
 
-        formatted.to_html + CGI.escapeHTML(title.delete_prefix(text))
+        formatted.to_html + CGI.escapeHTML(rest)
       end
 
       # A page's front matter title formatted as its heading is, or nil if the formatting includes

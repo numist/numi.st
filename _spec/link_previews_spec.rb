@@ -2058,6 +2058,13 @@ describe Jekyll::LinkPreviews do
           expect(popover_title(link_named(build_site, 'emphasis'))).to eq('*Fish* &amp; Chips &amp; Co')
         end
 
+        it "shows the <title>'s text when it starts with the formatted title's text in the middle of a word" do
+          write_layout('fishing', 'Fishing | Site')
+          write_page('emphasis', '*Fish*', layout: 'fishing')
+          write_post("An [emphasis](/emphasis/) title.\n")
+          expect(popover_title(link_named(build_site, 'emphasis'))).to eq('Fishing | Site')
+        end
+
         it "shows the <title>'s text when the formatted title has markup that isn't text formatting" do
           write_page('linked', 'A [link](/plain/)')
           write_page('plain', 'Plain')
