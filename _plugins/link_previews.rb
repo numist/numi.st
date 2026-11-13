@@ -365,6 +365,20 @@ module Jekyll
       text << ' ' if separated
     end
 
+    # A page that links lead to, parsed, with the text a reader sees on it found once for all the
+    # fragments that look for it.
+    class LinkedPage
+      attr_reader :document
+
+      def initialize(document)
+        @document = document
+      end
+
+      def text
+        @text ||= LinkPreviews.visible_text(@document)
+      end
+    end
+
     # The part of a link's URL after '#': the id of an element, or a text directive that quotes the
     # page (https://wicg.github.io/scroll-to-text-fragment/), which takes precedence over an id before
     # it. Of several text directives, the first is quoted.
@@ -418,10 +432,10 @@ module Jekyll
         !@start.nil?
       end
 
-      # Returns what the fragment names in a parsed page: the text it quotes, or the text of the heading
+      # Returns what the fragment names on a LinkedPage: the text it quotes, or the text of the heading
       # with its id, or else the id itself. Returns nil if the page has no such text or element.
-      def resolve(document)
-        quote? ? quote_in(LinkPreviews.visible_text(document)) : element_text(document)
+      def resolve(page)
+        quote? ? quote_in(page.text) : element_text(page.document)
       end
 
       # What to show when the fragment can't be resolved.
@@ -508,8 +522,8 @@ module Jekyll
         fragments = entry(url)['fragments'] || {}
         unless fragments.key?(fragment.key)
           page = fetch_page(url)
-          page[:document] ||= LinkPreviews.parse(page[:body], page[:charset]) if page[:body]
-          found = page[:document] && fragment.resolve(page[:document])
+          page[:linked] ||= LinkedPage.new(LinkPreviews.parse(page[:body], page[:charset])) if page[:body]
+          found = page[:linked] && fragment.resolve(page[:linked])
           @entries[url]['fragments'] = fragments.merge(fragment.key => found).sort.to_h
         end
         text = @entries[url]['fragments'][fragment.key]
@@ -737,7 +751,7 @@ module Jekyll
           [item.destination(site.dest).delete_prefix(site.dest), item]
         end
         @titles = {}
-        @documents = {}
+        @linked_pages = {}
       end
 
       # Returns the Target that href, on the page at page_url (excluding the baseurl), names, or nil if it
@@ -767,8 +781,8 @@ module Jekyll
 
       # Returns what fragment names on a page target (see Fragment#resolve), from the build's output.
       def fragment_text(target, fragment)
-        @documents[target.url] ||= LinkPreviews.parse(page_html(target.item), 'UTF-8')
-        fragment.resolve(@documents[target.url])
+        @linked_pages[target.url] ||= LinkedPage.new(LinkPreviews.parse(page_html(target.item), 'UTF-8'))
+        fragment.resolve(@linked_pages[target.url])
       end
 
       private

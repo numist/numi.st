@@ -309,6 +309,14 @@ describe Jekyll::LinkPreviews do
     end
   end
 
+  describe Jekyll::LinkPreviews::LinkedPage do
+    it 'finds the text a reader sees on the page once, however many fragments look for it' do
+      page = described_class.new(Jekyll::LinkPreviews.parse('<p>One</p><p>two</p>'.b, 'UTF-8'))
+      expect(page.text).to eq('One two')
+      expect(page.text).to be(page.text)
+    end
+  end
+
   describe Jekyll::LinkPreviews::Fragment do
     def fragment(href)
       described_class.parse(href)
@@ -316,7 +324,7 @@ describe Jekyll::LinkPreviews do
 
     def resolve(href, body)
       html = "<html><head><title>Page</title></head><body>#{body}</body></html>"
-      fragment(href).resolve(Jekyll::LinkPreviews.parse(html.b, 'UTF-8'))
+      fragment(href).resolve(Jekyll::LinkPreviews::LinkedPage.new(Jekyll::LinkPreviews.parse(html.b, 'UTF-8')))
     end
 
     describe '.parse' do
