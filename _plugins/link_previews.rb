@@ -61,7 +61,7 @@ module Jekyll
     }mix
 
     class MarkupError < StandardError; end
-    # Raised when the data previews are built from, in links.yml or a link's data-preview-favicon, is invalid.
+    # Raised when hand-written preview data, in links.yml or a link's data-preview-favicon, is invalid.
     class PreviewDataError < StandardError; end
 
     def self.external?(href)
