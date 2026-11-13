@@ -1,4 +1,4 @@
-// ABOUTME: Shows the build-time preview (favicon and page title) of external links as a popover:
+// ABOUTME: Shows the build-time preview (favicon and page title) of links as a popover:
 // ABOUTME: on hover for mice, on first tap for touch, and on keyboard focus.
 
 window.addEventListener("load", function () {

@@ -1,5 +1,5 @@
-# ABOUTME: Tests for the link previews plugin: external link detection, HTML annotation,
-# ABOUTME: page title and favicon fetching against a local HTTP server, and the on-disk cache.
+# ABOUTME: Tests for the link previews plugin: link classification, HTML annotation, page title and favicon
+# ABOUTME: fetching against a local HTTP server, the on-disk cache, and previews of the site's own pages and files.
 require 'rspec'
 require 'jekyll'
 require 'webrick'
@@ -158,7 +158,7 @@ describe Jekyll::LinkPreviews do
       expect(external?('https://numi.st/post/2025/airbags/')).to be true
     end
 
-    it 'treats relative paths, fragments, and other schemes as internal' do
+    it 'does not treat relative paths, fragments, or other schemes as external' do
       expect(external?('/about/')).to be false
       expect(external?('post/2022/x/')).to be false
       expect(external?('#fn:1')).to be false
@@ -172,8 +172,33 @@ describe Jekyll::LinkPreviews do
       expect(external?('https://en.wikipedia.org/wiki/Café')).to be true
     end
 
-    it 'treats unparseable hrefs as internal' do
+    it 'does not treat unparseable hrefs as external' do
       expect(external?('https://exa mple.com/%%')).to be false
+    end
+  end
+
+  describe '.internal?' do
+    def internal?(href)
+      described_class.internal?(href)
+    end
+
+    it 'treats paths, relative paths, fragments, queries, and empty hrefs as internal' do
+      expect(internal?('/about/')).to be true
+      expect(internal?('post/2022/x/')).to be true
+      expect(internal?('../paper.pdf')).to be true
+      expect(internal?('#section')).to be true
+      expect(internal?('?q=1')).to be true
+      expect(internal?('')).to be true
+    end
+
+    it 'does not treat links with a scheme or host, or missing hrefs, as internal' do
+      expect(internal?('https://numi.st/post/2025/airbags/')).to be false
+      expect(internal?('//example.com/path')).to be false
+      expect(internal?('mailto:blog@numist.net')).to be false
+      expect(internal?('tel:+15555550100')).to be false
+      expect(internal?('javascript:void(0)')).to be false
+      expect(internal?('https://exa mple.com/%%')).to be false
+      expect(internal?(nil)).to be false
     end
   end
 
@@ -954,9 +979,8 @@ describe Jekyll::LinkPreviews do
       expect(output).to include('class="link-preview"')
     end
 
-    it 'leaves internal links, icon links, comments, and scripts untouched' do
+    it 'leaves non-http links, icon links, comments, and scripts untouched' do
       html = article(<<~HTML)
-        <a href="/about/">about</a>
         <a href="mailto:blog@numist.net">email</a>
         <a href="#{@base}/page"><svg class="social-svg-icon"><use xlink:href="#github"></use></svg></a>
         <!-- <a href="#{@base}/page">commented</a> -->
@@ -1111,6 +1135,198 @@ describe Jekyll::LinkPreviews do
         expect(output).not_to include('data-preview-favicon')
         expect(File.binread(File.join(@dir, '_site/assets/img/favicons/inline.png'))).to eq(png_bytes)
         expect(@requests).not_to include('/untitled')
+      end
+    end
+
+    describe 'internal links' do
+      before do
+        FileUtils.mkdir_p(File.join(@source, '_layouts'))
+        File.write(File.join(@source, '_layouts/titled.html'), <<~HTML)
+          <html><head><title>{{ page.title }} &amp; Co</title></head><body><article>{{ content }}</article></body></html>
+        HTML
+        File.write(File.join(@source, 'index.html'), "---\n---\n<p>Index</p>\n")
+        File.write(File.join(@source, 'target.md'), "---\nlayout: titled\ntitle: Target\npermalink: /target/\n---\nTarget\n")
+        File.write(File.join(@source, 'plain.md'), "---\nlayout: titled\ntitle: Plain\npermalink: /plain\n---\nPlain\n")
+        File.write(File.join(@source, 'untitled.html'), "---\n---\n<p>No head</p>\n")
+        FileUtils.mkdir_p(File.join(@source, 'files'))
+        File.write(File.join(@source, 'files/paper.pdf'), '%PDF-1.4 fake')
+        File.write(File.join(@source, 'files/café menu.pdf'), '%PDF-1.4 fake')
+        FileUtils.mkdir_p(File.join(@source, '_link_previews/favicons'))
+        File.binwrite(File.join(@source, '_link_previews/favicons/inline.png'), png_bytes)
+      end
+
+      def write_post(markdown, name: 'post.md')
+        File.write(File.join(@source, name), "---\nlayout: titled\ntitle: Post\npermalink: /notes/post/\n---\n#{markdown}")
+      end
+
+      def build_site(config = {})
+        config = Jekyll.configuration(
+          { 'source' => @source, 'destination' => File.join(@dir, '_site'), 'url' => 'http://example.com' }.merge(config)
+        )
+        Jekyll::Site.new(config).process
+        File.read(File.join(@dir, '_site/notes/post/index.html'))
+      end
+
+      def links_named(output, text)
+        Nokogiri::HTML5(output).css('article a').select { |link| link.text == text }
+      end
+
+      def link_named(output, text)
+        links = links_named(output, text)
+        expect(links.size).to eq(1)
+        links.first
+      end
+
+      def popover_link(link)
+        Nokogiri::HTML5.fragment(link['data-bs-content']).at_css('a')
+      end
+
+      def popover_favicon(link)
+        Nokogiri::HTML5.fragment(link['data-bs-content']).at_css('img')&.[]('src')
+      end
+
+      def links_yml
+        YAML.load_file(File.join(@source, '_link_previews/links.yml'))
+      end
+
+      it "previews a link to another page with that page's title and the site's favicon, in the same tab" do
+        write_post("A [link](/target/).\n")
+        output = build_site
+        expect(output).to include(
+          %(<a href="/target/" class="link-preview" ) +
+          %(data-bs-content="&lt;img class=&quot;link-preview-favicon&quot; src=&quot;/favicon.png&quot; alt=&quot;&quot;&gt;) +
+          %(&lt;a href=&quot;/target/&quot;&gt;Target &amp;amp; Co&lt;/a&gt;" data-favicon="/favicon.png">link</a>)
+        )
+        expect(@log.string).not_to include('Link preview:')
+        expect(links_yml).to be_empty
+      end
+
+      it 'resolves relative, index.html, extensionless, fragment, and query links to the page they name' do
+        write_post(<<~MARKDOWN)
+          [relative](../../target/) [dot](./../../target/) [index](/target/index.html) [unslashed](/target)
+          [fragment](/target/#section) [query](/target/?q=1) [plain](/plain) [plain.html](../../plain.html)
+        MARKDOWN
+        output = build_site
+        titles = %w[relative dot index unslashed fragment query plain plain.html].map do |text|
+          popover_link(link_named(output, text)).text
+        end
+        expect(titles).to eq(['Target & Co'] * 6 + ['Plain & Co'] * 2)
+        expect(@log.string).not_to include('Link preview:')
+      end
+
+      it 'previews links within the page with its own title' do
+        write_post("A [section](#section) and the [page]().\n")
+        output = build_site
+        expect(popover_link(link_named(output, 'section')).text).to eq('Post & Co')
+        expect(popover_link(link_named(output, 'section'))['href']).to eq('#section')
+      end
+
+      it 'leaves footnote references and back-references to the footnotes script' do
+        write_post("A claim[^1] and a [link](/target/).\n\n[^1]: A note.\n")
+        output = build_site
+        expect(output).to include('<a href="#fn:1" class="footnote" rel="footnote">1</a>')
+        expect(output).to include('<a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a>')
+        expect(output.scan('class="link-preview"').size).to eq(1)
+      end
+
+      it 'does not need an inline title for an internal link the page generates' do
+        write_post(%(A [generated]({{ "/target/" | relative_url }}).\n))
+        output = build_site
+        expect(popover_link(link_named(output, 'generated')).text).to eq('Target & Co')
+        expect(@log.string).not_to include('Link preview:')
+      end
+
+      it 'uses an internal link\'s own title and favicon instead of its target\'s' do
+        write_post(%([titled](/target/ "Inline") <a href="/target/" data-preview-favicon="inline.png">iconic</a>\n))
+        output = build_site
+        expect(popover_link(link_named(output, 'titled')).text).to eq('Inline')
+        expect(popover_favicon(link_named(output, 'titled'))).to eq('/favicon.png')
+        iconic = link_named(output, 'iconic')
+        expect(popover_link(iconic).text).to eq('Target & Co')
+        expect(popover_favicon(iconic)).to eq('/assets/img/favicons/inline.png')
+        expect(iconic['data-favicon']).to eq('/assets/img/favicons/inline.png')
+        expect(File.binread(File.join(@dir, '_site/assets/img/favicons/inline.png'))).to eq(png_bytes)
+      end
+
+      it 'shows the URL and warns when the linked page has no title' do
+        write_post("An [untitled](/untitled.html) page.\n")
+        output = build_site
+        expect(popover_link(link_named(output, 'untitled')).text).to eq('/untitled.html')
+        expect(@log.string).to include(
+          'Link preview: post.md links to /untitled.html, which has no title; give the page a <title>, ' \
+          'or give the link an inline title, e.g. [text](url "Title") in Markdown'
+        )
+      end
+
+      it 'records links to files other than pages in the cache, without a title, for filling in by hand' do
+        write_post(<<~MARKDOWN)
+          A [paper](/files/paper.pdf), [again](../../files/paper.pdf#page=2), a [menu](/files/café%20menu.pdf),
+          [the same menu](</files/caf%C3%A9 menu.pdf>), and the [feed](/feed.xml).
+        MARKDOWN
+        output = build_site
+        expect(links_yml).to include(
+          '/files/paper.pdf' => { 'title' => nil, 'error' => 'not HTML (application/pdf)' },
+          '/files/café menu.pdf' => { 'title' => nil, 'error' => 'not HTML (application/pdf)' },
+          '/feed.xml' => { 'title' => nil, 'error' => 'not HTML (text/xml)' }
+        )
+        paper = link_named(output, 'paper')
+        expect(popover_link(paper).text).to eq('/files/paper.pdf')
+        expect(popover_favicon(paper)).to eq('/favicon.png')
+        expect(@log.string.scan('Link preview: /files/paper.pdf: no title (not HTML (application/pdf)); ').size).to eq(1)
+        expect(@requests).to be_empty
+      end
+
+      it 'uses hand-filled titles for files other than pages' do
+        File.write(File.join(@source, '_link_previews/links.yml'), "/files/paper.pdf:\n  title: A Paper\n")
+        write_post("A [paper](/files/paper.pdf).\n")
+        output = build_site
+        expect(popover_link(link_named(output, 'paper')).text).to eq('A Paper')
+        expect(popover_favicon(link_named(output, 'paper'))).to eq('/favicon.png')
+        expect(@log.string).not_to include('/files/paper.pdf')
+      end
+
+      it 'fails the build on a link to something that is not in the site, naming the page and link' do
+        ['/nowhere/', 'nowhere.pdf', '/files/', '/target/missing.html'].each do |href|
+          write_post("A [broken link](#{href}).\n")
+          expect { build_site }.to raise_error(
+            Jekyll::LinkPreviews::BrokenLinkError, "post.md links to #{href}, which is not in the site"
+          )
+        end
+      end
+
+      it 'does not preview other schemes or links outside articles' do
+        write_post(<<~MARKDOWN)
+          [mail](mailto:blog@numist.net) [phone](tel:+15555550100) <a href="javascript:void(0)">script</a>
+        MARKDOWN
+        File.write(File.join(@source, 'index.html'), "---\n---\n<footer><a href=\"/nowhere/\">footer</a></footer>\n")
+        output = build_site
+        expect(output).not_to include('link-preview')
+        expect(File.read(File.join(@dir, '_site/index.html'))).to include('<footer><a href="/nowhere/">footer</a></footer>')
+      end
+
+      describe 'with a baseurl' do
+        it 'resolves links within the baseurl and uses its favicon' do
+          write_post("An [absolute](/blog/target/) and a [relative](../../target/) link.\n")
+          output = build_site('baseurl' => '/blog')
+          %w[absolute relative].each do |text|
+            link = link_named(output, text)
+            expect(popover_link(link).text).to eq('Target & Co')
+            expect(popover_favicon(link)).to eq('/blog/favicon.png')
+          end
+        end
+
+        it 'keys files by their URL within the baseurl' do
+          write_post("A [paper](/blog/files/paper.pdf).\n")
+          build_site('baseurl' => '/blog')
+          expect(links_yml).to include('/blog/files/paper.pdf' => { 'title' => nil, 'error' => 'not HTML (application/pdf)' })
+        end
+
+        it 'fails on links outside the baseurl' do
+          write_post("A [broken link](/target/).\n")
+          expect { build_site('baseurl' => '/blog') }.to raise_error(
+            Jekyll::LinkPreviews::BrokenLinkError, 'post.md links to /target/, which is not in the site'
+          )
+        end
       end
     end
 

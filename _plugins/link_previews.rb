@@ -1,7 +1,8 @@
-# ABOUTME: Annotates external text links in rendered HTML with popover previews showing the
-# ABOUTME: linked page's title and self-hosted favicon, fetched at build time and cached in _link_previews.
+# ABOUTME: Annotates text links in rendered HTML with popover previews of the linked page's title and favicon:
+# ABOUTME: fetched at build time and cached in _link_previews for other sites, taken from the build for this one.
 require 'jekyll'
 require 'net/http'
+require 'webrick'
 require 'nokogiri'
 require 'cgi'
 require 'digest'
@@ -14,6 +15,8 @@ module Jekyll
     CACHE_FILE = 'links.yml'
     FIX_HINT = "set title: and remove error: in #{CACHE_DIR}/#{CACHE_FILE}, or delete the entry to retry"
     FAVICON_URL_DIR = '/assets/img/favicons'
+    # The site's own favicon, as _includes/head.html declares it, relative to the baseurl.
+    SITE_FAVICON = '/favicon.png'
     USER_AGENT = 'numi.st link preview builder'
     TIMEOUT = 5
     MAX_REDIRECTS = 5
@@ -63,12 +66,19 @@ module Jekyll
     class MarkupError < StandardError; end
     # Raised when hand-written preview data, in links.yml or a link's data-preview-favicon, is invalid.
     class PreviewDataError < StandardError; end
+    # Raised when a link to this site names something the build doesn't publish.
+    class BrokenLinkError < StandardError; end
 
     def self.external?(href)
       uri = URI.parse(ascii_url(href))
       !uri.host.nil? && [nil, 'http', 'https'].include?(uri.scheme&.downcase)
     rescue URI::InvalidURIError
       false
+    end
+
+    # Whether a link is to this site without naming its host: a path, relative path, fragment, or query.
+    def self.internal?(href)
+      !href.nil? && !href.match?(%r{\A(?:[a-z][a-z0-9+.-]*:|//)}i)
     end
 
     # Percent-encodes non-ASCII characters so that IRIs can be parsed and requested as URIs.
@@ -78,6 +88,15 @@ module Jekyll
 
     def self.text_only?(link)
       !link.text.strip.empty? && link.css('*').all? { |element| TEXT_ELEMENTS.include?(element.name) }
+    end
+
+    # Footnote references and back-references, which footnotes.js presents itself.
+    def self.footnote?(link)
+      (link['class'].to_s.split & %w[footnote reversefootnote]).any?
+    end
+
+    def self.not_html_error(content_type)
+      "not HTML (#{content_type})"
     end
 
     # Decodes using the response's charset, else the document's own declaration, else UTF-8.
@@ -105,27 +124,42 @@ module Jekyll
       (urls.compact.grep(%r{\Ahttps?://}) + [URI.join(page_url, '/favicon.ico').to_s]).uniq
     end
 
-    # Annotates external text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
-    # Links whose href isn't written out in the page's source were generated (e.g. by Liquid), so they
-    # aren't fetched or cached. Raises MarkupError, naming the page, if the HTML's elements aren't
-    # properly closed and nested.
-    def self.annotate(html, previews, page: nil, source: nil)
+    # Annotates text links inside <article> elements, leaving the rest of the HTML byte-for-byte intact.
+    # External links whose href isn't written out in the page's source were generated (e.g. by Liquid),
+    # so they aren't fetched or cached. Internal links are annotated when the site's targets are given,
+    # with the page's url to resolve them against. Raises MarkupError, naming the page, if the HTML's
+    # elements aren't properly closed and nested, and BrokenLinkError if an internal link's target isn't
+    # in the site.
+    def self.annotate(html, previews, page: nil, source: nil, targets: nil, url: nil)
       edits = []
       untitled_generated_hrefs = []
+      untitled_target_hrefs = []
       each_element(html, page) do |name, start, opening_tag_end, finish, in_article|
         next unless name == 'a' && in_article
 
         link = Nokogiri::HTML5.fragment(html[start...finish]).at_css('a')
-        next unless link && external?(link['href']) && text_only?(link)
+        next unless link && text_only?(link) && !footnote?(link)
 
-        generated = !source.nil? && !literal_in_source?(source, link['href'], html[start...opening_tag_end])
-        untitled_generated_hrefs << link['href'] if generated && squish(link['title']).empty?
-        edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
+        href = link['href']
+        if external?(href)
+          generated = !source.nil? && !literal_in_source?(source, href, html[start...opening_tag_end])
+          untitled_generated_hrefs << href if generated && squish(link['title']).empty?
+          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
+        elsif targets && internal?(href)
+          target = targets.find(href, url)
+          raise BrokenLinkError, "#{page} links to #{href}, which is not in the site" unless target
+          untitled_target_hrefs << href if squish(link['title']).empty? && target.page? && target.title.nil?
+          edits << [start, opening_tag_end, annotated_opening_tag(link, previews, target: target, page: page)]
+        end
       end
       untitled_generated_hrefs.uniq.each do |href|
         Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which the page generates; " \
                                             'give the link an inline title, e.g. [text](url "Title") in Markdown, ' \
                                             'or a title attribute in the layout or include that generates it')
+      end
+      untitled_target_hrefs.uniq.each do |href|
+        Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, which has no title; give the page a <title>, " \
+                                            'or give the link an inline title, e.g. [text](url "Title") in Markdown')
       end
       apply_edits(html, edits)
     end
@@ -208,45 +242,51 @@ module Jekyll
       output << html[position..]
     end
 
-    # A link's own title attribute overrides the cached page title, and is removed so its
+    # A link's own title attribute overrides the cached or target page title, and is removed so its
     # native tooltip doesn't compete with the popover. Likewise, its data-preview-favicon names a
-    # file in the favicons directory that overrides the cached favicon.
-    def self.annotated_opening_tag(link, previews, generated: false, page: nil)
+    # file in the favicons directory that overrides the cached or site favicon. Links to other sites
+    # open in a new tab; links to a target in this site open in the same one.
+    def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil)
       href = link['href']
       inline_title = squish(link.remove_attribute('title')&.value)
       inline_favicon = squish(link.remove_attribute('data-preview-favicon')&.value)
       unless inline_favicon.empty?
         favicon = previews.inline_favicon(inline_favicon, [page, "the data-preview-favicon for #{href}"].compact.join(': '))
       end
-      if generated
-        title = inline_title unless inline_title.empty?
-      else
-        title = inline_title.empty? ? previews.title(href) : inline_title
+      title = inline_title unless inline_title.empty?
+      if target
+        title ||= target.title
+      elsif !generated
+        title ||= previews.title(href)
         favicon ||= previews.favicon(href)
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
-      link['target'] ||= '_blank'
-      link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
-      favicon_url = "#{FAVICON_URL_DIR}/#{favicon}" if favicon
-      link['data-bs-content'] = popover_content(href, title || href, favicon_url)
+      unless target
+        link['target'] ||= '_blank'
+        link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
+      end
+      favicon_url = favicon ? "#{FAVICON_URL_DIR}/#{favicon}" : target&.favicon_url
+      link['data-bs-content'] = popover_content(href, title || href, favicon_url, new_tab: target.nil?)
       link['data-favicon'] = favicon_url if favicon_url
       attributes = link.attribute_nodes.map { |attribute| %( #{attribute.name}="#{CGI.escapeHTML(attribute.value)}") }
       "<a#{attributes.join}>"
     end
 
-    def self.popover_content(href, title, favicon_url)
+    def self.popover_content(href, title, favicon_url, new_tab: true)
       image = favicon_url ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML(favicon_url)}" alt="">) : ''
-      %(#{image}<a href="#{CGI.escapeHTML(href)}" target="_blank" rel="noopener">#{CGI.escapeHTML(title)}</a>)
+      new_tab_attributes = new_tab ? ' target="_blank" rel="noopener"' : ''
+      %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>)
     end
 
     def self.process(site)
       previews = Previews.new(File.join(site.source, CACHE_DIR))
+      targets = Targets.new(site, previews)
       (site.pages + site.documents).each do |item|
         next unless item.output && item.output_ext == '.html'
 
         source_path = File.join(site.source, item.relative_path)
         source = File.read(source_path) if File.file?(source_path)
-        item.output = annotate(item.output, previews, page: item.relative_path, source: source)
+        item.output = annotate(item.output, previews, page: item.relative_path, source: source, targets: targets, url: item.url)
       end
       previews.report
       previews.save
@@ -285,6 +325,14 @@ module Jekyll
         check_favicon(name, owner)
         @inline_favicons << name
         name
+      end
+
+      # The title of a file in this site other than a page, which can only be filled in by hand, so its
+      # entry starts out with an error.
+      def file_title(url, content_type)
+        @title_needed[url] = true
+        @entries[url] ||= { 'title' => nil, 'error' => LinkPreviews.not_html_error(content_type) }
+        usable_title(@entries[url])
       end
 
       def favicon_files
@@ -349,7 +397,7 @@ module Jekyll
           response, body, final_url = get(url, PAGE_SIZE_LIMIT) do |headers|
             %w[text/html application/xhtml+xml].include?(headers.content_type)
           end
-          raise "not HTML (#{response.content_type})" unless body
+          raise LinkPreviews.not_html_error(response.content_type) unless body
 
           { url: final_url, body: body, charset: response.type_params['charset'] }
         rescue StandardError => e
@@ -451,6 +499,77 @@ module Jekyll
         return if File.file?(favicon_path(name))
 
         raise PreviewDataError, "#{owner}, #{name}, is not a file in #{CACHE_DIR}/favicons/"
+      end
+    end
+
+    # The pages and files the build publishes, for resolving internal links to the target they name. A
+    # link's path is matched as a browser and web server would: relative to the linking page's URL, after
+    # percent-decoding, with a directory's index.html and a page's .html extension optional.
+    class Targets
+      # A page or file in the build. url is its path, including the baseurl.
+      Target = Struct.new(:targets, :url, :item) do
+        def page?
+          url.end_with?('.html')
+        end
+
+        def title
+          targets.title(self)
+        end
+
+        def favicon_url
+          targets.favicon_url
+        end
+      end
+
+      def initialize(site, previews)
+        @previews = previews
+        @baseurl = site.baseurl.to_s.chomp('/')
+        @items = (site.pages + site.documents + site.static_files).select(&:write?).to_h do |item|
+          [item.destination(site.dest).delete_prefix(site.dest), item]
+        end
+        @titles = {}
+      end
+
+      # Returns the Target that href, on the page at page_url (excluding the baseurl), names, or nil if it
+      # isn't in the build.
+      def find(href, page_url)
+        path = URI.join("http://site#{escape(@baseurl + page_url)}", escape(href)).path
+        path = URI::DEFAULT_PARSER.unescape(path)
+        return unless path == @baseurl || path.start_with?("#{@baseurl}/")
+
+        path = path.delete_prefix(@baseurl)
+        candidates = path.end_with?('/') ? ["#{path}index.html"] : [path, "#{path}/index.html", "#{path}.html"]
+        found = candidates.find { |candidate| @items.key?(candidate) }
+        Target.new(self, @baseurl + found, @items[found]) if found
+      rescue URI::Error
+        nil
+      end
+
+      # A page's title comes from its rendered <title>; other files' titles come from the cache.
+      def title(target)
+        return @previews.file_title(target.url, content_type(target.url)) unless target.page?
+
+        @titles[target.url] = LinkPreviews.extract_title(page_html(target.item), 'UTF-8') unless @titles.key?(target.url)
+        @titles[target.url]
+      end
+
+      def favicon_url
+        @baseurl + SITE_FAVICON
+      end
+
+      private
+
+      # Percent-encodes the characters an href may contain that a URI can't.
+      def escape(url)
+        LinkPreviews.ascii_url(url).gsub(' ', '%20')
+      end
+
+      def content_type(url)
+        WEBrick::HTTPUtils.mime_type(url, WEBrick::HTTPUtils::DefaultMimeTypes)
+      end
+
+      def page_html(item)
+        item.respond_to?(:output) ? item.output : File.read(item.path)
       end
     end
 
