@@ -1273,6 +1273,14 @@ describe Jekyll::LinkPreviews do
         )
       end
 
+      it 'previews a link to an HTML file without front matter with its own <title>' do
+        File.write(File.join(@source, 'static.html'), "<html><head><title>Static &amp; Plain</title></head></html>\n")
+        write_post("A [static](/static.html) page.\n")
+        output = build_site
+        expect(popover_link(link_named(output, 'static')).text).to eq('Static & Plain')
+        expect(@log.string).not_to include('Link preview:')
+      end
+
       it 'records links to files other than pages in the cache, without a title, for filling in by hand' do
         write_post(<<~MARKDOWN)
           A [paper](/files/paper.pdf), [again](../../files/paper.pdf#page=2), a [menu](/files/café%20menu.pdf),
