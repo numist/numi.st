@@ -336,24 +336,6 @@ module Jekyll
       previews.favicon_files.each { |name| site.static_files << FaviconFile.new(site, name) }
     end
 
-    # A page's text as a reader sees it, with blocks and lines separated and runs of whitespace collapsed
-    # to a single space.
-    def self.visible_text(document)
-      text = +''
-      append_visible_text(document.root, text) if document.root
-      squish(text)
-    end
-
-    def self.append_visible_text(node, text)
-      return text << node.content if node.is_a?(Nokogiri::XML::Text)
-      return unless node.element? && !HIDDEN_ELEMENTS.include?(node.name)
-
-      separated = BLOCK_ELEMENTS.include?(node.name)
-      text << ' ' if separated
-      node.children.each { |child| append_visible_text(child, text) }
-      text << ' ' if separated
-    end
-
     # A page that links lead to, parsed, with the text a reader sees on it found once for all the
     # fragments that look for it.
     class LinkedPage
@@ -363,8 +345,26 @@ module Jekyll
         @document = document
       end
 
+      # The page's text as a reader sees it, with blocks and lines separated and runs of whitespace
+      # collapsed to a single space.
       def text
-        @text ||= LinkPreviews.visible_text(@document)
+        @text ||= begin
+          text = +''
+          append_visible_text(@document.root, text) if @document.root
+          LinkPreviews.squish(text)
+        end
+      end
+
+      private
+
+      def append_visible_text(node, text)
+        return text << node.content if node.is_a?(Nokogiri::XML::Text)
+        return unless node.element? && !HIDDEN_ELEMENTS.include?(node.name)
+
+        separated = BLOCK_ELEMENTS.include?(node.name)
+        text << ' ' if separated
+        node.children.each { |child| append_visible_text(child, text) }
+        text << ' ' if separated
       end
     end
 
