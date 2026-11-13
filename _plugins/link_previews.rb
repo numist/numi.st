@@ -28,6 +28,15 @@ module Jekyll
     # Elements that may appear inside a link without it ceasing to be a text link.
     TEXT_ELEMENTS = %w[abbr b bdi bdo br cite code del dfn em i ins kbd mark q s samp small span strong sub sup time u var wbr].freeze
 
+    # Text elements that Bootstrap's popover sanitizer keeps, with the attributes it keeps on any element.
+    POPOVER_TEXT_ELEMENTS = (TEXT_ELEMENTS & %w[b br code em i s small span strong sub sup u]).freeze
+    POPOVER_ATTRIBUTES = /\A(?:class|dir|id|lang|role|aria-[\w-]*)\z/i
+
+    # A page's title formatted as _layouts/page.html formats its heading.
+    TITLE_HEADING = Liquid::Template.parse(
+      "{{ title | smartify | markdownify | remove: '<p>' | remove: '</p>' | strip }}"
+    )
+
     # Elements whose text a reader doesn't see.
     HIDDEN_ELEMENTS = %w[head script style noscript template].freeze
 
@@ -279,11 +288,11 @@ module Jekyll
       unless inline_favicon.empty?
         favicon = previews.inline_favicon(inline_favicon, [page, "the data-preview-favicon for #{href}"].compact.join(': '))
       end
-      title = inline_title unless inline_title.empty?
+      title = CGI.escapeHTML(inline_title) unless inline_title.empty?
       if target
-        title ||= target.title
+        title ||= target.title_html
       elsif !generated
-        title ||= previews.title(href)
+        title ||= previews.title(href)&.then { |text| CGI.escapeHTML(text) }
         favicon ||= previews.favicon(href)
       end
       fragment = Fragment.parse(href)
@@ -291,7 +300,7 @@ module Jekyll
         quote = find_fragment(fragment, href, previews, generated: generated, target: target, page: page) || fragment.fallback
       elsif fragment && title && inline_title.empty?
         found = find_fragment(fragment, href, previews, generated: generated, target: target, page: page)
-        title = "#{title} # #{found || fragment.fallback}"
+        title = "#{title} # #{CGI.escapeHTML(found || fragment.fallback)}"
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
       unless target
@@ -299,7 +308,7 @@ module Jekyll
         link['rel'] = (link['rel'].to_s.split | ['noopener']).join(' ')
       end
       favicon_url = favicon ? "#{FAVICON_URL_DIR}/#{favicon}" : target&.favicon_url
-      link['data-bs-content'] = popover_content(href, title || href, favicon_url, quote, new_tab: target.nil?)
+      link['data-bs-content'] = popover_content(href, title || CGI.escapeHTML(href), favicon_url, quote, new_tab: target.nil?)
       link['data-favicon'] = favicon_url if favicon_url
       opening_tag(link)
     end
@@ -323,10 +332,11 @@ module Jekyll
 
     # The favicon and title link, or a quote that cites them as the site's Markdown writes quotes:
     # > quote <cite>[Title](url)</cite>
+    # The title is HTML.
     def self.popover_content(href, title, favicon_url, quote = nil, new_tab: true)
       image = favicon_url ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML(favicon_url)}" alt="">) : ''
       new_tab_attributes = new_tab ? ' target="_blank" rel="noopener"' : ''
-      link = %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>)
+      link = %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{title}</a>)
       return link unless quote
 
       %(<blockquote class="link-preview-quote"><p>#{CGI.escapeHTML(quote)} <cite>#{link}</cite></p></blockquote>)
@@ -823,6 +833,10 @@ module Jekyll
           targets.title(self)
         end
 
+        def title_html
+          targets.title_html(self)
+        end
+
         def favicon_url
           targets.favicon_url
         end
@@ -833,12 +847,14 @@ module Jekyll
       end
 
       def initialize(site, previews)
+        @site = site
         @previews = previews
         @baseurl = site.baseurl.to_s.chomp('/')
         @items = (site.pages + site.documents + site.static_files).select(&:write?).to_h do |item|
           [item.destination(site.dest).delete_prefix(site.dest), item]
         end
         @titles = {}
+        @title_htmls = {}
         @linked_pages = {}
       end
 
@@ -861,6 +877,13 @@ module Jekyll
 
         @titles[target.url] = page_title(target.item) unless @titles.key?(target.url)
         @titles[target.url]
+      end
+
+      # A target's title as HTML: a page's formatted title (see formatted_title) followed by the rest of
+      # its <title>, when the <title> starts with that title's text; otherwise its title, escaped.
+      def title_html(target)
+        @title_htmls[target.url] = build_title_html(target) unless @title_htmls.key?(target.url)
+        @title_htmls[target.url]
       end
 
       def favicon_url
@@ -889,6 +912,28 @@ module Jekyll
         return if item.respond_to?(:output) && LinkPreviews.squish(item.data['title']).empty?
 
         LinkPreviews.extract_title(page_html(item), 'UTF-8')
+      end
+
+      def build_title_html(target)
+        title = title(target)
+        return if title.nil?
+
+        formatted = formatted_title(target.item) if target.page? && target.item.respond_to?(:output)
+        text = LinkPreviews.squish(formatted&.text)
+        return CGI.escapeHTML(title) unless formatted&.element_children&.any? && title.start_with?(text)
+
+        formatted.to_html + CGI.escapeHTML(title.delete_prefix(text))
+      end
+
+      # A page's front matter title formatted as its heading is, or nil if the formatting includes
+      # markup that isn't text formatting the popover keeps.
+      def formatted_title(item)
+        html = TITLE_HEADING.render!({ 'title' => item.data['title'] }, registers: { site: @site })
+        fragment = Nokogiri::HTML5.fragment(html)
+        fragment if fragment.css('*').all? do |element|
+          POPOVER_TEXT_ELEMENTS.include?(element.name) &&
+            element.attribute_nodes.all? { |attribute| attribute.name.match?(POPOVER_ATTRIBUTES) }
+        end
       end
 
       def page_html(item)

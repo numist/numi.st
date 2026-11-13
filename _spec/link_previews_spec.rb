@@ -1985,6 +1985,85 @@ describe Jekyll::LinkPreviews do
         end
       end
 
+      describe 'formatted titles' do
+        # Like jekyll-seo-tag, the <title> is the front matter title's plain text, escaped, and the site's name.
+        before do
+          File.write(File.join(@source, '_layouts/formatted.html'), <<~HTML)
+            <html><head><title>{{ page.title | smartify | markdownify | strip_html | strip }} | Site</title></head><body><article>{{ content }}</article></body></html>
+          HTML
+        end
+
+        def write_page(name, title, layout: 'formatted')
+          File.write(File.join(@source, "#{name}.md"), <<~MARKDOWN)
+            ---
+            layout: #{layout}
+            title: '#{title}'
+            permalink: /#{name}/
+            ---
+            The quick brown fox.
+
+            ## The Section
+          MARKDOWN
+        end
+
+        def popover_title(link)
+          popover_link(link).inner_html
+        end
+
+        it "formats a linked page's title as its heading is formatted, followed by the rest of its <title>" do
+          write_page('code', '`<!-- x -->`')
+          write_page('emphasis', '*Fish* & Chips')
+          write_post("A [code](/code/) title and an [emphasis](/emphasis/) title.\n")
+          output = build_site
+          code = link_named(output, 'code')
+          expect(popover_title(code)).to eq('<code class="language-plaintext highlighter-rouge">&lt;!-- x --&gt;</code> | Site')
+          expect(code['data-bs-content']).to end_with(
+            '<a href="/code/"><code class="language-plaintext highlighter-rouge">&lt;!-- x --&gt;</code> | Site</a>'
+          )
+          expect(popover_title(link_named(output, 'emphasis'))).to eq('<em>Fish</em> &amp; Chips | Site')
+          expect(@log.string).not_to include('Link preview:')
+        end
+
+        it "shows an unformatted title as the <title>'s text" do
+          write_page('plain', %(Fish & "Chips"))
+          write_post("A [plain](/plain/) title.\n")
+          expect(build_site).to include(
+            %(&lt;a href=&quot;/plain/&quot;&gt;Fish &amp;amp; “Chips” | Site&lt;/a&gt;" data-favicon="/favicon.png">plain</a>)
+          )
+        end
+
+        it "shows the <title>'s text when it doesn't start with the formatted title's text" do
+          write_page('emphasis', '*Fish* & Chips', layout: 'titled')
+          write_post("An [emphasis](/emphasis/) title.\n")
+          expect(popover_title(link_named(build_site, 'emphasis'))).to eq('*Fish* &amp; Chips &amp; Co')
+        end
+
+        it "shows the <title>'s text when the formatted title has markup that isn't text formatting" do
+          write_page('linked', 'A [link](/plain/)')
+          write_page('plain', 'Plain')
+          write_post("A [linked](/linked/) title.\n")
+          expect(popover_title(link_named(build_site, 'linked'))).to eq('A link | Site')
+        end
+
+        it 'appends the heading an element fragment names to a formatted title' do
+          write_page('code', '`<!-- x -->`')
+          write_post("A [heading](/code/#the-section).\n")
+          expect(popover_title(link_named(build_site, 'heading'))).to eq(
+            '<code class="language-plaintext highlighter-rouge">&lt;!-- x --&gt;</code> | Site # The Section'
+          )
+        end
+
+        it 'cites a formatted title after the text a text fragment names' do
+          write_page('code', '`<!-- x -->`')
+          write_post("A [quote](/code/#:~:text=quick%20brown).\n")
+          link = link_named(build_site, 'quote')
+          citation = Nokogiri::HTML5.fragment(link['data-bs-content']).at_css('blockquote > p > cite')
+          expect(citation.at_css('a code').text).to eq('<!-- x -->')
+          expect(citation.at_css('a').text).to eq('<!-- x --> | Site')
+          expect(quoted_text(Nokogiri::HTML5.fragment(link['data-bs-content']))).to eq('quick brown')
+        end
+      end
+
       it 'leaves internal links without a preview as plain links, without checking their targets' do
         write_post(<<~MARKDOWN)
           A [page](/target/){: data-no-preview="" }, a [file](/files/paper.pdf){: data-no-preview="" },
