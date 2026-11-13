@@ -26,7 +26,7 @@ Discrete things I've written (or at least adapted) in the making of this site in
 * Plugin for [generating graphviz SVGs from DOT](/post/2023/graphviz/)
 * Plugin for making git metadata available to liquid (not quite ready to share yet)
 
-In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/) wins the day.
+In this new world of dependencies, I want to stay on top of updates without adopting any changes that break the site horribly. A combination of deploy previews with an auto-merge GitHub action strikes a reasonable compromise until such a time as [accelerationism](/post/2022/accelerationism/){: data-no-preview="" } wins the day.
 
 # Future
 
