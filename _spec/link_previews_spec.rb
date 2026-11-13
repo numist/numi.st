@@ -508,14 +508,18 @@ describe Jekyll::LinkPreviews do
       'set title: and remove error: in _link_previews/links.yml, or delete the entry to retry'
     end
 
-    # Serves a titled page from a host with no favicon at all.
-    def with_iconless_server
+    # Serves a host of its own whose paths each respond with a content type and body, and, if given, a
+    # status; any other path is not found. Requests are recorded in @requests.
+    def with_server(routes)
       server = WEBrick::HTTPServer.new(
         BindAddress: '127.0.0.1', Port: 0, Logger: WEBrick::Log.new(StringIO.new), AccessLog: []
       )
-      server.mount_proc('/titled') do |_, response|
-        response['Content-Type'] = 'text/html'
-        response.body = '<html><head><title>Iconless</title></head></html>'
+      server.mount_proc('/') do |request, response|
+        @requests << request.path
+        content_type, body, status = routes.fetch(request.path) { [nil, '', 404] }
+        response.status = status || 200
+        response['Content-Type'] = content_type
+        response.body = body
       end
       thread = Thread.new { server.start }
       begin
@@ -574,7 +578,7 @@ describe Jekyll::LinkPreviews do
     end
 
     it 'does not track favicons that cannot be found' do
-      with_iconless_server do |base|
+      with_server('/titled' => ['text/html', '<html><head><title>Iconless</title></head></html>']) do |base|
         expect(previews.title("#{base}/titled")).to eq('Iconless')
         expect(previews.favicon("#{base}/titled")).to be_nil
         previews.save
@@ -654,6 +658,58 @@ describe Jekyll::LinkPreviews do
       it 'falls back to /favicon.ico' do
         expect(previews.favicon("#{@base}/untitled")).to eq(favicon_name(ico_bytes, 'ico'))
         expect(File.binread(File.join(cache_dir, 'favicons', favicon_name(ico_bytes, 'ico')))).to eq(ico_bytes)
+      end
+
+      describe "falling back to the site's homepage" do
+        def homepage(rel = 'icon')
+          ['text/html', %(<html><head><title>Home</title><link rel="#{rel}" href="/static/icon.png"></head></html>)]
+        end
+
+        def untitled_page
+          ['text/html', '<html><head><title>Deep</title></head></html>']
+        end
+
+        it 'uses the icon the homepage declares when the page is not HTML' do
+          with_server('/paper.pdf' => ['application/pdf', '%PDF-1.4 fake'], '/' => homepage,
+                      '/static/icon.png' => ['image/png', png_bytes]) do |base|
+            expect(previews.favicon("#{base}/paper.pdf")).to eq(favicon_name(png_bytes, 'png'))
+            expect(@requests).to eq(['/paper.pdf', '/favicon.ico', '/', '/static/icon.png'])
+          end
+        end
+
+        it 'uses the icon the homepage declares when the page declares none and /favicon.ico is empty' do
+          with_server('/deep/page' => untitled_page, '/favicon.ico' => ['image/x-icon', ''],
+                      '/' => homepage('shortcut icon'), '/static/icon.png' => ['image/png', png_bytes]) do |base|
+            expect(previews.favicon("#{base}/deep/page")).to eq(favicon_name(png_bytes, 'png'))
+            expect(@requests).to eq(['/deep/page', '/favicon.ico', '/', '/static/icon.png'])
+          end
+        end
+
+        it "is not fetched when the page's own candidates yield a favicon" do
+          with_server('/deep/page' => untitled_page, '/favicon.ico' => ['image/x-icon', ico_bytes],
+                      '/' => homepage, '/static/icon.png' => ['image/png', png_bytes]) do |base|
+            expect(previews.favicon("#{base}/deep/page")).to eq(favicon_name(ico_bytes, 'ico'))
+            expect(@requests).to eq(['/deep/page', '/favicon.ico'])
+          end
+        end
+
+        it 'is not fetched again when the page is the homepage' do
+          with_server('/' => untitled_page) do |base|
+            expect(previews.favicon(base)).to be_nil
+            expect(@requests).to eq(['/', '/favicon.ico'])
+          end
+        end
+
+        it 'leaves the page without a favicon, recording no error, when the homepage cannot be fetched' do
+          with_server('/deep/page' => untitled_page, '/' => ['text/html', 'Server Error', 500]) do |base|
+            expect(previews.title("#{base}/deep/page")).to eq('Deep')
+            expect(previews.favicon("#{base}/deep/page")).to be_nil
+            previews.save
+            expect(load_links.fetch("#{base}/deep/page")).to eq('title' => 'Deep', 'fetched' => today)
+            expect(@requests).to eq(['/deep/page', '/favicon.ico', '/'])
+            expect(report).to be_empty
+          end
+        end
       end
 
       it 'discovers a favicon for each URL, resolving it against the final URL after redirects' do

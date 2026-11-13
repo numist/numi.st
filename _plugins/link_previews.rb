@@ -673,8 +673,16 @@ module Jekyll
         end
       end
 
-      # Returns the file name of the first of the page's candidate favicons that downloads, if any.
+      # Returns the file name of the first of the page's candidate favicons that downloads, else of the
+      # first of its site's homepage's, if any.
       def discover_favicon(page)
+        page_url = URI(page[:url])
+        download_first_icon(page) ||
+          (download_first_icon(fetch_page(URI.join(page_url, '/').to_s)) unless page_url.request_uri == '/')
+      end
+
+      # Returns the file name of the first of the page's candidate favicons that downloads, if any.
+      def download_first_icon(page)
         LinkPreviews.icon_urls(page[:body], page[:charset], page[:url]).each do |url|
           @downloads[url] = download_favicon(url) unless @downloads.key?(url)
           return @downloads[url] if @downloads[url]
