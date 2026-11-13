@@ -1,4 +1,112 @@
 ---
+"/LICENSES/Bad Code.txt":
+  title:
+  error: not HTML (text/plain)
+"/LICENSES/MIT.txt":
+  title:
+  error: not HTML (text/plain)
+"/LICENSES/by-nc-sa 4.0 full.webarchive":
+  title:
+  error: not HTML (application/octet-stream)
+"/bicycle/lumber.jpeg":
+  title:
+  error: not HTML (image/jpeg)
+"/feed.xml":
+  title:
+  error: not HTML (text/xml)
+"/lego/moc241216-forklift.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/photo/2009/green-and-gold/IMG_3480.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2009/weedy-seadragon/3853512867_6df9977976_o.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/alley-cat/4868115908_aabc007506_o.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/camping-with-rhi/4304991579_33266f8aaf_o.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/camping-with-rhi/4305319023_2228e45e56_o.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/camping-with-rhi/IMG_0104-crop.JPG":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/camping-with-rhi/IMG_0104.JPG":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/camping-with-rhi/gravatar.jpeg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/overflowing-taxi/IMG_3686.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/photo/2010/wet-floor/5212613521_8b598d20e6_o.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/post/2019/media-center/Media Center.zip":
+  title:
+  error: not HTML (application/zip)
+"/post/2022/reviving-a-Yamaha-PSS-A50/Littelfuse_PTC_1206L_Datasheet.pdf.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/post/2022/travel-uke/IMG_1171.jpeg":
+  title:
+  error: not HTML (image/jpeg)
+"/post/2022/travel-uke/ukulele svgs.zip":
+  title:
+  error: not HTML (application/zip)
+? "/post/2023/caches-make-predictions-about-the-future/Jaleel - 2010 - High Performance Cache Replacement Using Re-Reference Interval Prediction (RRIP).pdf"
+: title:
+  error: not HTML (application/pdf)
+? "/post/2023/caches-make-predictions-about-the-future/Qureshi - 2007 - Adaptive Insertion Policies for High Performance Caching.pdf"
+: title:
+  error: not HTML (application/pdf)
+"/post/2025/data-loss/IMG_5448.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/projects/dewisa/ADAU1701.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/IMG_9676.jpeg":
+  title:
+  error: not HTML (image/jpeg)
+"/projects/dewisa/RP-110WSW-Spec-Sheet.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/RP-140WM-Spec-Sheet.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/RP-440WC-Spec-Sheet.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/RP-440WF-Spec-Sheet.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/RP-HUB1-Spec-Sheet.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/balanced-attenuator.jpg":
+  title:
+  error: not HTML (image/jpeg)
+"/projects/dewisa/drv134.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/ina134.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/ina137.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/dewisa/tpa3116d2.pdf":
+  title:
+  error: not HTML (application/pdf)
+"/projects/vfr/Sync Day.jpg":
+  title:
+  error: not HTML (image/jpeg)
 http://daughertymotorsports.com/Backup/:
   title: DMr Performance Suspension
   favicon: 8fb774d558f641ea.ico
