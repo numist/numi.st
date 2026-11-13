@@ -831,8 +831,8 @@ describe Jekyll::LinkPreviews do
       end
 
       describe 'fragments' do
-        def fragment(href)
-          previews.fragment(href, Jekyll::LinkPreviews::Fragment.parse(href))
+        def fragment(href, cache = previews)
+          cache.fragment(href, Jekyll::LinkPreviews::Fragment.parse(href), page: 'notes/page.md')
         end
 
         it 'finds fragments in the page fetched for its title, caching them sorted in its entry' do
@@ -861,7 +861,7 @@ describe Jekyll::LinkPreviews do
           @requests.clear
 
           cached = described_class.new(cache_dir)
-          expect(cached.fragment("#{@base}/sections#gone", Jekyll::LinkPreviews::Fragment.parse('#gone'))).to be_nil
+          expect(fragment("#{@base}/sections#gone", cached)).to be_nil
           expect(@requests).to be_empty
         end
 
@@ -875,13 +875,24 @@ describe Jekyll::LinkPreviews do
           )
         end
 
-        it 'caches a fragment of a page that cannot be fetched as null' do
-          write_links("#{@base}/missing:\n  title: By Hand\n")
-          expect(fragment("#{@base}/missing#intro")).to be_nil
+        it 'does not cache a fragment of a page that cannot be fetched, warning why once per link on every build' do
+          hand_written = "#{@base}/missing:\n  title: By Hand\n"
+          write_links(hand_written)
+          2.times { expect(fragment("#{@base}/missing#intro")).to be_nil }
           previews.save
-          expect(YAML.load_file(links_path).fetch("#{@base}/missing")).to eq(
-            'title' => 'By Hand', 'fragments' => { 'intro' => nil }
-          )
+          expect(File.read(links_path)).to eq(hand_written)
+          warning = "Link preview: notes/page.md links to #{@base}/missing#intro, but the page it links to " \
+                    'could not be fetched to find its fragment (HTTP 404); set its value under fragments: ' \
+                    'in _link_previews/links.yml, or the next build will fetch it again'
+          warnings = report
+          expect(warnings.lines.size).to eq(1)
+          expect(warnings).to end_with("#{warning}\n")
+          @requests.clear
+
+          cached = described_class.new(cache_dir)
+          expect(fragment("#{@base}/missing#intro", cached)).to be_nil
+          expect(@requests).to eq(['/missing'])
+          expect(report(cached).scan(warning).size).to eq(2)
         end
 
         it 'uses hand-set fragments, treating blank ones as not on the page, without fetching' do
@@ -1122,6 +1133,27 @@ describe Jekyll::LinkPreviews do
         expect(popover(quote).at_css('blockquote').text).to eq('quick')
         expect(@requests).to be_empty
         expect(@log.string).to be_empty
+      end
+
+      it 'does not look for the fragments of a page whose title could not be fetched' do
+        annotate_page(%(<a href="#{@base}/missing#intro">x</a><a href="#{@base}/missing#:~:text=quick">y</a>))
+        previews.report
+        previews.save
+        expect(@requests).to eq(['/missing', '/favicon.ico'])
+        expect(YAML.load_file(links_path).fetch("#{@base}/missing")).not_to have_key('fragments')
+        expect(@log.string.scan('Link preview:').size).to eq(1)
+        expect(@log.string).to include("Link preview: #{@base}/missing: no title (HTTP 404); ")
+      end
+
+      it 'shows the fragment as written, and warns naming the page and link, when the page cannot be fetched to find it' do
+        File.write(links_path, "#{@base}/missing:\n  title: By Hand\n")
+        output = annotate_page(%(<a href="#{@base}/missing#:~:text=quick">x</a>))
+        previews.report
+        expect(popover(output).at_css('blockquote').text).to eq('quick')
+        expect(@log.string).to include(
+          "Link preview: notes/page.md links to #{@base}/missing#:~:text=quick, but the page it links to " \
+          'could not be fetched to find its fragment (HTTP 404)'
+        )
       end
 
       it 'shows an inline title in place of the whole title, still quoting text' do

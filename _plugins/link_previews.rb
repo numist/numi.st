@@ -14,6 +14,7 @@ module Jekyll
     CACHE_DIR = '_link_previews'
     CACHE_FILE = 'links.yml'
     FIX_HINT = "set title: and remove error: in #{CACHE_DIR}/#{CACHE_FILE}, or delete the entry to retry"
+    FRAGMENT_FIX_HINT = "set its value under fragments: in #{CACHE_DIR}/#{CACHE_FILE}, or the next build will fetch it again"
     FAVICON_URL_DIR = '/assets/img/favicons'
     # The site's own favicon, as _includes/head.html declares it, relative to the baseurl.
     SITE_FAVICON = '/favicon.png'
@@ -279,9 +280,9 @@ module Jekyll
       end
       fragment = Fragment.parse(href)
       if fragment&.quote?
-        quote = find_fragment(fragment, href, previews, generated: generated, target: target) || fragment.fallback
+        quote = find_fragment(fragment, href, previews, generated: generated, target: target, page: page) || fragment.fallback
       elsif fragment && title && inline_title.empty?
-        found = find_fragment(fragment, href, previews, generated: generated, target: target)
+        found = find_fragment(fragment, href, previews, generated: generated, target: target, page: page)
         title = "#{title} # #{found || fragment.fallback}"
       end
       link['class'] = [link['class'], 'link-preview'].compact.join(' ')
@@ -298,12 +299,12 @@ module Jekyll
 
     # Returns what fragment names on the page that a link to href links to, or nil if that page isn't
     # searched (it isn't an HTML page in this site, is generated, or its cache entry has an error) or
-    # doesn't have it.
-    def self.find_fragment(fragment, href, previews, generated:, target:)
+    # doesn't have it. page is the page with the link, for warnings.
+    def self.find_fragment(fragment, href, previews, generated:, target:, page:)
       if target
         target.fragment_text(fragment) if target.page?
       elsif !generated && !previews.error?(href)
-        previews.fragment(href, fragment)
+        previews.fragment(href, fragment, page: page)
       end
     end
 
@@ -500,6 +501,7 @@ module Jekyll
         @pages = {}
         @downloads = {}
         @title_needed = {}
+        @unfetched_fragments = []
         @inline_favicons = []
       end
 
@@ -522,16 +524,21 @@ module Jekyll
       end
 
       # Returns what fragment names on the page at href (see Fragment#resolve), or nil if it isn't on the
-      # page. A fragment not yet in the entry's fragments is looked for on the page, fetched again if
-      # need be, and cached as null if the page doesn't have it or can't be fetched.
-      def fragment(href, fragment)
+      # page or the page can't be fetched. A fragment not yet in the entry's fragments is looked for on
+      # the page, fetched again if need be, and cached as null if the page doesn't have it. If the page
+      # can't be fetched, nothing is cached, so the next build fetches it again, and the report warns
+      # about the link to href on page.
+      def fragment(href, fragment, page:)
         url = cache_key(href)
         fragments = entry(url)['fragments'] || {}
         unless fragments.key?(fragment.key)
-          page = fetch_page(url)
-          page[:linked] ||= LinkedPage.new(LinkPreviews.parse(page[:body], page[:charset])) if page[:body]
-          found = page[:linked] && fragment.resolve(page[:linked])
-          @entries[url]['fragments'] = fragments.merge(fragment.key => found).sort.to_h
+          fetched = fetch_page(url)
+          if fetched[:error]
+            @unfetched_fragments << [page, href, fetched[:error]]
+            return
+          end
+          fetched[:linked] ||= LinkedPage.new(LinkPreviews.parse(fetched[:body], fetched[:charset]))
+          @entries[url]['fragments'] = fragments.merge(fragment.key => fragment.resolve(fetched[:linked])).sort.to_h
         end
         text = @entries[url]['fragments'][fragment.key]
         text unless blank?(text)
@@ -557,7 +564,8 @@ module Jekyll
         (@entries.values.map { |entry| entry['favicon'] }.reject { |name| blank?(name) } + @inline_favicons).uniq
       end
 
-      # Warns once for each URL used in this build whose title was needed but is unusable.
+      # Warns once for each URL used in this build whose title was needed but is unusable, and once for
+      # each link whose fragment wasn't looked for because its page couldn't be fetched.
       def report
         @title_needed.each do |url, title_needed|
           entry = @entries[url]
@@ -565,6 +573,10 @@ module Jekyll
 
           reason = blank?(entry['error']) ? '' : " (#{entry['error']})"
           Jekyll.logger.warn('Link preview:', "#{url}: no title#{reason}; #{FIX_HINT}")
+        end
+        @unfetched_fragments.uniq.each do |page, href, error|
+          Jekyll.logger.warn('Link preview:', "#{page} links to #{href}, but the page it links to could not be fetched " \
+                                              "to find its fragment (#{error}); #{FRAGMENT_FIX_HINT}")
         end
       end
 
