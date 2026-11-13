@@ -397,6 +397,22 @@ describe Jekyll::LinkPreviews do
         expect(resolve('#caf%C3%A9', body)).to eq('Menu')
       end
 
+      it 'names a heading without the permalink glyphs before or after its text, or by its id if it has no text' do
+        page = <<~HTML
+          <h2 id="spaced">Spaced <a href="#spaced">¶</a></h2>
+          <h2 id="glued">Glued<a href="#glued">¶</a></h2>
+          <h2 id="leading"><a href="#leading">#</a> Leading §</h2>
+          <h2 id="plain">🔗 Plain ¶ #</h2>
+          <h2 id="c-sharp">C# and F#</h2>
+          <h2 id="glyph-word">#hashtag</h2>
+          <h2 id="glyphs"><a href="#glyphs">¶</a></h2>
+          <h2 id="empty"> <a href="#empty"></a> </h2>
+        HTML
+        expect(%w[spaced glued leading plain c-sharp glyph-word glyphs empty].map { |id| resolve("##{id}", page) }).to eq(
+          ['Spaced', 'Glued', 'Leading', 'Plain', 'C# and F#', '#hashtag', 'glyphs', 'empty']
+        )
+      end
+
       it 'names other elements, including named anchors, by their id' do
         expect(resolve('#note', body)).to eq('note')
         expect(resolve('#legacy', body)).to eq('legacy')

@@ -385,6 +385,9 @@ module Jekyll
     class Fragment
       HEADINGS = %w[h1 h2 h3 h4 h5 h6].freeze
 
+      # What pages commonly put before or after a heading's text to link to it.
+      PERMALINK_GLYPHS = %w[¶ # § 🔗].freeze
+
       # A position that isn't between two characters of a word, in any script.
       WORD_BOUNDARY = '(?:(?<!\p{Word})|(?!\p{Word}))'
 
@@ -465,7 +468,23 @@ module Jekyll
         element = document.at_xpath('//*[@id=$id]', nil, id: @id) || document.at_xpath('//a[@name=$id]', nil, id: @id)
         return unless element
 
-        HEADINGS.include?(element.name) ? LinkPreviews.squish(element.text) : @id
+        return @id unless HEADINGS.include?(element.name)
+
+        text = heading_text(element)
+        text.empty? ? @id : text
+      end
+
+      # A heading's text, without the permalink glyphs that pages put before or after it, each in an
+      # element of its own or as a word of its own.
+      def heading_text(element)
+        parts = without_permalinks(element.xpath('.//text()').map(&:content))
+        without_permalinks(LinkPreviews.squish(parts.join).split(' ')).join(' ')
+      end
+
+      # texts without the permalink glyphs, or blank texts, at their start and end.
+      def without_permalinks(texts)
+        permalink = ->(text) { ['', *PERMALINK_GLYPHS].include?(LinkPreviews.squish(text)) }
+        texts.drop_while(&permalink).reverse.drop_while(&permalink).reverse
       end
 
       # Finds the first start, after the prefix, and the first end after it that the suffix follows,
