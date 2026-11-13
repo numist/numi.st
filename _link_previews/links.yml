@@ -202,6 +202,8 @@ https://discussions.apple.com/thread/7665078:
   favicon: 5493c61cf725cf3a.ico
 https://docs.swift.org/swift-book/ReferenceManual/Statements.html:
   title: 'The Swift Programming Language: Redirect'
+  fragments:
+    ID532:
 https://doi.org/10.1029/2022GB007481:
   title: Species Traits and Geomorphic Setting as Drivers of Global Soil Carbon Stocks in Seagrass Meadows - Kennedy - 2022 - Global Biogeochemical Cycles - Wiley Online Library
 https://emergencemagazine.org/essay/benchmarking/:
@@ -219,6 +221,8 @@ https://en.wikipedia.org/wiki/3.5%25_rule:
 https://en.wikipedia.org/wiki/Carboniferous:
   title: Carboniferous - Wikipedia
   favicon: 3638de61226857e6.ico
+  fragments:
+    Coal_formation: Coal formation
 https://en.wikipedia.org/wiki/Pascal%27s_Wager:
   title: Pascal's wager - Wikipedia
   favicon: 3638de61226857e6.ico
@@ -242,6 +246,8 @@ https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b:
 https://github.com/apple-oss-distributions/IOKitUser/blob/8414957d8b059c9b32bad253855bdda7ecd2bb84/IOCFSerialize.c:
   title: IOKitUser/IOCFSerialize.c at 8414957d8b059c9b32bad253855bdda7ecd2bb84 · apple-oss-distributions/IOKitUser · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fragments:
+    L411:
 https://github.com/apple/truetype-hinting-interpreter-example:
   title: 'GitHub - apple/truetype-hinting-interpreter-example: Swift TrueType Interpreter · GitHub'
   favicon: 74cf90ac2fe6624a.png
@@ -254,6 +260,8 @@ https://github.com/indirect/feedyour.email/pull/85:
 https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h:
   title: libextobjc/extobjc/EXTScope.h at bdec77056a38a52bc8f30a19cec52d66a70e7bf6 · jspahrsummers/libextobjc · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fragments:
+    L12-L33:
 https://github.com/numist/Switch:
   title: 'GitHub - numist/Switch: A window-based context switcher for the Mac · GitHub'
   favicon: 74cf90ac2fe6624a.png
@@ -302,6 +310,8 @@ https://graphviz.org/doc/info/lang.html:
 https://graphviz.org/faq/font/:
   title: Font FAQ | Graphviz
   favicon: 4ffb429ed94ebb76.png
+  fragments:
+    default-fonts-and-postscript-fonts: Default fonts and PostScript fonts
 https://hachyderm.io/@samwho/112288527423374593:
   title: 'Sam Rose: "Made a dumb website so I wouldn''t ever have to Go…" - Hachyderm.io'
   favicon: 0f60bc7526970099.png
@@ -344,6 +354,11 @@ https://kosonorthamerica.com/product/tnt-04-multifunction-meter/:
 https://kottke.org/24/08/hopefulness-is-the-warrior-emotion:
   title: Hopefulness Is the Warrior Emotion
   favicon: 79bf0abd7d212bdd.png
+https://letterfromjail.com:
+  title: Letter from Birmingham Jail, by Dr. Martin Luther King, Jr.
+  favicon: cd0fa93d04ce4ae9.png
+  fragments:
+    ":~:text=I have almost reached the regrettable conclusion,is much more bewildering than outright rejection.": 'I have almost reached the regrettable conclusion that the Negro’s great stumbling block in his stride toward freedom is not the White Citizen’s Counciler or the Ku Klux Klanner, but the white moderate, who is more devoted to “order” than to justice; who prefers a negative peace which is the absence of tension to a positive peace which is the presence of justice; who constantly says: “I agree with you in the goal you seek, but I cannot agree with your methods of direct action”; who paternalistically believes he can set the timetable for another man’s freedom; who lives by a mythical concept of time and who constantly advises the Negro to wait for a “more convenient season.” Shallow understanding from people of good will is more frustrating than absolute misunderstanding from people of ill will. Lukewarm acceptance is much more bewildering than outright rejection.'
 https://lights0123.com/fractions/:
   title: Unicode Fraction Creator
 https://maggieappleton.com/garden-history:
@@ -368,12 +383,16 @@ https://mrgan.com/gb/:
   favicon: 78d180da322f9e4f.png
 https://numist.github.io/highlight-css/:
   title: highlight-css | CSS files created from Pygments’ and Rouge’s built-in styles
+  fragments:
+    other-tomorrow: tomorrow
 https://openbuildspartstore.com/delrin-v-wheel-kit/:
   title:
   error: 'Failed to open TCP connection to openbuilds.com:443 (getaddrinfo: nodename nor servname provided, or not known)'
 https://ourworldindata.org/water-use-stress:
   title: Water Use and Stress | Our World in Data
   favicon: 1d6702f47aca4232.ico
+  fragments:
+    ":~:text=Freshwater withdrawals by country": Freshwater withdrawals by country
 https://pankeysradiator.com:
   title: Industrial Radiator Repairs, cleaning and services | Pankeys Radiator
   favicon: c965a500f6984835.png
@@ -414,6 +433,8 @@ https://simonwillison.net/2024/Oct/18/d-richard-hipp/:
 https://slate.com/human-interest/2024/04/parenting-effects-nature-nurture-atlantic.html:
   title: 'Why parenting does matter: I’m getting pretty tired of these “Nurture is nothing” articles!'
   favicon: a85b0578562d82c6.ico
+  fragments:
+    ":~:text=I find it interesting that,have been written by men": I find it interesting that most of the recent essays I’ve come across that argue that parents don’t matter have been written by men
 https://sqlite.org/forum/forumpost/3ce1ee76242cfb29:
   title: 'SQLite User Forum: Is `pragma mmap_size` still considered dangerous on macOS?'
   favicon: 76d60ff1eb9596a1.ico
@@ -452,6 +473,8 @@ https://vfrworld.com/threads/more-power-from-a-neutered-california-3rd-gen.33650
 https://vfrworld.com/threads/vfr-750-1992-rear-shock-upgrade.40731/:
   title: VFR 750 1992 rear shock upgrade | VFRworld
   favicon: f0b029c51dcc6417.png
+  fragments:
+    post-385082: post-385082
 https://webmention.io:
   title: Webmention.io
   favicon: '049ff8decf05bd52.ico'
@@ -497,12 +520,17 @@ https://www.bennetts.co.uk/bikesocial/reviews/products/motorcycle-armour-and-bas
 https://www.bitsaboutmoney.com/archive/bond-villain-compliance-strategy/:
   title: The Bond villain compliance strategy
   favicon: cb3420c16164077a.png
+  fragments:
+    ":~:text=Dollarization is very intentionally wielded like a club to accomplish the U.S.’s goals": Dollarization is very intentionally wielded like a club to accomplish the U.S.’s goals
 https://www.bloomberg.com/news/articles/2026-08-31/apple-s-phil-schiller-steps-down-from-running-app-store-and-product-events:
   title: Apple’s Phil Schiller Steps Down from Running App Store and Product Events - Bloomberg
   favicon: fd1ace0f3033ff03.ico
 ? https://www.bloomberg.com/news/newsletters/2026-09-06/apple-s-new-ceo-like-cook-pay-package-shows-he-s-going-nowhere-sept-9-event-mtpvpcj1
 : title: Apple’s New CEO-Like Cook Pay Package Shows He’s Going Nowhere; Sept. 9 Event - Bloomberg
   favicon: fd1ace0f3033ff03.ico
+  fragments:
+    ? ":~:text=Ternus and services chief Eddy Cue want to make even more money from the App Store and figure out ways to raise margins and squeeze additional recurring revenue from the platform. Schiller, on the other hand, seems to believe that such moves will only further irk developers and governments."
+    :
 https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business:
   title: Twitter Gets Into the Stock Business - Bloomberg
   favicon: fd1ace0f3033ff03.ico
@@ -563,6 +591,9 @@ https://www.motorcyclespecs.co.za/model/Honda/honda_vfr750f_90.html:
   favicon: 4b20bc647836f9d5.ico
 https://www.npr.org/transcripts/526051566:
   title: 'Episode 553: The Dollar At The Center Of The World : Planet Money : NPR'
+  fragments:
+    ? ":~:text=That night, they went through the draft IMF Articles of Agreement, ultimately 96 pages, and changed every reference to gold-convertible currency to U.S. dollar"
+    :
 https://www.nytimes.com/2021/08/23/us/wildfires-carbon-offsets.html:
   title: Forests Used as Carbon Offsets Are Going Up in Wildfire Flames - The New York Times
   favicon: 94de5ae7e9bcf747.ico
@@ -595,6 +626,8 @@ https://www.speedmotoco.com/Motorcycle-Projector-Headlight-Stacked-streetfight-p
 https://www.sqlite.org/fileformat.html:
   title: Database File Format
   favicon: 76d60ff1eb9596a1.ico
+  fragments:
+    magic_header_string: 1.3.1. Magic Header String
 https://www.sqlite.org/src/file?ci=84634bc268e5c801&name=src/wal.c&ln=294:
   title: 'SQLite: wal.c at [84634bc268]'
   favicon: 76d60ff1eb9596a1.ico
@@ -619,9 +652,13 @@ https://www.sqlite.org/src/info?name=0a33005e6426702c&ln=4969:
 https://www.sqlite.org/testing.html:
   title: How SQLite Is Tested
   favicon: 76d60ff1eb9596a1.ico
+  fragments:
+    assert: 8.1. Assert
 https://www.sqlite.org/walformat.html:
   title: WAL-mode File Format
   favicon: 76d60ff1eb9596a1.ico
+  fragments:
+    the_wal_index_file_format: 2. The WAL-Index File Format
 https://www.steel.org/wp-content/uploads/2021/11/AISI_FactSheet_SteelSustainability-11-3-21.pdf:
   title: Facts About American Steel Sustainability - American Iron and Steel Institute
 https://www.strava.com/activities/8018303622:
@@ -687,6 +724,8 @@ https://www.youtube.com/watch?v=moQ08uyiYls:
 https://www.youtube.com/watch?v=zJOS0sV2a24:
   title: xkcd | Randall Munroe | Talks at Google - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fragments:
+    t=44m30s:
 https://xoxo.zone/@numist/110812673720717013:
   title: 'Scott Perry: "Time for a new project: de-WiSA-fying our speaker…" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
