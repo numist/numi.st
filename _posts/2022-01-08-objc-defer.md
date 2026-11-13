@@ -46,7 +46,7 @@ return rc;
 
 This reduces duplication, but has worse locality. I don't love it, but I feel like it's the safer style.
 
-Really what I want is something like [Swift's `defer`](https://docs.swift.org/swift-book/ReferenceManual/Statements.html#ID532):
+Really what I want is something like [Swift's `defer`](https://docs.swift.org/latest/documentation/the-swift-programming-language/statements/#Defer-Statement):
 
 ``` objective_c
 int fds[2] = { -1, -1};

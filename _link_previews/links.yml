@@ -233,11 +233,12 @@ https://discussions.apple.com/thread/7665078:
   title: Security Verification
   favicon: 5493c61cf725cf3a.ico
   fetched: 2026-11-12
-https://docs.swift.org/swift-book/ReferenceManual/Statements.html:
-  title: 'The Swift Programming Language: Redirect'
-  fetched: 2026-11-12
+https://docs.swift.org/latest/documentation/the-swift-programming-language/statements/:
+  title: Statements | Documentation
+  favicon: 5047233430e980eb.ico
+  fetched: 2026-11-13
   fragments:
-    ID532:
+    Defer-Statement: Defer Statement
 https://doi.org/10.1029/2022GB007481:
   title: Species Traits and Geomorphic Setting as Drivers of Global Soil Carbon Stocks in Seagrass Meadows - Kennedy - 2022 - Global Biogeochemical Cycles - Wiley Online Library
   fetched: 2026-11-12
@@ -663,7 +664,7 @@ https://www.bloomberg.com/news/articles/2026-08-31/apple-s-phil-schiller-steps-d
   favicon: fd1ace0f3033ff03.ico
   fetched: 2026-11-12
 ? https://www.bloomberg.com/news/newsletters/2026-09-06/apple-s-new-ceo-like-cook-pay-package-shows-he-s-going-nowhere-sept-9-event-mtpvpcj1
-: title: Apple’s New CEO-Like Cook Pay Package Shows He’s Going Nowhere; Sept. 9 Event - Bloomberg
+: title: Tim Cook’s CEO-Like Pay Package Shows He Isn’t Going Anywhere
   favicon: fd1ace0f3033ff03.ico
   fetched: 2026-11-12
   fragments:
