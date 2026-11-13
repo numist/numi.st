@@ -413,9 +413,9 @@ module Jekyll
       # returns nil if it isn't of that form.
       def self.quote_terms(directive)
         parts = directive.split(',', -1)
-        prefix = parts.shift.delete_suffix('-') if parts.size > 1 && parts.first.end_with?('-')
-        suffix = parts.pop.delete_prefix('-') if parts.size > 1 && parts.last.start_with?('-')
-        return unless [1, 2].include?(parts.size) && parts.none?(&:empty?)
+        prefix = parts.shift.delete_suffix('-') if parts.first&.end_with?('-')
+        suffix = parts.pop.delete_prefix('-') if parts.last&.start_with?('-')
+        return unless [1, 2].include?(parts.size) && [prefix, *parts, suffix].compact.none?(&:empty?)
 
         start, finish = parts.map { |part| decode(part) }
         { prefix: prefix && decode(prefix), start: start, finish: finish, suffix: suffix && decode(suffix) }

@@ -364,6 +364,10 @@ describe Jekyll::LinkPreviews do
         expect(fragment('#intro:~:other=x').key).to eq('intro')
         expect(fragment('#intro:~:text=').key).to eq('intro')
         expect(fragment('#:~:text=a,b,c')).to be_nil
+        expect(fragment('#intro:~:text=a-,-b').key).to eq('intro')
+        %w[a-,-b -a a- -,a a,-].each do |directive|
+          expect(fragment("#:~:text=#{directive}")).to be_nil
+        end
       end
     end
 
