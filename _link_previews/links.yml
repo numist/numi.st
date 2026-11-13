@@ -110,631 +110,835 @@
 http://daughertymotorsports.com/Backup/:
   title: DMr Performance Suspension
   favicon: 8fb774d558f641ea.ico
+  fetched: 2026-11-12
 http://ntpbikes.com:
   title: NTP Bikes
+  fetched: 2026-11-12
 http://numist.net/define/?numismatics:
   title:
   error: Failed to open TCP connection to numist.net:80 (Connection refused - connect(2) for 208.85.243.230:80)
+  fetched: 2026-11-12
 http://numist.net/post/2009/i-dream-of-switcher.html:
   title:
   error: Failed to open TCP connection to numist.net:80 (Connection refused - connect(2) for 208.85.243.230:80)
+  fetched: 2026-11-12
 http://numist.net/post/2010/project-typewriter.html:
   title:
   error: Failed to open TCP connection to numist.net:80 (Connection refused - connect(2) for 208.85.243.230:80)
+  fetched: 2026-11-12
 http://numist.net/series/funemployment-cross-country-trip/:
   title:
   error: Failed to open TCP connection to numist.net:80 (Connection refused - connect(2) for 208.85.243.230:80)
+  fetched: 2026-11-12
 http://swanjolras.tumblr.com/post/102498776997:
   title:
   error: HTTP 403
+  fetched: 2026-11-12
 http://tyga-performance.com/index.php?cPath=72_1036_1947_1949:
   title:
   error: HTTP 403
+  fetched: 2026-11-12
 http://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 http://worrydream.com/Tangle/:
   title: 'Tangle: a JavaScript library for reactive documents'
   favicon: d0941a567d63273d.ico
+  fetched: 2026-11-12
 http://www.factorypro.com/Prod_Pages/prodh20.html:
   title: vfr 750, honda, carb, tune, tuning, carburetor, shift kit, ignition, motorcycle, sounds, factory pro
   favicon: 9fa0d913e827459f.ico
+  fetched: 2026-11-12
 http://www.maybefriday.com:
   title: Tanya Breshears
+  fetched: 2026-11-12
 http://www.nicoleaptekar.com:
   title: Nicole Aptekar
   favicon: 75b2806e03b71b08.ico
+  fetched: 2026-11-12
 http://www.rc30.info/rc30brochures.html:
   title: Honda RC30 Brochures
+  fetched: 2026-11-12
 https://andre.arko.net/2022/02/17/feedyouremail/:
   title: feedyour.email
   favicon: '089a3f29b0f5321a.ico'
+  fetched: 2026-11-12
 https://arko.net:
   title: André Arko
   favicon: decc88a7dca418ea.ico
+  fetched: 2026-11-12
 https://arxiv.org/pdf/2304.03271:
   title: 'Making AI Less “Thirsty”: Uncovering and Addressing the Secret Water Footprint of AI Models - arXiv'
   favicon: 59ebf37bd06e0b93.ico
+  fetched: 2026-11-12
 https://blacker.caltech.edu:
   title:
   error: Failed to open TCP connection to blacker.caltech.edu:443 (Operation timed out - user specified timeout)
+  fetched: 2026-11-12
 https://bookshop.org/p/books/hogfather-terry-pratchett/6432864:
   title: Hogfather a book by Terry Pratchett - Bookshop.org US
+  fetched: 2026-11-12
 https://bookshop.org/p/books/more-a-memoir-of-open-marriage-molly-roden-winter/20059873?ean=9780385549455:
   title: 'More: A Memoir of Open Marriage a book by Molly Roden Winter - Bookshop.org US'
+  fetched: 2026-11-12
 https://brandinho.github.io/bayesian-perspective-q-learning/:
   title: A Bayesian Perspective on Q-Learning
+  fetched: 2026-11-12
 https://circuitsandstrings.wordpress.com/2015/11/16/backpacker-travel-ukulele/:
   title: Backpacker Travel Ukulele | Circuits and Strings
   favicon: 5b658f5a51a2cc16.ico
+  fetched: 2026-11-12
 https://clang.llvm.org/docs/BoundsSafety.html:
   title: "-fbounds-safety - Clang"
   favicon: a965c5fb2db3cc8e.ico
+  fetched: 2026-11-12
 https://creativecommons.org/licenses/by-nc-sa/4.0/:
   title: Deed - Attribution-NonCommercial-ShareAlike 4.0 International - Creative Commons
   favicon: d7dd7bbeea7bdcc8.ico
+  fetched: 2026-11-12
 https://datatracker.ietf.org/doc/html/rfc5023:
   title: RFC 5023 - The Atom Publishing Protocol
   favicon: 9b8ea08883a7ba9f.png
+  fetched: 2026-11-12
 https://developer.apple.com/documentation/dispatch/dispatch_source_type_vnode?language=objc:
   title: DISPATCH_SOURCE_TYPE_VNODE | Apple Developer Documentation
   favicon: ff40def6165731f2.ico
+  fetched: 2026-11-12
 https://developer.apple.com/documentation/kernel/1402127-mach_vm_read_overwrite:
   title: mach_vm_read_overwrite | Apple Developer Documentation
   favicon: ff40def6165731f2.ico
+  fetched: 2026-11-12
 https://developer.apple.com/documentation/kernel/1402405-mach_vm_read:
   title: mach_vm_read | Apple Developer Documentation
   favicon: ff40def6165731f2.ico
+  fetched: 2026-11-12
 https://developer.apple.com/documentation/swiftui/view/oncontinuoushover(coordinatespace:perform:):
   title: onContinuousHover(coordinateSpace:perform:) | Apple Developer Documentation
   favicon: ff40def6165731f2.ico
+  fetched: 2026-11-12
 https://developer.apple.com/documentation/swiftui/view/onhover(perform:):
   title: onHover(perform:) | Apple Developer Documentation
   favicon: ff40def6165731f2.ico
+  fetched: 2026-11-12
 https://developer.squareup.com/blog/inside-a-square-inforad/:
   title: Inside a Square Inforad
   favicon: bfc7cf4dd3f866b9.png
+  fetched: 2026-11-12
 https://developer.squareup.com/blog/the-square-tweetwriter/:
   title: The @Square Tweetwriter
   favicon: bfc7cf4dd3f866b9.png
+  fetched: 2026-11-12
 https://discussions.apple.com/thread/7665078:
   title: Security Verification
   favicon: 5493c61cf725cf3a.ico
+  fetched: 2026-11-12
 https://docs.swift.org/swift-book/ReferenceManual/Statements.html:
   title: 'The Swift Programming Language: Redirect'
+  fetched: 2026-11-12
   fragments:
     ID532:
 https://doi.org/10.1029/2022GB007481:
   title: Species Traits and Geomorphic Setting as Drivers of Global Soil Carbon Stocks in Seagrass Meadows - Kennedy - 2022 - Global Biogeochemical Cycles - Wiley Online Library
+  fetched: 2026-11-12
 https://emergencemagazine.org/essay/benchmarking/:
   title: Benchma(r)king – James Bridle
   favicon: 66b59dde0d22a080.png
+  fetched: 2026-11-12
 https://en.wikipedia.org/wiki/1981_Professional_Air_Traffic_Controllers_Organization_strike:
   title: 1981 Professional Air Traffic Controllers Organization strike - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
 https://en.wikipedia.org/wiki/2022_United_States_railroad_labor_dispute:
   title: 2022 United States railroad labor dispute - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
 https://en.wikipedia.org/wiki/3.5%25_rule:
   title: 3.5% rule - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
 https://en.wikipedia.org/wiki/Carboniferous:
   title: Carboniferous - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
   fragments:
     Coal_formation: Coal formation
 https://en.wikipedia.org/wiki/Pascal%27s_Wager:
   title: Pascal's wager - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
 https://en.wikipedia.org/wiki/Zero_fret:
   title: Zero fret - Wikipedia
   favicon: 3638de61226857e6.ico
+  fetched: 2026-11-12
 https://evolution-motorcycles.com:
   title: Motorcycle & E-Bike Service, Sales, and Suspension Specialists – Evolution Motorcycles
   favicon: 8a91748927a52870.png
+  fetched: 2026-11-12
 https://feedyour.email:
   title: Feed Your Email
   favicon: 4361a2d458d7535d.ico
+  fetched: 2026-11-12
 https://fsck.com:
   title: Jesse Vincent
+  fetched: 2026-11-12
 https://garagedoorlighting.com/product/double-track-garage-door-lighting-system/:
   title: Double Track Garage Door Lighting System | Garage Door Lighting
   favicon: 60b99b30f3061df8.png
+  fetched: 2026-11-12
 https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b:
   title: Exception test for `defer` · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/apple-oss-distributions/IOKitUser/blob/8414957d8b059c9b32bad253855bdda7ecd2bb84/IOCFSerialize.c:
   title: IOKitUser/IOCFSerialize.c at 8414957d8b059c9b32bad253855bdda7ecd2bb84 · apple-oss-distributions/IOKitUser · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
   fragments:
     L411:
 https://github.com/apple/truetype-hinting-interpreter-example:
   title: 'GitHub - apple/truetype-hinting-interpreter-example: Swift TrueType Interpreter · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/indirect/feedyour.email/issues/23:
   title: 'Provide source-domain favicons for feeds · Issue #23 · indirect/feedyour.email · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/indirect/feedyour.email/pull/85:
   title: 'find BCCs etc from Received if necessary by indirect · Pull Request #85 · indirect/feedyour.email · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/jspahrsummers/libextobjc/blob/bdec77056a38a52bc8f30a19cec52d66a70e7bf6/extobjc/EXTScope.h:
   title: libextobjc/extobjc/EXTScope.h at bdec77056a38a52bc8f30a19cec52d66a70e7bf6 · jspahrsummers/libextobjc · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
   fragments:
     L12-L33:
 https://github.com/numist/Switch:
   title: 'GitHub - numist/Switch: A window-based context switcher for the Mac · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/Switch/pull/139:
   title: 'Swift/SwiftUI rewrite by numist · Pull Request #139 · numist/Switch · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/Tweetwriter:
   title: 'GitHub - numist/Tweetwriter: Twitter integration for embedded Linux machines powering hacked typewriters. · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/highlight-css:
   title: 'GitHub - numist/highlight-css: CSS files created from Pygments'' and Rouge''s built-in styles · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st:
   title: 'GitHub - numist/numi.st: My public memory bank. · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/blob/99fac0f9982f0f4a2f7e393627e5f173fa0aa6b6/_layouts/page.html:
   title: numi.st/_layouts/page.html at 99fac0f9982f0f4a2f7e393627e5f173fa0aa6b6 · numist/numi.st · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/blob/99fac0f9982f0f4a2f7e393627e5f173fa0aa6b6/assets/js/footnotes.js:
   title: numi.st/assets/js/footnotes.js at 99fac0f9982f0f4a2f7e393627e5f173fa0aa6b6 · numist/numi.st · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/blob/df03820b253b22937a6b7be033e247cc13311676/assets/js/abbr.js:
   title: numi.st/assets/js/abbr.js at df03820b253b22937a6b7be033e247cc13311676 · numist/numi.st · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/blob/main/.github/workflows/merge-dependabot.yml:
   title: numi.st/.github/workflows/merge-dependabot.yml at main · numist/numi.st · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/commit/a55de95e0cea5c688a8a67be182f15fd75218bdb:
   title: Use site fonts in graphs · numist/numi.st@a55de95 · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/issues:
   title: Issues · numist/numi.st · GitHub
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/issues/23:
   title: 'Investigate pulling a static copy of the numist.net blog into here · Issue #23 · numist/numi.st · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://github.com/numist/numi.st/issues/51:
   title: 'Add copy button to code blocks · Issue #51 · numist/numi.st · GitHub'
   favicon: 74cf90ac2fe6624a.png
+  fetched: 2026-11-12
 https://godbolt.org/z/GcrMEMaTz:
   title: Compiler Explorer
   favicon: 97c751fb218c83b0.ico
+  fetched: 2026-11-12
 https://graphviz.org/doc/info/lang.html:
   title: DOT Language | Graphviz
   favicon: 4ffb429ed94ebb76.png
+  fetched: 2026-11-12
 https://graphviz.org/faq/font/:
   title: Font FAQ | Graphviz
   favicon: 4ffb429ed94ebb76.png
+  fetched: 2026-11-12
   fragments:
     default-fonts-and-postscript-fonts: Default fonts and PostScript fonts
 https://hachyderm.io/@samwho/112288527423374593:
   title: 'Sam Rose: "Made a dumb website so I wouldn''t ever have to Go…" - Hachyderm.io'
   favicon: 0f60bc7526970099.png
+  fetched: 2026-11-12
 https://inessential.com/2021/03/17/new_in_netnewswire_6_icloud_syncing:
   title: 'inessential: New in NetNewsWire 6: iCloud Syncing'
+  fetched: 2026-11-12
 https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time:
   title: 'Falsehoods programmers believe about time: @noahsussman: Infinite Undo'
+  fetched: 2026-11-12
 https://infosec.exchange/@0xabad1dea/110338578370807798:
   title: 'abadidea: "the word "compatible" most literally means "suffe…" - Infosec Exchange'
   favicon: 24531c232ecc0a6c.png
+  fetched: 2026-11-12
 https://infosec.exchange/@lcamtuf/112289350026473979:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 https://infosec.exchange/@madcoder/110341697250959272:
   title: 'Pierre H.: "@numist@xoxo.zone @0xabad1dea yeah it''s the same …" - Infosec Exchange'
   favicon: 24531c232ecc0a6c.png
+  fetched: 2026-11-12
 https://itrevolution.com/product/accelerate/:
   title: Accelerate
   favicon: 248397118a23cd0d.png
+  fetched: 2026-11-12
 https://jekyllrb.com/docs/plugins/generators/:
   title: Generators | Jekyll • Simple, blog-aware, static sites
   favicon: eee20940c27f3f60.ico
+  fetched: 2026-11-12
 https://juripakaste.fi/swift-git-attributes/:
   title: Better diff hunk headers with Swift
+  fetched: 2026-11-12
 https://keelingcurve.ucsd.edu:
   title: The Keeling Curve
   favicon: dffa6110df2672bb.ico
+  fetched: 2026-11-12
 https://keithjgrant.com/posts/2019/02/adding-webmention-support-to-a-static-site/:
   title: Adding Webmention Support to a Static Site
   favicon: '040906dc96cf9347.png'
+  fetched: 2026-11-12
 https://kershaw.kaiusa.com/scallion-knives.html:
   title: Kershaw Scallion Pocketknives | Kershaw Knives
   favicon: 84307414db587792.ico
+  fetched: 2026-11-12
 https://kill-the-newsletter.com/:
   title: Kill the Newsletter!
   favicon: b9587615add8f240.ico
+  fetched: 2026-11-12
 https://kosonorthamerica.com/product/tnt-04-multifunction-meter/:
   title: TNT-04 | Multifunction meter - black bezel - KOSO North America
   favicon: 4aa0259dffc4e41a.png
+  fetched: 2026-11-12
 https://kottke.org/24/08/hopefulness-is-the-warrior-emotion:
   title: Hopefulness Is the Warrior Emotion
   favicon: 79bf0abd7d212bdd.png
+  fetched: 2026-11-12
 https://letterfromjail.com:
   title: Letter from Birmingham Jail, by Dr. Martin Luther King, Jr.
   favicon: cd0fa93d04ce4ae9.png
+  fetched: 2026-11-12
   fragments:
     ":~:text=I have almost reached the regrettable conclusion,is much more bewildering than outright rejection.": 'I have almost reached the regrettable conclusion that the Negro’s great stumbling block in his stride toward freedom is not the White Citizen’s Counciler or the Ku Klux Klanner, but the white moderate, who is more devoted to “order” than to justice; who prefers a negative peace which is the absence of tension to a positive peace which is the presence of justice; who constantly says: “I agree with you in the goal you seek, but I cannot agree with your methods of direct action”; who paternalistically believes he can set the timetable for another man’s freedom; who lives by a mythical concept of time and who constantly advises the Negro to wait for a “more convenient season.” Shallow understanding from people of good will is more frustrating than absolute misunderstanding from people of ill will. Lukewarm acceptance is much more bewildering than outright rejection.'
 https://lights0123.com/fractions/:
   title: Unicode Fraction Creator
+  fetched: 2026-11-12
 https://maggieappleton.com/garden-history:
   title: A Brief History & Ethos of the Digital Garden
   favicon: d855657244bdd055.png
+  fetched: 2026-11-12
 https://man7.org/linux/man-pages/man2/mincore.2.html:
   title: mincore(2) - Linux manual page
+  fetched: 2026-11-12
 https://maximeboisvert.com:
   title: Maxime Boisvert
   favicon: 46214bfa5d1eb800.ico
+  fetched: 2026-11-12
 https://maximeboisvert.com/Regards-et-jeux-dans-les-iles-de-la-nuit:
   title: Regards et jeux dans les îles de la nuit — Maxime Boisvert
   favicon: 46214bfa5d1eb800.ico
+  fetched: 2026-11-12
 ? https://maximeboisvert.wordpress.com/2014/12/11/regards-et-jeux-dans-les-iles-de-la-nuit-hybridation-st-denys-garneau-alain-grandbois-3/
 : title: Regards et jeux dans les Îles de la nuit. [ Hybridation St-Denys Garneau | Alain Grandbois ] – Maxime Boisvert | blogue
   favicon: 5b658f5a51a2cc16.ico
+  fetched: 2026-11-12
 https://mefi.social/@biogeo/112864616066293382:
   title: 'Geoffrey Adams: "I think we need to encourage people to stop using…" - mefi.social'
   favicon: 4cde60134d087989.png
+  fetched: 2026-11-12
 https://mrgan.com/gb/:
   title: Glyphboard
   favicon: 78d180da322f9e4f.png
+  fetched: 2026-11-12
 https://numist.github.io/highlight-css/:
   title: highlight-css | CSS files created from Pygments’ and Rouge’s built-in styles
+  fetched: 2026-11-12
   fragments:
     other-tomorrow: tomorrow
 https://openbuildspartstore.com/delrin-v-wheel-kit/:
   title:
   error: 'Failed to open TCP connection to openbuilds.com:443 (getaddrinfo: nodename nor servname provided, or not known)'
+  fetched: 2026-11-12
 https://ourworldindata.org/water-use-stress:
   title: Water Use and Stress | Our World in Data
   favicon: 1d6702f47aca4232.ico
+  fetched: 2026-11-12
   fragments:
     ":~:text=Freshwater withdrawals by country": Freshwater withdrawals by country
 https://pankeysradiator.com:
   title: Industrial Radiator Repairs, cleaning and services | Pankeys Radiator
   favicon: c965a500f6984835.png
+  fetched: 2026-11-12
 https://pspdfkit.com/blog/2017/even-swiftier-objective-c/:
   title: Even Swiftier Objective-C
   favicon: 7a2c16ff083629fb.png
+  fetched: 2026-11-12
 https://purposebuiltmoto.com/product/daytona-deva01-multifunction-cockpit/:
   title: Daytona DEVA Multifunction Cockpit | Purpose Built Moto
+  fetched: 2026-11-12
 https://rc30.yolasite.com/project.php:
   title: RC30 Project
+  fetched: 2026-11-12
 https://rubygems.org/gems/jekyll-mermaid/versions/1.0.0:
   title: jekyll-mermaid | RubyGems.org | your community gem host
   favicon: 03a3589af56ff3a5.ico
+  fetched: 2026-11-12
 https://shop.keyboard.io/products/model-100:
   title: The Model 100 – Keyboardio
   favicon: a229ca6c6f161743.png
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Aug/26/gemini-bounding-box-visualization/:
   title: Building a tool showing how Gemini Pro can return bounding boxes for objects in images
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Aug/8/django-http-debug/:
   title: django-http-debug, a new Django app mostly written by Claude
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Jun/21/search-based-rag/:
   title: Building search-based RAG using Claude, Datasette and Val Town
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Mar/22/claude-and-chatgpt-case-study/:
   title: Claude and ChatGPT for ad-hoc sidequests
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Mar/23/building-c-extensions-for-sqlite-with-chatgpt-code-interpreter/:
   title: Building and testing C extensions for SQLite with ChatGPT Code Interpreter
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Mar/26/llm-cmd/:
   title: llm cmd undo last git commit—a new plugin for LLM
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://simonwillison.net/2024/Oct/18/d-richard-hipp/:
   title: A quote from D. Richard Hipp
   favicon: 3cee34add5f59757.ico
+  fetched: 2026-11-12
 https://slate.com/human-interest/2024/04/parenting-effects-nature-nurture-atlantic.html:
   title: 'Why parenting does matter: I’m getting pretty tired of these “Nurture is nothing” articles!'
   favicon: a85b0578562d82c6.ico
+  fetched: 2026-11-12
   fragments:
     ":~:text=I find it interesting that,have been written by men": I find it interesting that most of the recent essays I’ve come across that argue that parents don’t matter have been written by men
 https://sqlite.org/forum/forumpost/3ce1ee76242cfb29:
   title: 'SQLite User Forum: Is `pragma mmap_size` still considered dangerous on macOS?'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://stegriff.co.uk/upblog/fixing-a-yamaha-pss-a50-that-wont-switch-on/:
   title: Fixing a Yamaha PSS-A50 that won’t switch on - SteGriff
   favicon: ede78b2358d97d1d.ico
+  fetched: 2026-11-12
 https://stephaniekelton.com/book/:
   title: Book - Stephanie Kelton
   favicon: 26e5b06ebf38cad3.jpg
+  fetched: 2026-11-12
 https://storage.courtlistener.com/recap/gov.uscourts.cand.364265/gov.uscourts.cand.364265.1508.0_2.pdf:
   title: Epic Games, Inc. v Apple Inc., Document 1508 - Order Granting Epic Games, Inc.’s Motion to Enforce Injunction; Denying Apple Inc.’s Motion to Set Aside Judgment; Denying Apple Inc.’s Motion Under Federal Rule of Evidence 502(d); Denying Apple Inc.’s Motion for Entry of Judgment on Its Indemnification Counterclaim Without Prejudice; and Referral to the United States Attorney re Criminal Contempt - Filed 04/30/25
   favicon: d4f0906fc604917c.ico
+  fetched: 2026-11-12
 https://sw-motech.us/products/luggage/tank+bags/EVO+tank+ring/4052572027516.htm:
   title:
   favicon: b3a2a4820f507213.ico
   error: HTTP 404
+  fetched: 2026-11-12
 https://symbol.wtf/:
   title: symbol.wtf
   favicon: c7a3d3e332c00a43.ico
+  fetched: 2026-11-12
 https://theukulelesite.com/gotoh-upt-tuner-w-optional-install.html:
   title: The Ukulele Site | Gotoh UPT Tuner Upgrade
   favicon: c415a601e0be38d5.ico
+  fetched: 2026-11-12
 https://thewoodwhisperer.com/product/hybrid-woodworking-book/:
   title: Hybrid Woodworking Book - The Wood Whisperer – The Wood Whisperer Store
   favicon: ab297fcd331e021b.jpg
+  fetched: 2026-11-12
 https://thismight.be:
   title: are we there yet?
   favicon: f42c8ace0696b628.ico
+  fetched: 2026-11-12
 https://twitter.com/numist/status/1210394543301939200:
   title:
   favicon: cc4939af5d16855f.ico
   error: HTTP 404
+  fetched: 2026-11-12
 https://vfrworld.com/threads/more-power-from-a-neutered-california-3rd-gen.33650/:
   title: More Power from a Neutered California 3rd Gen | VFRworld
   favicon: f0b029c51dcc6417.png
+  fetched: 2026-11-12
 https://vfrworld.com/threads/vfr-750-1992-rear-shock-upgrade.40731/:
   title: VFR 750 1992 rear shock upgrade | VFRworld
   favicon: f0b029c51dcc6417.png
+  fetched: 2026-11-12
   fragments:
     post-385082: post-385082
 https://webmention.io:
   title: Webmention.io
   favicon: '049ff8decf05bd52.ico'
+  fetched: 2026-11-12
 https://wicg.github.io/scroll-to-text-fragment/:
   title: URL Fragment Text Directives
+  fetched: 2026-11-12
 https://www.advrider.com/f/threads/dangers-of-airbag-vests-probably-limited-to-a-specific-model.1793079/:
   title: Dangers of airbag vests (probably limited to a specific model) | Adventure Rider
   favicon: ae85ee0c9d63ebea.png
+  fetched: 2026-11-12
 https://www.agencetopo.qc.ca/wp/en/events/event/labsessions-8-2/:
   title: 'TOPO • Labsessions #8'
   favicon: ec4a38a112f8be6c.png
+  fetched: 2026-11-12
 https://www.agencetopo.qc.ca/wp/en/events/event/regards-jeux-iles-de-pensee-mecanique-maxime-boisvert-5-mai-19-juin-2016/:
   title: TOPO • [Regards] et jeux dans les Îles de la (pensée mécanique) - Maxime Boisvert and sans - May 5 to June 19, 2016
   favicon: ec4a38a112f8be6c.png
+  fetched: 2026-11-12
 https://www.agencetopo.qc.ca/wp/en/regards-et-jeux-dans-les-iles-de-la-nuit/:
   title: TOPO • Regards et jeux dans les îles de la nuit
   favicon: ec4a38a112f8be6c.png
+  fetched: 2026-11-12
 https://www.airtech-streamlining.com/honda-fairings-seats-fenders-parts/VFR7501990-93.htm:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.aliexpress.com/item/2251832705199667.html?gatewayAdapt=4itemAdapt:
   title:
   favicon: 320b81fe5f8e5ba1.ico
   error: too many redirects
+  fetched: 2026-11-12
 https://www.amazon.com/gp/product/B016V4V84U:
   title: 'Amazon.com: Okones 3-2/3'''' Overall Length,2-2/5'''' U Hook Length,Solid Brass Key Ring Belt Hook Key Buckle for Leathercraft Pack of 1 (U hook Length 2-2/5'''') : Clothing, Shoes & Jewelry'
   favicon: 5866636f18764cd6.ico
+  fetched: 2026-11-12
 https://www.amazon.com/gp/product/B08BX4RCW8:
   title: 'Amazon.com: Nite Ize S-Biner MicroLock Aluminum, Locking Keychain Carabiner, 5 Pack, Assorted Colors : Sports & Outdoors'
   favicon: 5866636f18764cd6.ico
+  fetched: 2026-11-12
 https://www.amazon.com/gp/product/B08KW5YG5X:
   title: 'Amazon.com: SHONAN 1.93 Inch Flag Clips for Flagpole Rope, Stainless Steel Carabiners Marine Grade, Boat Fender Clips, 4 Pack Spring Snap Hooks for Ropes, Keychain, Dog Leash, 90 Lbs Capacity : Sports & Outdoors'
   favicon: 5866636f18764cd6.ico
+  fetched: 2026-11-12
 https://www.audiworld.com/forums/q3-discussion-195/q3-transmission-shift-quirks-2983770/:
   title: Q3 Transmission Shift Quirks - AudiWorld Forums
   favicon: fd2f16f23b983cb4.ico
+  fetched: 2026-11-12
 https://www.bbc.com/news/science-environment-36424768:
   title: Famous peppered moth's dark secret revealed - BBC News
   favicon: f6b39d4849648334.png
+  fetched: 2026-11-12
 https://www.bennetts.co.uk/bikesocial/reviews/products/motorcycle-armour-and-base-layers/inemotion-airbag-vest-review-safety:
   title: In&motion airbag review | System used in RST, Klim, Ixon, Furygan & Held
   favicon: 597be214e07b606c.ico
+  fetched: 2026-11-12
 https://www.bitsaboutmoney.com/archive/bond-villain-compliance-strategy/:
   title: The Bond villain compliance strategy
   favicon: cb3420c16164077a.png
+  fetched: 2026-11-12
   fragments:
     ":~:text=Dollarization is very intentionally wielded like a club to accomplish the U.S.’s goals": Dollarization is very intentionally wielded like a club to accomplish the U.S.’s goals
 https://www.bloomberg.com/news/articles/2026-08-31/apple-s-phil-schiller-steps-down-from-running-app-store-and-product-events:
   title: Apple’s Phil Schiller Steps Down from Running App Store and Product Events - Bloomberg
   favicon: fd1ace0f3033ff03.ico
+  fetched: 2026-11-12
 ? https://www.bloomberg.com/news/newsletters/2026-09-06/apple-s-new-ceo-like-cook-pay-package-shows-he-s-going-nowhere-sept-9-event-mtpvpcj1
 : title: Apple’s New CEO-Like Cook Pay Package Shows He’s Going Nowhere; Sept. 9 Event - Bloomberg
   favicon: fd1ace0f3033ff03.ico
+  fetched: 2026-11-12
   fragments:
     ? ":~:text=Ternus and services chief Eddy Cue want to make even more money from the App Store and figure out ways to raise margins and squeeze additional recurring revenue from the platform. Schiller%2C on the other hand%2C seems to believe that such moves will only further irk developers and governments."
     :
 https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business:
   title: Twitter Gets Into the Stock Business - Bloomberg
   favicon: fd1ace0f3033ff03.ico
+  fetched: 2026-11-12
 https://www.bloomberg.com/opinion/articles/2023-10-17/you-can-t-sell-trees-no-one-cuts-down:
   title: You Can’t Sell Trees No One Cuts Down - Bloomberg
   favicon: fd1ace0f3033ff03.ico
+  fetched: 2026-11-12
 https://www.bricklink.com/v3/studio/design.page?idModel=623629:
   title: BrickLink - Buy and sell LEGO Parts, Sets and Minifigures
   favicon: 1ca721e3536ea99f.png
+  fetched: 2026-11-12
 https://www.brimstone.com/news/brimstone-to-produce-the-world’s-first-carbon-negative-portland-cement-:
   title:
   favicon: 85df0863a7382338.png
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.cbgitty.com/guitar-instrument-parts/1pc-ukulele-rod-piezo-pickup/:
   title: Rod Piezo Acoustic Instrument Pickups - Choose from 3, 4 and 6-string Options - C. B. Gitty Crafter Supply
   favicon: 1e920ef72e8e25ff.jpg
+  fetched: 2026-11-12
 https://www.cisa.gov/resources-tools/resources/product-security-bad-practices:
   title: Product Security Bad Practices | CISA
   favicon: 5996f010067604f7.png
+  fetched: 2026-11-12
 https://www.energy.ca.gov/news/2022-02/new-data-indicates-california-remains-ahead-clean-electricity-goals:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.fender.com/en-US/accessories/digital-tuners/fender-bullet-tuner/0239979002.html:
   title:
   error: HTTP 403
+  fetched: 2026-11-12
 https://www.grainger.com/product/DAYTON-Definite-Purpose-Magnetic-6GNV0?opr=ILOF:
   title: DAYTON, 2 Poles, 208-240V AC, Definite Purpose Magnetic Contactor - 6GNV0|6GNV0 - Grainger
+  fetched: 2026-11-12
 https://www.huffpost.com/entry/time-perception-aging_l_63973dc2e4b0169d76d92560:
   title: Why Time Flies By Faster As We Get Older | HuffPost Life
   favicon: 8a5cf405c8e7c3f5.ico
+  fetched: 2026-11-12
 https://www.imminet.com/products/tie-downs/cargobuckle/:
   title: CargoBuckle - IMMI CargoBuckle | IMMI
   favicon: f983b85d1f220d31.png
+  fetched: 2026-11-12
 https://www.investopedia.com/terms/f/fullemployment.asp:
   title: 'Full Employment: Definition, Types, and Examples'
   favicon: e0fc32883526e3aa.ico
+  fetched: 2026-11-12
 https://www.jsonfeed.org:
   title: JSON Feed
   favicon: 61df47ec42ab7d15.png
+  fetched: 2026-11-12
 https://www.konflictmotorsports.com/suspension-store/ti-nitride-coating:
   title:
   error: no title found
+  fetched: 2026-11-12
 https://www.leovince.com/en-us/product/1811-2786-underbody-ktm-690-duke-lc4-2008-2011-2:
   title:
   favicon: 6bec71261785df79.ico
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.linkedin.com/in/numist/:
   title: Scott Perry - Apple | LinkedIn
   favicon: 19b079c09197fba6.ico
+  fetched: 2026-11-12
 https://www.motoairbag.com/en/shop/accessories-and-refills/upgrade-to-fast-lock/:
   title: UPGRADE TO FAST LOCK - Motoairbag - L'airbag per i motociclisti
   favicon: 56420f02f0c27a80.png
+  fetched: 2026-11-12
 https://www.motorcyclespecs.co.za/model/Honda/honda_rc51_sp2_06.html:
   title: Honda VTR 1000 RC51 SP2
   favicon: 4b20bc647836f9d5.ico
+  fetched: 2026-11-12
 https://www.motorcyclespecs.co.za/model/Honda/honda_vfr750f_90.html:
   title: 1990 Honda VFR 750F-L
   favicon: 4b20bc647836f9d5.ico
+  fetched: 2026-11-12
 https://www.npr.org/transcripts/526051566:
   title: 'Episode 553: The Dollar At The Center Of The World : Planet Money : NPR'
+  fetched: 2026-11-12
   fragments:
     ? ":~:text=That night%2C they went through the draft IMF Articles of Agreement%2C ultimately 96 pages%2C and changed every reference to gold-convertible currency to U.S. dollar"
     :
 https://www.nytimes.com/2021/08/23/us/wildfires-carbon-offsets.html:
   title: Forests Used as Carbon Offsets Are Going Up in Wildfire Flames - The New York Times
   favicon: 94de5ae7e9bcf747.ico
+  fetched: 2026-11-12
 https://www.nytimes.com/2026/11/04/us/politics/susan-collins-defeat-donald-trump.html:
   title: "‘It Is Never Enough’: Susan Collins Couldn’t Outrun Trump - The New York Times"
   favicon: 94de5ae7e9bcf747.ico
+  fetched: 2026-11-12
 ? https://www.qdexhaust.it/en/catalog-qd-exhaust/ducati-en/monster-s4-en/ducati-monster-s4-ex-box-series-stainless-steel-exhaust-system/
 : title: Impianti di Scarico Unici Interamente Realizzati a Mano - QD Exhaust
   favicon: 5daf6b446cf26f21.png
+  fetched: 2026-11-12
 https://www.rc51forums.com/threads/a-guide-to-ohlins-forks-front-suspension-for-the-rc51.39641/:
   title: A guide to Ohlins forks / front suspension for the RC51 | RC51 Forums
   favicon: 810327dc881a8b66.ico
+  fetched: 2026-11-12
 https://www.reddit.com/r/motorcycle/comments/1kds0xm/deleted_by_user/:
   title: "[deleted by user] : r/motorcycle"
   favicon: f60ae5a33ee8d16c.png
+  fetched: 2026-11-12
 https://www.reddit.com/r/synthesizers/comments/kjzwj5/my_yamaha_pss_a50_wont_turn_on/:
   title: 'My Yamaha PSS A50 won’t turn on : r/synthesizers'
   favicon: f60ae5a33ee8d16c.png
+  fetched: 2026-11-12
 https://www.sciencedirect.com/science/article/abs/pii/S175058360800056X:
   title: CO2 capture from coal-fired power plants based on sodium carbonate slurry; a systems feasibility and sensitivity study - ScienceDirect
+  fetched: 2026-11-12
 https://www.shapertools.com/en-us/origin/overview:
   title: Shaper Origin | Handheld CNC Routing
   favicon: 2d21081c3df5ae5e.ico
+  fetched: 2026-11-12
 https://www.sheldonbrown.com/gear-calc.html:
   title: Sheldon Brown's Bicycle Gear Calculator
   favicon: 03cf5b4943e8e593.ico
+  fetched: 2026-11-12
 https://www.speedmotoco.com/Motorcycle-Projector-Headlight-Stacked-streetfight-p/projector-fya.htm:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.sqlite.org/fileformat.html:
   title: Database File Format
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
   fragments:
     magic_header_string: 1.3.1. Magic Header String
 https://www.sqlite.org/src/file?ci=84634bc268e5c801&name=src/wal.c&ln=294:
   title: 'SQLite: wal.c at [84634bc268]'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpager.c:
   title: 'SQLite: pager.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpager.h:
   title: 'SQLite: pager.h at trunk'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache.c:
   title: 'SQLite: pcache.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache.h:
   title: 'SQLite: pcache.h at trunk'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache1.c:
   title: 'SQLite: pcache1.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/src/info?name=0a33005e6426702c&ln=4969:
   title: 'SQLite: Artifact [0a33005e64]'
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
 https://www.sqlite.org/testing.html:
   title: How SQLite Is Tested
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
   fragments:
     assert: 8.1. Assert
 https://www.sqlite.org/walformat.html:
   title: WAL-mode File Format
   favicon: 76d60ff1eb9596a1.ico
+  fetched: 2026-11-12
   fragments:
     the_wal_index_file_format: 2. The WAL-Index File Format
 https://www.steel.org/wp-content/uploads/2021/11/AISI_FactSheet_SteelSustainability-11-3-21.pdf:
   title: Facts About American Steel Sustainability - American Iron and Steel Institute
+  fetched: 2026-11-12
 https://www.strava.com/activities/8018303622:
   title: Another perfect Tuesday | Strava
   favicon: '0890398f716f2832.png'
+  fetched: 2026-11-12
 https://www.swift.org/blog/migrating-truetype-hinting-to-swift/:
   title: 'Swift at Apple: Migrating the TrueType Hinting Interpreter | Swift.org'
   favicon: 5047233430e980eb.ico
+  fetched: 2026-11-12
 https://www.theatlantic.com/ideas/archive/2024/02/polyamory-ruling-class-fad-monogamy/677312/:
   title: Polyamory, the Ruling Class's Latest Fad - The Atlantic
   favicon: 699681aed805d84f.ico
+  fetched: 2026-11-12
 https://www.theparisreview.org/blog/2022/06/29/scenes-from-an-open-marriage/:
   title: Scenes from an Open Marriage by Jean Garnett
   favicon: 193b1d9fb32684f9.ico
+  fetched: 2026-11-12
 https://www.thespread.media/i/62684285/this-is-our-place-we-make-the-rules:
   title: Manic. Pixie. Huh? - by Rachel Baker and Maggie Bullock
   favicon: daa196ed973555bb.png
+  fetched: 2026-11-12
 https://www.theverge.com/2024/9/23/24252195/last-coal-power-plant-close-climate-change-clean-energy:
   title: The UK helped usher in the coal era — now it’s closing its last remaining plant | The Verge
   favicon: e8b35d402d511a68.ico
+  fetched: 2026-11-12
 https://www.tonymottaz.com/code-for-computers-and-humans/:
   title:
   favicon: 884e0e3737c703d8.ico
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.trailtech.net/en-us/shop/accessories/digital-gauges/vapor-tachometer/:
   title: Vapor Tachometer | Digital Gauges | Trail Tech
   favicon: cc81f761d4dda0a8.ico
+  fetched: 2026-11-12
 https://www.twicesoldtales.com:
   title: Twice Sold Tales
   favicon: 455ad1b5333146d9.png
+  fetched: 2026-11-12
 https://www.ukulele.de/angebot/550/risa-uke-solid-soprano:
   title:
   error: HTTP 404
+  fetched: 2026-11-12
 https://www.untitledmotorcycles.com/umc024-gambler:
   title: UMC-024 GAMBLER — Untitled Motorcycles
   favicon: f16de6db66ac51a2.ico
+  fetched: 2026-11-12
 https://www.untitledmotorcycles.com/umc063-zero-xp-experimental:
   title: UMC-063 XP ZERO — Untitled Motorcycles
   favicon: f16de6db66ac51a2.ico
+  fetched: 2026-11-12
 https://www.valleywater.org/news-events/news-releases/recycled-water-runs-through-it-purple-pipe-system:
   title: 'Recycled Water Runs Through it: The Purple Pipe System | Santa Clara Valley Water'
   favicon: eef77e8bcba6578c.ico
+  fetched: 2026-11-12
 https://www.vortexracing.com/product/gc210/:
   title: Motorcycle Gas Cap - GC210 | Vortex Racing
   favicon: e736cca2920c9792.jpg
+  fetched: 2026-11-12
 https://www.weforum.org/agenda/2024/09/negative-energy-price-record-in-europe-and-other-top-energy-stories/:
   title: Negative energy price record in Europe and more energy stories | World Economic Forum
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=FATQ0Yf0Fhc:
   title: 'Stephanie Kelton: The big myth of government deficits | TED - YouTube'
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=N2jZryt607U:
   title: Motorcycle Airbags Exist – But No One Uses Them? - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=VruWHHEnZGw:
   title: No Place to Race - Mick Doohan - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=d-7o9xYp7eE:
   title: Don't Talk to the Police - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=moQ08uyiYls:
   title: Hidden Motorcycle Airbags in Backpacks and Jeans - Review - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
 https://www.youtube.com/watch?v=zJOS0sV2a24:
   title: xkcd | Randall Munroe | Talks at Google - YouTube
   favicon: 8f713bc9f87f7260.ico
+  fetched: 2026-11-12
   fragments:
     t=44m30s:
 https://xoxo.zone/@numist/110812673720717013:
   title: 'Scott Perry: "Time for a new project: de-WiSA-fying our speaker…" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-12
 https://xoxo.zone/@numist/111747357265896352:
   title: 'Scott Perry: "Speaking of lines being a useful proxy for statem…" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-12
 https://xoxo.zone/@numist/111747541251099631:
   title: 'Scott Perry: "Git diff support for plists: [diff "plist"] …" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-12
 https://yalereview.org/article/brandy-jensen-polycrisis:
   title: 'The Yale Review | Brandy Jensen: "The Polycrisis"'
   favicon: 2f74276525b2f739.ico
+  fetched: 2026-11-12

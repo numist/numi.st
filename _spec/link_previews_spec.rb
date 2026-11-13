@@ -135,6 +135,15 @@ describe Jekyll::LinkPreviews do
     File.join(cache_dir, 'links.yml')
   end
 
+  def load_links(path = links_path)
+    YAML.safe_load_file(path, permitted_classes: [Date])
+  end
+
+  # The date, in UTC, that a page fetched now is dated by in the cache.
+  def today
+    Time.now.utc.to_date
+  end
+
   def favicon_name(bytes, extension)
     "#{Digest::SHA256.hexdigest(bytes)[0, 16]}.#{extension}"
   end
@@ -562,7 +571,7 @@ describe Jekyll::LinkPreviews do
         expect(previews.title("#{base}/titled")).to eq('Iconless')
         expect(previews.favicon("#{base}/titled")).to be_nil
         previews.save
-        expect(YAML.load_file(links_path).fetch("#{base}/titled")).to eq('title' => 'Iconless')
+        expect(load_links.fetch("#{base}/titled")).to eq('title' => 'Iconless', 'fetched' => today)
         expect(report).to be_empty
       end
     end
@@ -571,8 +580,8 @@ describe Jekyll::LinkPreviews do
       slow = described_class.new(cache_dir, timeout: 0.1)
       expect(slow.title("#{@base}/slow")).to be_nil
       slow.save
-      expect(YAML.load_file(links_path).fetch("#{@base}/slow")).to eq(
-        'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'Net::ReadTimeout'
+      expect(load_links.fetch("#{@base}/slow")).to eq(
+        'title' => nil, 'favicon' => favicon_name(ico_bytes, 'ico'), 'error' => 'Net::ReadTimeout', 'fetched' => today
       )
       expect(report(slow)).to include("Link preview: #{@base}/slow: no title (Net::ReadTimeout); #{fix_hint}")
     end
@@ -581,7 +590,7 @@ describe Jekyll::LinkPreviews do
       expect(previews.title("#{@base}/iri/café")).to eq('IRI')
       previews.save
       expect(@requests).to eq(['/iri/caf%C3%A9', '/iri/%C3%ADcone.png', '/favicon.ico'])
-      expect(YAML.load_file(links_path).keys).to eq(["#{@base}/iri/café"])
+      expect(load_links.keys).to eq(["#{@base}/iri/café"])
     end
 
     describe 'large responses' do
@@ -592,7 +601,7 @@ describe Jekyll::LinkPreviews do
       it 'does not download the body of a non-HTML link' do
         expect(previews.title("#{@base}/video.mp4")).to be_nil
         previews.save
-        expect(YAML.load_file(links_path).fetch("#{@base}/video.mp4")['error']).to eq('not HTML (video/mp4)')
+        expect(load_links.fetch("#{@base}/video.mp4")['error']).to eq('not HTML (video/mp4)')
         expect(streamed_megabytes('/video.mp4')).to be < 16
       end
 
@@ -612,7 +621,7 @@ describe Jekyll::LinkPreviews do
       href = "//127.0.0.1:#{@server.config[:Port]}/page"
       previews.title(href)
       previews.save
-      expect(YAML.load_file(links_path).keys).to eq(["https:#{href}"])
+      expect(load_links.keys).to eq(["https:#{href}"])
       expect(report).to include("Link preview: https:#{href}: no title (")
     end
 
@@ -693,7 +702,7 @@ describe Jekyll::LinkPreviews do
         File.write(links_path, yaml)
       end
 
-      it 'writes one hand-editable entry per URL, sorted' do
+      it 'writes one hand-editable entry per URL, sorted, dated by when its page was fetched' do
         previews.title("#{@base}/page")
         previews.title("#{@base}/missing")
         previews.save
@@ -703,10 +712,49 @@ describe Jekyll::LinkPreviews do
             title:
             favicon: #{favicon_name(ico_bytes, 'ico')}
             error: HTTP 404
+            fetched: #{today}
           #{@base}/page:
             title: 'Fish & Chips: “A History”'
             favicon: #{favicon_name(png_bytes, 'png')}
+            fetched: #{today}
         YAML
+      end
+
+      it 'dates fetches in UTC, whatever the time zone' do
+        original_zone = ENV.fetch('TZ', nil)
+        # At any moment, the dates in these zones differ, so at least one differs from the date in UTC.
+        dates = %w[Etc/GMT-14 Etc/GMT+12].map do |zone|
+          ENV['TZ'] = zone
+          cache = described_class.new(cache_dir)
+          cache.title("#{@base}/page")
+          cache.save
+          load_links.fetch("#{@base}/page")['fetched'].tap { File.delete(links_path) }
+        ensure
+          ENV['TZ'] = original_zone
+        end
+        expect(dates).to eq([today, today])
+      end
+
+      it 'keeps the date of a hand-written or earlier fetch, and needs none' do
+        hand_written = "#{@base}/page:\n  title: Dated\n  fetched: 2020-01-02\n#{@base}/og:\n  title: Undated\n"
+        write_links(hand_written)
+        expect(previews.title("#{@base}/page")).to eq('Dated')
+        expect(previews.title("#{@base}/og")).to eq('Undated')
+        previews.save
+        expect(File.read(links_path)).to eq(hand_written)
+        expect(@requests).to be_empty
+      end
+
+      it 'fails on a fetched date that is not a date' do
+        ["'2020-01-02'", '2020-01', 'yesterday', '20200102'].each do |fetched|
+          write_links("#{@base}/page:\n  title: Page\n  fetched: #{fetched}\n")
+          value = load_links.fetch("#{@base}/page")['fetched']
+          expect { described_class.new(cache_dir) }.to raise_error(
+            Jekyll::LinkPreviews::PreviewDataError,
+            "_link_previews/links.yml: the fetched date for #{@base}/page must be a date written as YYYY-MM-DD, " \
+            "not #{value.inspect}"
+          )
+        end
       end
 
       it 'keeps long titles on one line' do
@@ -852,6 +900,7 @@ describe Jekyll::LinkPreviews do
             #{@base}/sections:
               title: Sections
               favicon: #{favicon_name(png_bytes, 'png')}
+              fetched: #{today}
               fragments:
                 ":~:text=QUICK": quick
                 intro: The Introduction
@@ -862,7 +911,7 @@ describe Jekyll::LinkPreviews do
         it 'caches a fragment that is not on the page as null, and does not refetch it' do
           expect(fragment("#{@base}/sections#gone")).to be_nil
           previews.save
-          expect(YAML.load_file(links_path).fetch("#{@base}/sections")['fragments']).to eq('gone' => nil)
+          expect(load_links.fetch("#{@base}/sections")['fragments']).to eq('gone' => nil)
           @requests.clear
 
           cached = described_class.new(cache_dir)
@@ -875,9 +924,45 @@ describe Jekyll::LinkPreviews do
           expect(fragment("#{@base}/sections#intro")).to eq('The Introduction')
           expect(@requests).to eq(['/sections'])
           previews.save
-          expect(YAML.load_file(links_path).fetch("#{@base}/sections")).to eq(
-            'title' => 'By Hand', 'favicon' => nil, 'fragments' => { 'intro' => 'The Introduction' }
-          )
+          expect(File.read(links_path)).to eq(<<~YAML)
+            ---
+            #{@base}/sections:
+              title: By Hand
+              favicon:
+              fetched: #{today}
+              fragments:
+                intro: The Introduction
+          YAML
+        end
+
+        it 'dates an entry again when fetching its page for a fragment, keeping the date where it is written' do
+          write_links(<<~YAML)
+            #{@base}/sections:
+              title: Before
+              fragments:
+                note: note
+            #{@base}/page:
+              fragments: {}
+              fetched: 2020-01-02
+              title: After
+          YAML
+          fragment("#{@base}/sections#intro")
+          fragment("#{@base}/page#intro")
+          previews.save
+          expect(File.read(links_path)).to eq(<<~YAML)
+            ---
+            #{@base}/page:
+              fragments:
+                intro:
+              fetched: #{today}
+              title: After
+            #{@base}/sections:
+              title: Before
+              fetched: #{today}
+              fragments:
+                intro: The Introduction
+                note: note
+          YAML
         end
 
         it 'does not cache a fragment of a page that cannot be fetched, warning why once per link on every build' do
@@ -935,6 +1020,7 @@ describe Jekyll::LinkPreviews do
             #{other_entries}#{@base}/sections:
               title: Sections
               favicon: #{favicon_name(png_bytes, 'png')}
+              fetched: #{today}
               fragments:
                 intro: The Introduction
           YAML
@@ -1015,7 +1101,7 @@ describe Jekyll::LinkPreviews do
         %(Inline &amp;amp; Title&lt;/a&gt;" data-favicon="/assets/img/favicons/#{favicon_name(ico_bytes, 'ico')}">x</a>)
       ))
       expect(@log.string).to be_empty
-      expect(YAML.load_file(links_path).fetch("#{@base}/missing")['title']).to be_nil
+      expect(load_links.fetch("#{@base}/missing")['title']).to be_nil
     end
 
     describe 'data-preview-favicon' do
@@ -1033,7 +1119,7 @@ describe Jekyll::LinkPreviews do
           %(&lt;a href=&quot;#{@base}/page&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;) +
           %(Fish &amp;amp; Chips: “A History”&lt;/a&gt;" data-favicon="/assets/img/favicons/inline.png">x</a>)
         ))
-        expect(YAML.load_file(links_path).fetch("#{@base}/page")['favicon']).to eq(favicon_name(png_bytes, 'png'))
+        expect(load_links.fetch("#{@base}/page")['favicon']).to eq(favicon_name(png_bytes, 'png'))
         expect(previews.favicon_files).to include('inline.png')
       end
 
@@ -1064,7 +1150,7 @@ describe Jekyll::LinkPreviews do
         previews.save
         expect(output).to include(%(rel=&quot;noopener&quot;&gt;Inline&lt;/a&gt;" data-favicon="/assets/img/favicons/inline.png">x</a>))
         expect(@requests).to be_empty
-        expect(YAML.load_file(links_path)).not_to have_key("#{@base}/page")
+        expect(load_links).not_to have_key("#{@base}/page")
         expect(@log.string).to be_empty
       end
 
@@ -1147,7 +1233,7 @@ describe Jekyll::LinkPreviews do
         previews.report
         previews.save
         expect(@requests).to eq(['/missing', '/favicon.ico'])
-        expect(YAML.load_file(links_path).fetch("#{@base}/missing")).not_to have_key('fragments')
+        expect(load_links.fetch("#{@base}/missing")).not_to have_key('fragments')
         expect(@log.string.scan('Link preview:').size).to eq(1)
         expect(@log.string).to include("Link preview: #{@base}/missing: no title (HTTP 404); ")
       end
@@ -1479,7 +1565,7 @@ describe Jekyll::LinkPreviews do
       it 'previews literal links from the source' do
         output = build_post
         expect(output.scan('class="link-preview"').size).to eq(8)
-        expect(YAML.load_file(File.join(@source, '_link_previews/links.yml')).keys).to contain_exactly(
+        expect(load_links(File.join(@source, '_link_previews/links.yml')).keys).to contain_exactly(
           "#{@base}/page?a=1&b=2", "#{@base}/og", "#{@base}/latin1", "#{@base}/meta-charset?x=1&y=2",
           "#{@base}/long-title",
           "#{@base}/page" # from index.html
@@ -1622,7 +1708,7 @@ describe Jekyll::LinkPreviews do
       end
 
       def links_yml
-        YAML.load_file(File.join(@source, '_link_previews/links.yml'))
+        load_links(File.join(@source, '_link_previews/links.yml'))
       end
 
       it "previews a link to another page with that page's title and the site's favicon, in the same tab" do
@@ -1854,8 +1940,8 @@ describe Jekyll::LinkPreviews do
         %(<feed><article><a href="#{@base}/page">external</a></article></feed>\n)
       )
       expect(File.binread(File.join(site, 'assets/img/favicons', favicon_name(png_bytes, 'png')))).to eq(png_bytes)
-      expect(YAML.load_file(File.join(@source, '_link_previews/links.yml'))).to eq(
-        "#{@base}/page" => { 'title' => 'Fish & Chips: “A History”', 'favicon' => favicon_name(png_bytes, 'png') }
+      expect(load_links(File.join(@source, '_link_previews/links.yml'))).to eq(
+        "#{@base}/page" => { 'title' => 'Fish & Chips: “A History”', 'favicon' => favicon_name(png_bytes, 'png'), 'fetched' => today }
       )
     end
 

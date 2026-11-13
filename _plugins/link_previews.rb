@@ -5,6 +5,7 @@ require 'net/http'
 require 'webrick'
 require 'nokogiri'
 require 'cgi'
+require 'date'
 require 'digest'
 require 'fileutils'
 require 'yaml'
@@ -495,8 +496,9 @@ module Jekyll
       end
     end
 
-    # Each linked URL's page title, favicon, and fragments, fetched on demand and cached on disk. Nothing
-    # cached is ever refetched, so anything that couldn't be fetched can be filled in by hand.
+    # Each linked URL's page title, favicon, and fragments, fetched on demand and cached on disk, with the
+    # date (in UTC) of the latest fetch of the page that the cache records. Nothing cached is ever
+    # refetched, so anything that couldn't be fetched can be filled in by hand.
     class Previews
       def initialize(directory, timeout: TIMEOUT)
         @directory = directory
@@ -543,6 +545,7 @@ module Jekyll
           end
           fetched[:linked] ||= LinkedPage.new(LinkPreviews.parse(fetched[:body], fetched[:charset]))
           @entries[url]['fragments'] = fragments.merge(fragment.key => fragment.resolve(fetched[:linked])).sort.to_h
+          date_fetch(@entries[url])
         end
         text = @entries[url]['fragments'][fragment.key]
         text unless blank?(text)
@@ -586,7 +589,7 @@ module Jekyll
 
       def save
         path = File.join(@directory, CACHE_FILE)
-        return if File.exist?(path) && YAML.safe_load_file(path) == @entries
+        return if File.exist?(path) && read_entries(path) == @entries
 
         FileUtils.mkdir_p(@directory)
         File.write(path, @entries.sort.to_h.to_yaml(line_width: -1))
@@ -622,7 +625,17 @@ module Jekyll
         entry['favicon'] = favicon if favicon
         error = page[:error] || (title ? nil : 'no title found')
         entry['error'] = error if error
+        date_fetch(entry)
         entry
+      end
+
+      # Dates an entry by today's fetch of its page, where the entry has a date already, or else before
+      # its fragments.
+      def date_fetch(entry)
+        after = entry.key?('fetched') ? {} : entry.slice('fragments')
+        after.each_key { |key| entry.delete(key) }
+        entry['fetched'] = Time.now.utc.to_date
+        entry.merge!(after)
       end
 
       def fetch_page(url)
@@ -711,7 +724,7 @@ module Jekyll
 
       def load
         path = File.join(@directory, CACHE_FILE)
-        entries = File.exist?(path) ? YAML.safe_load_file(path) || {} : {}
+        entries = File.exist?(path) ? read_entries(path) || {} : {}
         raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE} must be a mapping of URLs to entries" unless entries.is_a?(Hash)
 
         entries.each do |url, entry|
@@ -720,11 +733,24 @@ module Jekyll
                                     "not #{entry.inspect}"
           end
           check_fragments(entry['fragments'], url)
+          check_fetched(entry['fetched'], url)
           name = entry['favicon']
           next if name.is_a?(String) ? blank?(name) : name.nil?
 
           check_favicon(name, "#{CACHE_DIR}/#{CACHE_FILE}: the favicon for #{url}")
         end
+      end
+
+      # Reads the cache file, whose fetched: dates are written as YYYY-MM-DD and read as Dates.
+      def read_entries(path)
+        YAML.safe_load_file(path, permitted_classes: [Date])
+      end
+
+      def check_fetched(fetched, url)
+        return if fetched.nil? || fetched.instance_of?(Date)
+
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fetched date for #{url} must be a date written as YYYY-MM-DD, " \
+                                "not #{fetched.inspect}"
       end
 
       def check_fragments(fragments, url)
