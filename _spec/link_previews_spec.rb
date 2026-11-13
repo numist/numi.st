@@ -992,6 +992,19 @@ describe Jekyll::LinkPreviews do
           expect(report(cached).scan(warning).size).to eq(2)
         end
 
+        it 'caches a fragment of a page that is not HTML as null, without warning, and does not refetch it' do
+          write_links("#{@base}/paper.pdf:\n  title: By Hand\n")
+          expect(fragment("#{@base}/paper.pdf#page=3")).to be_nil
+          previews.save
+          expect(load_links.fetch("#{@base}/paper.pdf")['fragments']).to eq('page=3' => nil)
+          expect(report).to be_empty
+          @requests.clear
+
+          cached = described_class.new(cache_dir)
+          expect(fragment("#{@base}/paper.pdf#page=3", cached)).to be_nil
+          expect(@requests).to be_empty
+        end
+
         it 'uses hand-set fragments, treating blank ones as not on the page, without fetching' do
           write_links(<<~YAML)
             #{@base}/sections:

@@ -535,20 +535,22 @@ module Jekyll
 
       # Returns what fragment names on the page at href (see Fragment#resolve), or nil if it isn't on the
       # page or the page can't be fetched. A fragment not yet in the entry's fragments is looked for on
-      # the page, fetched again if need be, and cached as null if the page doesn't have it. If the page
-      # can't be fetched, nothing is cached, so the next build fetches it again, and the report warns
-      # about the link to href on page.
+      # the page, fetched again if need be, and cached as null if the page doesn't have it or isn't HTML.
+      # If the page can't be fetched, nothing is cached, so the next build fetches it again, and the
+      # report warns about the link to href on page.
       def fragment(href, fragment, page:)
         url = cache_key(href)
         fragments = entry(url)['fragments'] || {}
         unless fragments.key?(fragment.key)
           fetched = fetch_page(url)
-          if fetched[:error]
+          if fetched[:body]
+            fetched[:linked] ||= LinkedPage.new(LinkPreviews.parse(fetched[:body], fetched[:charset]))
+            found = fragment.resolve(fetched[:linked])
+          elsif !fetched[:not_html]
             @unfetched_fragments << [page, href, fetched[:error]]
             return
           end
-          fetched[:linked] ||= LinkedPage.new(LinkPreviews.parse(fetched[:body], fetched[:charset]))
-          @entries[url]['fragments'] = fragments.merge(fragment.key => fragment.resolve(fetched[:linked])).sort.to_h
+          @entries[url]['fragments'] = fragments.merge(fragment.key => found).sort.to_h
           date_fetch(@entries[url])
         end
         text = @entries[url]['fragments'][fragment.key]
@@ -648,9 +650,11 @@ module Jekyll
           response, body, final_url = get(url, PAGE_SIZE_LIMIT) do |headers|
             %w[text/html application/xhtml+xml].include?(headers.content_type)
           end
-          raise LinkPreviews.not_html_error(response.content_type) unless body
-
-          { url: final_url, body: body, charset: response.type_params['charset'] }
+          if body
+            { url: final_url, body: body, charset: response.type_params['charset'] }
+          else
+            { url: url, error: LinkPreviews.not_html_error(response.content_type), not_html: true }
+          end
         rescue StandardError => e
           { url: url, error: error_message(e) }
         end
