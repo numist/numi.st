@@ -1,5 +1,7 @@
 # numi.st
 
+Run Ruby commands under the version in `.ruby-version`, e.g. `chruby "$(cat .ruby-version)"`.
+
 ## Before committing
 
 - [ ] `bundle exec rspec _spec` passes with clean output.
