@@ -770,9 +770,18 @@ describe Jekyll::LinkPreviews do
           loaded = YAML.safe_load_file(links_path, permitted_classes: [Date, Time]).fetch("#{@base}/page")[key]
           expect { described_class.new(cache_dir) }.to raise_error(
             Jekyll::LinkPreviews::PreviewDataError,
-            "_link_previews/links.yml: the #{key} for #{@base}/page must be text, not #{loaded.inspect}"
+            "_link_previews/links.yml: the #{key} for #{@base}/page must be text, not #{loaded.inspect}; " \
+            "quote it, e.g. #{key}: \"…\""
           )
         end
+      end
+
+      it 'suggests quoting a number written as a title' do
+        write_links("#{@base}/page:\n  title: 1984\n")
+        expect { described_class.new(cache_dir) }.to raise_error(
+          Jekyll::LinkPreviews::PreviewDataError,
+          "_link_previews/links.yml: the title for #{@base}/page must be text, not 1984; quote it, e.g. title: \"…\""
+        )
       end
 
       it 'keeps long titles on one line' do

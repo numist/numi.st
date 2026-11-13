@@ -779,7 +779,8 @@ module Jekyll
       def check_text(text, key, url)
         return if text.nil? || text.is_a?(String)
 
-        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the #{key} for #{url} must be text, not #{text.inspect}"
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the #{key} for #{url} must be text, not #{text.inspect}; " \
+                                "quote it, e.g. #{key}: \"…\""
       end
 
       def check_fragments(fragments, url)
