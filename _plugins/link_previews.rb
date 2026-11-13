@@ -716,7 +716,8 @@ module Jekyll
       end
 
       def check_fragments(fragments, url)
-        return if fragments.nil? || (fragments.is_a?(Hash) && fragments.values.all? { |text| text.nil? || text.is_a?(String) })
+        return if fragments.nil?
+        return if fragments.is_a?(Hash) && fragments.all? { |key, text| key.is_a?(String) && (text.nil? || text.is_a?(String)) }
 
         raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fragments for #{url} must be a mapping of fragments to text, " \
                                 "not #{fragments.inspect}"

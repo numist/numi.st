@@ -904,8 +904,8 @@ describe Jekyll::LinkPreviews do
           YAML
         end
 
-        it 'fails on fragments that are not a mapping to text' do
-          ['intro', { 'intro' => 2024 }].each do |fragments|
+        it 'fails on fragments that are not a mapping of text to text' do
+          ['intro', { 'intro' => 2024 }, { 1 => 'Foo' }].each do |fragments|
             write_links({ "#{@base}/sections" => { 'title' => 'Sections', 'fragments' => fragments } }.to_yaml)
             expect { described_class.new(cache_dir) }.to raise_error(
               Jekyll::LinkPreviews::PreviewDataError,
