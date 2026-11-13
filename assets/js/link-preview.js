@@ -12,13 +12,9 @@ window.addEventListener("load", function () {
 
     // Without animation, hiding finishes immediately, so showing a preview again can't race a fade-out.
     // Previews quote text fragments in a blockquote with a citation, which the sanitizer otherwise removes.
-    // Previews show above their link, or below it if there's no room above, but never beside it: Popper
-    // keeps a popover above or below its link within the screen's width, but can't move one beside its
-    // link back across it, so a preview too tall for the room above and below would go off the side.
     links.popover({
         trigger: "manual",
-        placement: "top",
-        fallbackPlacements: ["bottom"],
+        placement: "auto",
         html: true,
         animation: false,
         allowList: Object.assign({}, bootstrap.Popover.Default.allowList, { blockquote: [], cite: [] })
