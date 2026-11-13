@@ -753,12 +753,12 @@ describe Jekyll::LinkPreviews do
       end
 
       it 'fails on a fetched date that is not a date' do
-        ["'2020-01-02'", '2020-01', 'yesterday', '20200102'].each do |fetched|
+        ["'2020-01-02'", '2020-01', 'yesterday', '20200102', '2020-01-02 10:00:00'].each do |fetched|
           write_links("#{@base}/page:\n  title: Page\n  fetched: #{fetched}\n")
-          value = load_links.fetch("#{@base}/page")['fetched']
+          value = YAML.safe_load_file(links_path, permitted_classes: [Date, Time]).fetch("#{@base}/page")['fetched']
           expect { described_class.new(cache_dir) }.to raise_error(
             Jekyll::LinkPreviews::PreviewDataError,
-            "_link_previews/links.yml: the fetched date for #{@base}/page must be a date written as YYYY-MM-DD, " \
+            "_link_previews/links.yml: the fetched date for #{@base}/page must be a date, e.g. 2020-01-02, " \
             "not #{value.inspect}"
           )
         end

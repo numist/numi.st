@@ -749,15 +749,16 @@ module Jekyll
         end
       end
 
-      # Reads the cache file, whose fetched: dates are written as YYYY-MM-DD and read as Dates.
+      # Reads the cache file, whose fetched: dates are written as YYYY-MM-DD and read as Dates. Times are
+      # read too, so that check_fetched can reject a fetched: written with a time of day.
       def read_entries(path)
-        YAML.safe_load_file(path, permitted_classes: [Date])
+        YAML.safe_load_file(path, permitted_classes: [Date, Time])
       end
 
       def check_fetched(fetched, url)
         return if fetched.nil? || fetched.instance_of?(Date)
 
-        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fetched date for #{url} must be a date written as YYYY-MM-DD, " \
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the fetched date for #{url} must be a date, e.g. 2020-01-02, " \
                                 "not #{fetched.inspect}"
       end
 
