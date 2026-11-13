@@ -9,6 +9,7 @@ require 'date'
 require 'digest'
 require 'fileutils'
 require 'yaml'
+require_relative 'inline_markdownify'
 
 module Jekyll
   module LinkPreviews
@@ -31,11 +32,6 @@ module Jekyll
     # Text elements that Bootstrap's popover sanitizer keeps, with the attributes it keeps on any element.
     POPOVER_TEXT_ELEMENTS = (TEXT_ELEMENTS & %w[b br code em i s small span strong sub sup u]).freeze
     POPOVER_ATTRIBUTES = /\A(?:class|dir|id|lang|role|aria-[\w-]*)\z/i
-
-    # A page's title formatted as _layouts/page.html formats its heading.
-    TITLE_HEADING = Liquid::Template.parse(
-      "{{ title | smartify | markdownify | remove: '<p>' | remove: '</p>' | strip }}"
-    )
 
     # Elements whose text a reader doesn't see.
     HIDDEN_ELEMENTS = %w[head script style noscript template].freeze
@@ -928,7 +924,7 @@ module Jekyll
       # A page's front matter title formatted as its heading is, or nil if the formatting includes
       # markup that isn't text formatting the popover keeps.
       def formatted_title(item)
-        html = TITLE_HEADING.render!({ 'title' => item.data['title'] }, registers: { site: @site })
+        html = Liquid::Context.new({}, {}, { site: @site }).invoke('inline_markdownify', item.data['title'])
         fragment = Nokogiri::HTML5.fragment(html)
         fragment if fragment.css('*').all? do |element|
           POPOVER_TEXT_ELEMENTS.include?(element.name) &&
