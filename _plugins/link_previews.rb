@@ -666,7 +666,7 @@ module Jekyll
           if body
             { url: final_url, body: body, charset: response.type_params['charset'] }
           else
-            { url: url, error: LinkPreviews.not_html_error(response.content_type), not_html: true }
+            { url: final_url, error: LinkPreviews.not_html_error(response.content_type), not_html: true }
           end
         rescue StandardError => e
           { url: url, error: error_message(e) }

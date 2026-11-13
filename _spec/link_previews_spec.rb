@@ -509,16 +509,17 @@ describe Jekyll::LinkPreviews do
     end
 
     # Serves a host of its own whose paths each respond with a content type and body, and, if given, a
-    # status; any other path is not found. Requests are recorded in @requests.
+    # status and headers; any other path is not found. Requests are recorded in @requests.
     def with_server(routes)
       server = WEBrick::HTTPServer.new(
         BindAddress: '127.0.0.1', Port: 0, Logger: WEBrick::Log.new(StringIO.new), AccessLog: []
       )
       server.mount_proc('/') do |request, response|
         @requests << request.path
-        content_type, body, status = routes.fetch(request.path) { [nil, '', 404] }
+        content_type, body, status, headers = routes.fetch(request.path) { [nil, '', 404] }
         response.status = status || 200
         response['Content-Type'] = content_type
+        headers&.each { |name, value| response[name] = value }
         response.body = body
       end
       thread = Thread.new { server.start }
@@ -674,6 +675,17 @@ describe Jekyll::LinkPreviews do
                       '/static/icon.png' => ['image/png', png_bytes]) do |base|
             expect(previews.favicon("#{base}/paper.pdf")).to eq(favicon_name(png_bytes, 'png'))
             expect(@requests).to eq(['/paper.pdf', '/favicon.ico', '/', '/static/icon.png'])
+          end
+        end
+
+        it "uses the final host's icons when the page redirects to a non-HTML page on another host" do
+          with_server('/paper.pdf' => ['application/pdf', '%PDF-1.4 fake'], '/' => homepage,
+                      '/static/icon.png' => ['image/png', png_bytes]) do |publisher|
+            with_server('/doi' => ['text/html', '', 302, { 'Location' => "#{publisher}/paper.pdf" }],
+                        '/favicon.ico' => ['image/x-icon', ico_bytes]) do |redirector|
+              expect(previews.favicon("#{redirector}/doi")).to eq(favicon_name(png_bytes, 'png'))
+              expect(@requests).to eq(['/doi', '/paper.pdf', '/favicon.ico', '/', '/static/icon.png'])
+            end
           end
         end
 
