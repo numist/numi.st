@@ -1,4 +1,5 @@
 ---
+title: "Motorcycles"
 layout: page
 ---
 When we started dating, Tanya asked one her her coworkers (who had previously worked with me at Square) for his impressions and he answered: "well, he's pretty smart… and he _really_ likes his motorcycles". Fair enough! If I'm on my deathbed, you could probably squeeze another couple hours out of this mortal coil by putting it on a bike.

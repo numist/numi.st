@@ -1,4 +1,5 @@
 ---
+title: "LICENSE"
 layout: page
 ---
 
