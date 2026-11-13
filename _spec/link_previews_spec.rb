@@ -2006,6 +2006,12 @@ describe Jekyll::LinkPreviews do
           MARKDOWN
         end
 
+        def write_layout(name, title)
+          File.write(File.join(@source, "_layouts/#{name}.html"), <<~HTML)
+            <html><head><title>#{title}</title></head><body><article>{{ content }}</article></body></html>
+          HTML
+        end
+
         def popover_title(link)
           popover_link(link).inner_html
         end
@@ -2024,11 +2030,25 @@ describe Jekyll::LinkPreviews do
           expect(@log.string).not_to include('Link preview:')
         end
 
+        it 'escapes the rest of the <title> after a formatted title' do
+          write_layout('menu', 'Fish &amp; Chips &lt;3')
+          write_page('emphasis', '*Fish*', layout: 'menu')
+          write_post("An [emphasis](/emphasis/) title.\n")
+          expect(link_named(build_site, 'emphasis')['data-bs-content']).to end_with(
+            '<a href="/emphasis/"><em>Fish</em> &amp; Chips &lt;3</a>'
+          )
+        end
+
         it "shows an unformatted title as the <title>'s text" do
           write_page('plain', %(Fish & "Chips"))
-          write_post("A [plain](/plain/) title.\n")
-          expect(build_site).to include(
+          write_page('spaced', "Fish\u00a0& Chips")
+          write_post("A [plain](/plain/) title and a [spaced](/spaced/) title.\n")
+          output = build_site
+          expect(output).to include(
             %(&lt;a href=&quot;/plain/&quot;&gt;Fish &amp;amp; “Chips” | Site&lt;/a&gt;" data-favicon="/favicon.png">plain</a>)
+          )
+          expect(output).to include(
+            %(&lt;a href=&quot;/spaced/&quot;&gt;Fish &amp;amp; Chips | Site&lt;/a&gt;" data-favicon="/favicon.png">spaced</a>)
           )
         end
 
@@ -2043,6 +2063,15 @@ describe Jekyll::LinkPreviews do
           write_page('plain', 'Plain')
           write_post("A [linked](/linked/) title.\n")
           expect(popover_title(link_named(build_site, 'linked'))).to eq('A link | Site')
+        end
+
+        it "shows the <title>'s text when the formatted title has text formatting the popover doesn't keep" do
+          write_page('styled', '<em style="color: red">Fish</em> & Chips')
+          write_page('keyboard', '<kbd>Fish</kbd> & Chips')
+          write_post("A [styled](/styled/) title and a [keyboard](/keyboard/) title.\n")
+          output = build_site
+          expect(popover_title(link_named(output, 'styled'))).to eq('Fish &amp; Chips | Site')
+          expect(popover_title(link_named(output, 'keyboard'))).to eq('Fish &amp; Chips | Site')
         end
 
         it 'appends the heading an element fragment names to a formatted title' do
@@ -2113,6 +2142,15 @@ describe Jekyll::LinkPreviews do
           'Link preview: post.md links to /untitled.html, which has no title; give the page a <title>, ' \
           'or give the link an inline title, e.g. [text](url "Title") in Markdown'
         )
+      end
+
+      it 'escapes the URL it shows when the linked page has no title' do
+        write_post("An [untitled](/untitled.html?fish&chips) page.\n")
+        output = build_site
+        expect(link_named(output, 'untitled')['data-bs-content']).to end_with(
+          '<a href="/untitled.html?fish&amp;chips">/untitled.html?fish&amp;chips</a>'
+        )
+        expect(@log.string).to include('Link preview: post.md links to /untitled.html?fish&chips, which has no title')
       end
 
       it 'treats a linked page with no title in its front matter as having no title, whatever its <title>' do
