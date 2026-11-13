@@ -407,7 +407,26 @@ describe Jekyll::LinkPreviews do
 
       it 'uses a prefix and suffix only to choose which text to quote' do
         expect(resolve('#:~:text=dog.%20The-,quick,fox', body)).to eq('quick red fox')
-        expect(resolve('#:~:text=quick,fox,-naps', body)).to eq('quick red fox')
+        expect(resolve('#:~:text=quick,-red', body)).to eq('quick')
+      end
+
+      it 'ends a range at the first end followed by the suffix, rather than moving on to a later start' do
+        expect(resolve('#:~:text=quick,fox,-naps', body)).to eq('quick brown fox jumps over the lazy dog. The quick red fox')
+        expect(resolve('#:~:text=alpha,beta,-delta', '<p>alpha beta gamma beta delta</p>')).to eq('alpha beta gamma beta')
+      end
+
+      it 'matches only whole words, in any script, at the edges of the text it quotes and of its prefix and suffix' do
+        expect(resolve('#:~:text=cat', '<p>conCATenate a Cat</p>')).to eq('Cat')
+        expect(resolve('#:~:text=caf', '<p>café</p>')).to be_nil
+        expect(resolve('#:~:text=jumps,do', body)).to be_nil
+        expect(resolve('#:~:text=he-,quick', body)).to be_nil
+        expect(resolve('#:~:text=quick,-re', body)).to be_nil
+        expect(resolve('#:~:text=quick,fox,-nap', body)).to be_nil
+      end
+
+      it 'needs no word boundary beside punctuation' do
+        expect(resolve('#:~:text=.%20The%20quick%20red', body)).to eq('. The quick red')
+        expect(resolve('#:~:text=lazy-,dog.,-The', body)).to eq('dog.')
       end
 
       it 'finds nothing for text that is not on the page, or is only in its head, scripts, or styles' do
@@ -1600,7 +1619,7 @@ describe Jekyll::LinkPreviews do
         it 'quotes the text that a text fragment names below the title, warning about text not on the page' do
           write_post(<<~MARKDOWN)
             A [quote](/target/#:~:text=quick%20brown), a [range](/target/#:~:text=quick,naps),
-            a [chosen](/target/#:~:text=The-,quick,fox,-naps) one, and a [missing](/target/#:~:text=purple,fox) one.
+            a [chosen](/target/#:~:text=fox.%20The-,quick,fox,-naps) one, and a [missing](/target/#:~:text=purple,fox) one.
           MARKDOWN
           output = build_site
           expect(popover_link(link_named(output, 'quote')).text).to eq('Target & Co')

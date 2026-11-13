@@ -371,6 +371,9 @@ module Jekyll
     class Fragment
       HEADINGS = %w[h1 h2 h3 h4 h5 h6].freeze
 
+      # A position that isn't between two characters of a word, in any script.
+      WORD_BOUNDARY = '(?:(?<!\p{Word})|(?!\p{Word}))'
+
       # How the fragment is cached: percent-decoded, with directives keeping the ':~:' that marks them.
       attr_reader :key
 
@@ -440,21 +443,25 @@ module Jekyll
         HEADINGS.include?(element.name) ? LinkPreviews.squish(element.text) : @id
       end
 
-      # Finds the first start, after the prefix, from which the end and then the suffix follow, matching
-      # case-insensitively, and returns the page's text from the start through the end.
+      # Finds the first start, after the prefix, and the first end after it that the suffix follows,
+      # matching whole words case-insensitively, and returns the page's text from the start through the
+      # end. Only the first start needs trying: any later start is followed by the same ends or fewer, so
+      # the search is a single pass over the text for each.
       def quote_in(text)
-        start = /#{"#{term(@prefix)} ?" if @prefix}(?<quote>#{term(@start)})/i
-        position = 0
-        while (match = text.match(start, position))
-          quote_end = match.end(0)
-          if @finish
-            finish = text.match(/#{term(@finish)}/i, quote_end) or return
-            quote_end = finish.end(0)
-          end
-          return text[match.begin(:quote)...quote_end] if @suffix.nil? || text.match?(/\G ?#{term(@suffix)}/i, quote_end)
-
-          position = match.begin(0) + 1
+        start = text.match(words(@prefix && "#{term(@prefix)} ?", "(?<quote>#{term(@start)})", !@finish && @suffix)) or return
+        quote_end = start.end(0)
+        if @finish
+          finish = text.match(words(nil, term(@finish), @suffix), quote_end) or return
+          quote_end = finish.end(0)
         end
+        text[start.begin(:quote)...quote_end]
+      end
+
+      # Matches the regexp source before and then quote, starting on a word boundary and ending on one,
+      # or else followed by the suffix, which ends on one but isn't part of the match.
+      def words(before, quote, suffix)
+        after = suffix ? "(?= ?#{term(suffix)}#{WORD_BOUNDARY})" : WORD_BOUNDARY
+        /#{WORD_BOUNDARY}#{before}#{quote}#{after}/i
       end
 
       def term(text)
