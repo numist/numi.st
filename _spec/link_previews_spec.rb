@@ -1294,6 +1294,15 @@ describe Jekyll::LinkPreviews do
         end
       end
 
+      it 'fails the build on a link that cannot be parsed, naming the page and link' do
+        ['/a|b/', '/a{b}/', 'a\\b'].each do |href|
+          write_post(%(An <a href="#{href}">unparseable link</a>.\n))
+          expect { build_site }.to raise_error(
+            Jekyll::LinkPreviews::BrokenLinkError, "post.md links to #{href}, which cannot be parsed as a URL"
+          )
+        end
+      end
+
       it 'does not preview other schemes or links outside articles' do
         write_post(<<~MARKDOWN)
           [mail](mailto:blog@numist.net) [phone](tel:+15555550100) <a href="javascript:void(0)">script</a>

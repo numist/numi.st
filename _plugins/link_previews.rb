@@ -66,7 +66,7 @@ module Jekyll
     class MarkupError < StandardError; end
     # Raised when hand-written preview data, in links.yml or a link's data-preview-favicon, is invalid.
     class PreviewDataError < StandardError; end
-    # Raised when a link to this site names something the build doesn't publish.
+    # Raised when a link to this site can't be parsed or names something the build doesn't publish.
     class BrokenLinkError < StandardError; end
 
     def self.external?(href)
@@ -128,8 +128,8 @@ module Jekyll
     # External links whose href isn't written out in the page's source were generated (e.g. by Liquid),
     # so they aren't fetched or cached. Internal links are annotated when the site's targets are given,
     # with the page's url to resolve them against. Raises MarkupError, naming the page, if the HTML's
-    # elements aren't properly closed and nested, and BrokenLinkError if an internal link's target isn't
-    # in the site.
+    # elements aren't properly closed and nested, and BrokenLinkError if an internal link can't be parsed
+    # or its target isn't in the site.
     def self.annotate(html, previews, page: nil, source: nil, targets: nil, url: nil)
       edits = []
       untitled_generated_hrefs = []
@@ -146,7 +146,11 @@ module Jekyll
           untitled_generated_hrefs << href if generated && squish(link['title']).empty?
           edits << [start, opening_tag_end, annotated_opening_tag(link, previews, generated: generated, page: page)]
         elsif targets && internal?(href)
-          target = targets.find(href, url)
+          target = begin
+            targets.find(href, url)
+          rescue URI::Error
+            raise BrokenLinkError, "#{page} links to #{href}, which cannot be parsed as a URL"
+          end
           raise BrokenLinkError, "#{page} links to #{href}, which is not in the site" unless target
           untitled_target_hrefs << href if squish(link['title']).empty? && target.page? && target.title.nil?
           edits << [start, opening_tag_end, annotated_opening_tag(link, previews, target: target, page: page)]
@@ -531,7 +535,7 @@ module Jekyll
       end
 
       # Returns the Target that href, on the page at page_url (excluding the baseurl), names, or nil if it
-      # isn't in the build.
+      # isn't in the build. Raises URI::Error if href can't be parsed.
       def find(href, page_url)
         path = URI.join("http://site#{escape(@baseurl + page_url)}", escape(href)).path
         path = URI::DEFAULT_PARSER.unescape(path)
@@ -541,8 +545,6 @@ module Jekyll
         candidates = path.end_with?('/') ? ["#{path}index.html"] : [path, "#{path}/index.html", "#{path}.html"]
         found = candidates.find { |candidate| @items.key?(candidate) }
         Target.new(self, @baseurl + found, @items[found]) if found
-      rescue URI::Error
-        nil
       end
 
       # A page's title comes from its rendered <title>; other files' titles come from the cache.
