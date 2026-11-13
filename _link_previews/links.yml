@@ -52,14 +52,11 @@ https://blacker.caltech.edu:
   title:
   error: Failed to open TCP connection to blacker.caltech.edu:443 (Operation timed out - user specified timeout)
 https://bookshop.org/p/books/hogfather-terry-pratchett/6432864:
-  title:
-  error: HTTP 403
+  title: Hogfather a book by Terry Pratchett - Bookshop.org US
 https://bookshop.org/p/books/more-a-memoir-of-open-marriage-molly-roden-winter/20059873?ean=9780385549455:
-  title:
-  error: HTTP 403
+  title: 'More: A Memoir of Open Marriage a book by Molly Roden Winter - Bookshop.org US'
 https://brandinho.github.io/bayesian-perspective-q-learning/:
-  title:
-  error: no title found
+  title: A Bayesian Perspective on Q-Learning
 https://circuitsandstrings.wordpress.com/2015/11/16/backpacker-travel-ukulele/:
   title: Backpacker Travel Ukulele | Circuits and Strings
   favicon: 5b658f5a51a2cc16.ico
@@ -99,8 +96,7 @@ https://discussions.apple.com/thread/7665078:
 https://docs.swift.org/swift-book/ReferenceManual/Statements.html:
   title: 'The Swift Programming Language: Redirect'
 https://doi.org/10.1029/2022GB007481:
-  title:
-  error: HTTP 403
+  title: Species Traits and Geomorphic Setting as Drivers of Global Soil Carbon Stocks in Seagrass Meadows - Kennedy - 2022 - Global Biogeochemical Cycles - Wiley Online Library
 https://emergencemagazine.org/essay/benchmarking/:
   title: Benchma(r)king – James Bridle
   favicon: 66b59dde0d22a080.png
@@ -205,8 +201,7 @@ https://hachyderm.io/@samwho/112288527423374593:
 https://inessential.com/2021/03/17/new_in_netnewswire_6_icloud_syncing:
   title: 'inessential: New in NetNewsWire 6: iCloud Syncing'
 https://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time:
-  title:
-  error: HTTP 403
+  title: 'Falsehoods programmers believe about time: @noahsussman: Infinite Undo'
 https://infosec.exchange/@0xabad1dea/110338578370807798:
   title: 'abadidea: "the word "compatible" most literally means "suffe…" - Infosec Exchange'
   favicon: 24531c232ecc0a6c.png
@@ -279,11 +274,9 @@ https://pspdfkit.com/blog/2017/even-swiftier-objective-c/:
   title: Even Swiftier Objective-C
   favicon: 7a2c16ff083629fb.png
 https://purposebuiltmoto.com/product/daytona-deva01-multifunction-cockpit/:
-  title:
-  error: HTTP 429
+  title: Daytona DEVA Multifunction Cockpit | Purpose Built Moto
 https://rc30.yolasite.com/project.php:
-  title:
-  error: HTTP 403
+  title: RC30 Project
 https://rubygems.org/gems/jekyll-mermaid/versions/1.0.0:
   title: jekyll-mermaid | RubyGems.org | your community gem host
   favicon: 03a3589af56ff3a5.ico
@@ -379,17 +372,14 @@ https://www.aliexpress.com/item/2251832705199667.html?gatewayAdapt=4itemAdapt:
   favicon: 320b81fe5f8e5ba1.ico
   error: too many redirects
 https://www.amazon.com/gp/product/B016V4V84U:
-  title: Amazon.com
+  title: 'Amazon.com: Okones 3-2/3'''' Overall Length,2-2/5'''' U Hook Length,Solid Brass Key Ring Belt Hook Key Buckle for Leathercraft Pack of 1 (U hook Length 2-2/5'''') : Clothing, Shoes & Jewelry'
   favicon: 5866636f18764cd6.ico
-  error: bot wall
 https://www.amazon.com/gp/product/B08BX4RCW8:
-  title: Amazon.com
+  title: 'Amazon.com: Nite Ize S-Biner MicroLock Aluminum, Locking Keychain Carabiner, 5 Pack, Assorted Colors : Sports & Outdoors'
   favicon: 5866636f18764cd6.ico
-  error: bot wall
 https://www.amazon.com/gp/product/B08KW5YG5X:
-  title: Amazon.com
+  title: 'Amazon.com: SHONAN 1.93 Inch Flag Clips for Flagpole Rope, Stainless Steel Carabiners Marine Grade, Boat Fender Clips, 4 Pack Spring Snap Hooks for Ropes, Keychain, Dog Leash, 90 Lbs Capacity : Sports & Outdoors'
   favicon: 5866636f18764cd6.ico
-  error: bot wall
 https://www.audiworld.com/forums/q3-discussion-195/q3-transmission-shift-quirks-2983770/:
   title: Q3 Transmission Shift Quirks - AudiWorld Forums
   favicon: fd2f16f23b983cb4.ico
@@ -403,21 +393,17 @@ https://www.bitsaboutmoney.com/archive/bond-villain-compliance-strategy/:
   title: The Bond villain compliance strategy
   favicon: cb3420c16164077a.png
 https://www.bloomberg.com/news/articles/2026-08-31/apple-s-phil-schiller-steps-down-from-running-app-store-and-product-events:
-  title:
+  title: Apple’s Phil Schiller Steps Down from Running App Store and Product Events - Bloomberg
   favicon: fd1ace0f3033ff03.ico
-  error: HTTP 403
 ? https://www.bloomberg.com/news/newsletters/2026-09-06/apple-s-new-ceo-like-cook-pay-package-shows-he-s-going-nowhere-sept-9-event-mtpvpcj1
-: title:
+: title: Apple’s New CEO-Like Cook Pay Package Shows He’s Going Nowhere; Sept. 9 Event - Bloomberg
   favicon: fd1ace0f3033ff03.ico
-  error: HTTP 403
 https://www.bloomberg.com/opinion/articles/2023-04-13/twitter-gets-into-the-stock-business:
-  title:
+  title: Twitter Gets Into the Stock Business - Bloomberg
   favicon: fd1ace0f3033ff03.ico
-  error: HTTP 403
 https://www.bloomberg.com/opinion/articles/2023-10-17/you-can-t-sell-trees-no-one-cuts-down:
-  title:
+  title: You Can’t Sell Trees No One Cuts Down - Bloomberg
   favicon: fd1ace0f3033ff03.ico
-  error: HTTP 403
 https://www.bricklink.com/v3/studio/design.page?idModel=623629:
   title: BrickLink - Buy and sell LEGO Parts, Sets and Minifigures
   favicon: 1ca721e3536ea99f.png
@@ -438,8 +424,7 @@ https://www.fender.com/en-US/accessories/digital-tuners/fender-bullet-tuner/0239
   title:
   error: HTTP 403
 https://www.grainger.com/product/DAYTON-Definite-Purpose-Magnetic-6GNV0?opr=ILOF:
-  title: Whoops, we couldn't find that.
-  error: soft 404
+  title: DAYTON, 2 Poles, 208-240V AC, Definite Purpose Magnetic Contactor - 6GNV0|6GNV0 - Grainger
 https://www.huffpost.com/entry/time-perception-aging_l_63973dc2e4b0169d76d92560:
   title: Why Time Flies By Faster As We Get Older | HuffPost Life
   favicon: 8a5cf405c8e7c3f5.ico
@@ -447,9 +432,8 @@ https://www.imminet.com/products/tie-downs/cargobuckle/:
   title: CargoBuckle - IMMI CargoBuckle | IMMI
   favicon: f983b85d1f220d31.png
 https://www.investopedia.com/terms/f/fullemployment.asp:
-  title:
+  title: 'Full Employment: Definition, Types, and Examples'
   favicon: e0fc32883526e3aa.ico
-  error: HTTP 403
 https://www.jsonfeed.org:
   title: JSON Feed
   favicon: 61df47ec42ab7d15.png
@@ -473,8 +457,7 @@ https://www.motorcyclespecs.co.za/model/Honda/honda_vfr750f_90.html:
   title: 1990 Honda VFR 750F-L
   favicon: 4b20bc647836f9d5.ico
 https://www.npr.org/transcripts/526051566:
-  title:
-  error: Net::ReadTimeout
+  title: 'Episode 553: The Dollar At The Center Of The World : Planet Money : NPR'
 https://www.nytimes.com/2021/08/23/us/wildfires-carbon-offsets.html:
   title: Forests Used as Carbon Offsets Are Going Up in Wildfire Flames - The New York Times
   favicon: 94de5ae7e9bcf747.ico
@@ -488,16 +471,13 @@ https://www.rc51forums.com/threads/a-guide-to-ohlins-forks-front-suspension-for-
   title: A guide to Ohlins forks / front suspension for the RC51 | RC51 Forums
   favicon: 810327dc881a8b66.ico
 https://www.reddit.com/r/motorcycle/comments/1kds0xm/deleted_by_user/:
-  title: Reddit
+  title: "[deleted by user] : r/motorcycle"
   favicon: f60ae5a33ee8d16c.png
-  error: bot wall
 https://www.reddit.com/r/synthesizers/comments/kjzwj5/my_yamaha_pss_a50_wont_turn_on/:
-  title: Reddit
+  title: 'My Yamaha PSS A50 won’t turn on : r/synthesizers'
   favicon: f60ae5a33ee8d16c.png
-  error: bot wall
 https://www.sciencedirect.com/science/article/abs/pii/S175058360800056X:
-  title:
-  error: HTTP 403
+  title: CO2 capture from coal-fired power plants based on sodium carbonate slurry; a systems feasibility and sensitivity study - ScienceDirect
 https://www.shapertools.com/en-us/origin/overview:
   title: Shaper Origin | Handheld CNC Routing
   favicon: 2d21081c3df5ae5e.ico
@@ -511,29 +491,23 @@ https://www.sqlite.org/fileformat.html:
   title: Database File Format
   favicon: 76d60ff1eb9596a1.ico
 https://www.sqlite.org/src/file?ci=84634bc268e5c801&name=src/wal.c&ln=294:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: wal.c at [84634bc268]'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpager.c:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: pager.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpager.h:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: pager.h at trunk'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache.c:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: pcache.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache.h:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: pcache.h at trunk'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/file?udc=1&ln=on&ci=trunk&name=src%2Fpcache1.c:
-  title: 'SQLite: Browser Verification'
+  title: 'SQLite: pcache1.c at trunk'
   favicon: 76d60ff1eb9596a1.ico
-  error: bot wall
 https://www.sqlite.org/src/info?name=0a33005e6426702c&ln=4969:
   title: 'SQLite: Artifact [0a33005e64]'
   favicon: 76d60ff1eb9596a1.ico
@@ -553,9 +527,8 @@ https://www.swift.org/blog/migrating-truetype-hinting-to-swift/:
   title: 'Swift at Apple: Migrating the TrueType Hinting Interpreter | Swift.org'
   favicon: 5047233430e980eb.ico
 https://www.theatlantic.com/ideas/archive/2024/02/polyamory-ruling-class-fad-monogamy/677312/:
-  title:
+  title: Polyamory, the Ruling Class's Latest Fad - The Atlantic
   favicon: 699681aed805d84f.ico
-  error: HTTP 403
 https://www.theparisreview.org/blog/2022/06/29/scenes-from-an-open-marriage/:
   title: Scenes from an Open Marriage by Jean Garnett
   favicon: 193b1d9fb32684f9.ico
@@ -570,9 +543,8 @@ https://www.tonymottaz.com/code-for-computers-and-humans/:
   favicon: 884e0e3737c703d8.ico
   error: HTTP 404
 https://www.trailtech.net/en-us/shop/accessories/digital-gauges/vapor-tachometer/:
-  title:
+  title: Vapor Tachometer | Digital Gauges | Trail Tech
   favicon: cc81f761d4dda0a8.ico
-  error: HTTP 403
 https://www.twicesoldtales.com:
   title: Twice Sold Tales
   favicon: 455ad1b5333146d9.png
@@ -592,8 +564,7 @@ https://www.vortexracing.com/product/gc210/:
   title: Motorcycle Gas Cap - GC210 | Vortex Racing
   favicon: e736cca2920c9792.jpg
 https://www.weforum.org/agenda/2024/09/negative-energy-price-record-in-europe-and-other-top-energy-stories/:
-  title:
-  error: HTTP 403
+  title: Negative energy price record in Europe and more energy stories | World Economic Forum
 https://www.youtube.com/watch?v=FATQ0Yf0Fhc:
   title: 'Stephanie Kelton: The big myth of government deficits | TED - YouTube'
   favicon: 8f713bc9f87f7260.ico
