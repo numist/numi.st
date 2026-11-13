@@ -11,13 +11,13 @@ window.addEventListener("load", function () {
     var pressFoundPreviewShown = false;
 
     // Without animation, hiding finishes immediately, so showing a preview again can't race a fade-out.
-    // Previews quote text fragments in a blockquote, which the sanitizer otherwise removes.
+    // Previews quote text fragments in a blockquote with a citation, which the sanitizer otherwise removes.
     links.popover({
         trigger: "manual",
         placement: "auto",
         html: true,
         animation: false,
-        allowList: Object.assign({}, bootstrap.Popover.Default.allowList, { blockquote: [] })
+        allowList: Object.assign({}, bootstrap.Popover.Default.allowList, { blockquote: [], cite: [] })
     });
 
     // Records why the preview is showing, so a preview that keyboard focus took over from a hover

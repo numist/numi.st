@@ -262,7 +262,7 @@ module Jekyll
     # native tooltip doesn't compete with the popover. Likewise, its data-preview-favicon names a
     # file in the favicons directory that overrides the cached or site favicon. Links to other sites
     # open in a new tab; links to a target in this site open in the same one. A text fragment's quote
-    # follows the title; an element fragment's heading text or id is appended to the linked page's
+    # cites the title; an element fragment's heading text or id is appended to the linked page's
     # title. A fragment that isn't found on the linked page is shown as it is written.
     def self.annotated_opening_tag(link, previews, generated: false, target: nil, page: nil)
       href = link['href']
@@ -308,11 +308,15 @@ module Jekyll
       end
     end
 
+    # The favicon and title link, or a quote that cites them as the site's Markdown writes quotes:
+    # > quote <cite>[Title](url)</cite>
     def self.popover_content(href, title, favicon_url, quote = nil, new_tab: true)
       image = favicon_url ? %(<img class="link-preview-favicon" src="#{CGI.escapeHTML(favicon_url)}" alt="">) : ''
       new_tab_attributes = new_tab ? ' target="_blank" rel="noopener"' : ''
-      blockquote = quote ? %(<blockquote class="link-preview-quote">#{CGI.escapeHTML(quote)}</blockquote>) : ''
-      %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>#{blockquote})
+      link = %(#{image}<a href="#{CGI.escapeHTML(href)}"#{new_tab_attributes}>#{CGI.escapeHTML(title)}</a>)
+      return link unless quote
+
+      %(<blockquote class="link-preview-quote"><p>#{CGI.escapeHTML(quote)} <cite>#{link}</cite></p></blockquote>)
     end
 
     def self.process(site)

@@ -143,6 +143,11 @@ describe Jekyll::LinkPreviews do
     TCPServer.open('127.0.0.1', 0) { |server| server.addr[1] }
   end
 
+  # The text a popover quotes: its blockquote's text, without the citation.
+  def quoted_text(popover)
+    popover.at_css('blockquote.link-preview-quote > p')&.xpath('text()')&.text&.strip
+  end
+
   describe '.external?' do
     def external?(href)
       described_class.external?(href)
@@ -1109,18 +1114,20 @@ describe Jekyll::LinkPreviews do
         expect(@log.string).to be_empty
       end
 
-      it 'quotes the text that a text fragment names below the title' do
+      it 'quotes the text that a text fragment names, citing the favicon and title of the page it links to' do
         output = annotate(article(%(<a href="#{@base}/sections#:~:text=QUICK%20brown">x</a>)))
-        expect(output).to include(
-          %(Sections&lt;/a&gt;&lt;blockquote class=&quot;link-preview-quote&quot;&gt;quick brown&lt;/blockquote&gt;")
+        expect(Nokogiri::HTML5.fragment(output).at_css('a')['data-bs-content']).to eq(
+          %(<blockquote class="link-preview-quote"><p>quick brown <cite>) +
+          %(<img class="link-preview-favicon" src="/assets/img/favicons/#{favicon_name(png_bytes, 'png')}" alt="">) +
+          %(<a href="#{@base}/sections#:~:text=QUICK%20brown" target="_blank" rel="noopener">Sections</a>) +
+          %(</cite></p></blockquote>)
         )
-        expect(popover(output).at_css('a').text).to eq('Sections')
         expect(@log.string).to be_empty
       end
 
       it 'quotes the start and end of a range that is not on the page, without warning' do
         output = annotate_page(%(<a href="#{@base}/sections#:~:text=quick,purple">x</a>))
-        expect(popover(output).at_css('blockquote').text).to eq('quick … purple')
+        expect(quoted_text(popover(output))).to eq('quick … purple')
         expect(@log.string).to be_empty
       end
 
@@ -1130,7 +1137,7 @@ describe Jekyll::LinkPreviews do
         quote = annotate_page(%(<a href="#{@base}/sections#:~:text=quick">x</a>))
         expect(popover(element).at_css('a').text).to eq("#{@base}/sections#intro")
         expect(popover(quote).at_css('a').text).to eq("#{@base}/sections#:~:text=quick")
-        expect(popover(quote).at_css('blockquote').text).to eq('quick')
+        expect(quoted_text(popover(quote))).to eq('quick')
         expect(@requests).to be_empty
         expect(@log.string).to be_empty
       end
@@ -1149,7 +1156,7 @@ describe Jekyll::LinkPreviews do
         File.write(links_path, "#{@base}/missing:\n  title: By Hand\n")
         output = annotate_page(%(<a href="#{@base}/missing#:~:text=quick">x</a>))
         previews.report
-        expect(popover(output).at_css('blockquote').text).to eq('quick')
+        expect(quoted_text(popover(output))).to eq('quick')
         expect(@log.string).to include(
           "Link preview: notes/page.md links to #{@base}/missing#:~:text=quick, but the page it links to " \
           'could not be fetched to find its fragment (HTTP 404)'
@@ -1161,7 +1168,7 @@ describe Jekyll::LinkPreviews do
         quote = annotate(article(%(<a href="#{@base}/sections#:~:text=quick" title="Inline">x</a>)))
         expect(popover(element).at_css('a').text).to eq('Inline')
         expect(popover(quote).at_css('a').text).to eq('Inline')
-        expect(popover(quote).at_css('blockquote').text).to eq('quick')
+        expect(quoted_text(popover(quote))).to eq('quick')
       end
 
       it 'does not fetch for the element fragment of a link that names its own title and favicon' do
@@ -1181,7 +1188,7 @@ describe Jekyll::LinkPreviews do
         YAML
         quote = annotate(article(%(<a href="#{@base}/sections#:~:text=x">x</a>)))
         element = annotate(article(%(<a href="#{@base}/sections#intro">x</a>)))
-        expect(popover(quote).at_css('blockquote').text).to eq('<img src=x>')
+        expect(quoted_text(popover(quote))).to eq('<img src=x>')
         expect(popover(element).at_css('a').text).to eq('Sections # <img src=y>')
         expect(popover(quote).at_css('img')).to be_nil
         expect(popover(element).at_css('img')).to be_nil
@@ -1526,7 +1533,7 @@ describe Jekyll::LinkPreviews do
         expect(element.at_css('a').text).to eq('Element')
         expect(element.at_css('blockquote')).to be_nil
         expect(quote.at_css('a').text).to eq('Quote')
-        expect(quote.at_css('blockquote').text).to eq('quick … fox')
+        expect(quoted_text(quote)).to eq('quick … fox')
         expect(@requests).not_to include('/sections')
         expect(@log.string).not_to include('/sections')
       end
@@ -1658,7 +1665,7 @@ describe Jekyll::LinkPreviews do
 
       describe 'fragments' do
         def popover_quote(link)
-          Nokogiri::HTML5.fragment(link['data-bs-content']).at_css('blockquote.link-preview-quote')&.text
+          quoted_text(Nokogiri::HTML5.fragment(link['data-bs-content']))
         end
 
         it 'appends the heading text or id that an element fragment names to the title, without caching it' do
@@ -1672,7 +1679,7 @@ describe Jekyll::LinkPreviews do
           expect(links_yml).to be_empty
         end
 
-        it 'quotes the text that a text fragment names below the title, without warning about text not on the page' do
+        it 'quotes the text that a text fragment names, citing the page it links to, without warning about text not on the page' do
           write_post(<<~MARKDOWN)
             A [quote](/target/#:~:text=quick%20brown), a [range](/target/#:~:text=quick,naps),
             a [chosen](/target/#:~:text=fox.%20The-,quick,fox,-naps) one, and a [missing](/target/#:~:text=purple,fox) one.
@@ -1680,6 +1687,9 @@ describe Jekyll::LinkPreviews do
           output = build_site
           expect(popover_link(link_named(output, 'quote')).text).to eq('Target & Co')
           expect(popover_quote(link_named(output, 'quote'))).to eq('quick brown')
+          citation = Nokogiri::HTML5.fragment(link_named(output, 'quote')['data-bs-content']).at_css('blockquote > p > cite')
+          expect(citation.at_css('img')['src']).to eq('/favicon.png')
+          expect(citation.at_css('a')['href']).to eq('/target/#:~:text=quick%20brown')
           expect(popover_quote(link_named(output, 'range'))).to eq('quick brown fox. The quick red fox naps')
           expect(popover_quote(link_named(output, 'chosen'))).to eq('quick red fox')
           expect(popover_quote(link_named(output, 'missing'))).to eq('purple … fox')
