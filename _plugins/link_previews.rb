@@ -551,7 +551,7 @@ module Jekyll
       def title(target)
         return @previews.file_title(target.url, content_type(target.url)) unless target.page?
 
-        @titles[target.url] = LinkPreviews.extract_title(page_html(target.item), 'UTF-8') unless @titles.key?(target.url)
+        @titles[target.url] = page_title(target.item) unless @titles.key?(target.url)
         @titles[target.url]
       end
 
@@ -568,6 +568,13 @@ module Jekyll
 
       def content_type(url)
         WEBrick::HTTPUtils.mime_type(url, WEBrick::HTTPUtils::DefaultMimeTypes)
+      end
+
+      # A rendered page without a title in its front matter has none of its own: its <title> is the site's.
+      def page_title(item)
+        return if item.respond_to?(:output) && LinkPreviews.squish(item.data['title']).empty?
+
+        LinkPreviews.extract_title(page_html(item), 'UTF-8')
       end
 
       def page_html(item)

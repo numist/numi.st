@@ -1148,6 +1148,7 @@ describe Jekyll::LinkPreviews do
         File.write(File.join(@source, 'target.md'), "---\nlayout: titled\ntitle: Target\npermalink: /target/\n---\nTarget\n")
         File.write(File.join(@source, 'plain.md'), "---\nlayout: titled\ntitle: Plain\npermalink: /plain\n---\nPlain\n")
         File.write(File.join(@source, 'untitled.html'), "---\n---\n<p>No head</p>\n")
+        File.write(File.join(@source, 'generic.md'), "---\nlayout: titled\npermalink: /generic/\n---\nGeneric\n")
         FileUtils.mkdir_p(File.join(@source, 'files'))
         File.write(File.join(@source, 'files/paper.pdf'), '%PDF-1.4 fake')
         File.write(File.join(@source, 'files/café menu.pdf'), '%PDF-1.4 fake')
@@ -1256,6 +1257,18 @@ describe Jekyll::LinkPreviews do
         expect(popover_link(link_named(output, 'untitled')).text).to eq('/untitled.html')
         expect(@log.string).to include(
           'Link preview: post.md links to /untitled.html, which has no title; give the page a <title>, ' \
+          'or give the link an inline title, e.g. [text](url "Title") in Markdown'
+        )
+      end
+
+      it 'treats a linked page with no title in its front matter as having no title, whatever its <title>' do
+        write_post("A [generic](/generic/) page and a [titled](/generic/ \"Inline\") link to it.\n")
+        output = build_site
+        expect(popover_link(link_named(output, 'generic')).text).to eq('/generic/')
+        expect(popover_link(link_named(output, 'titled')).text).to eq('Inline')
+        expect(@log.string.scan('Link preview:')).to eq(['Link preview:'])
+        expect(@log.string).to include(
+          'Link preview: post.md links to /generic/, which has no title; give the page a <title>, ' \
           'or give the link an inline title, e.g. [text](url "Title") in Markdown'
         )
       end
