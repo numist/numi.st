@@ -555,7 +555,7 @@ describe Jekyll::LinkPreviews do
       it 'fails on entries that are not mappings' do
         write_links("#{@base}/page: Some Title\n")
         expect { previews }.to raise_error(
-          Jekyll::LinkPreviews::CacheError,
+          Jekyll::LinkPreviews::PreviewDataError,
           %(_link_previews/links.yml: the entry for #{@base}/page must be a mapping with title: and favicon:, not "Some Title")
         )
       end
@@ -564,7 +564,7 @@ describe Jekyll::LinkPreviews do
         ['../outside.png', 'sub/inside.png', '.hidden.png', 123].each do |name|
           write_links({ "#{@base}/page" => { 'title' => 'Page', 'favicon' => name } }.to_yaml)
           expect { described_class.new(cache_dir) }.to raise_error(
-            Jekyll::LinkPreviews::CacheError,
+            Jekyll::LinkPreviews::PreviewDataError,
             "_link_previews/links.yml: the favicon for #{@base}/page must be a file name in _link_previews/favicons/, " \
             "not #{name.inspect}"
           )
@@ -574,14 +574,14 @@ describe Jekyll::LinkPreviews do
       it 'fails on a cache file that is not a mapping' do
         write_links("- #{@base}/page\n")
         expect { previews }.to raise_error(
-          Jekyll::LinkPreviews::CacheError, '_link_previews/links.yml must be a mapping of URLs to entries'
+          Jekyll::LinkPreviews::PreviewDataError, '_link_previews/links.yml must be a mapping of URLs to entries'
         )
       end
 
       it 'fails on an entry naming a favicon file that does not exist' do
         write_links("#{@base}/page:\n  title: Page\n  favicon: gone.png\n")
         expect { previews }.to raise_error(
-          Jekyll::LinkPreviews::CacheError,
+          Jekyll::LinkPreviews::PreviewDataError,
           "_link_previews/links.yml: the favicon for #{@base}/page, gone.png, is not a file in _link_previews/favicons/"
         )
       end
@@ -611,7 +611,7 @@ describe Jekyll::LinkPreviews do
         write_links("#{@base}/page:\n  title: Page\n  favicon: folder\n")
         FileUtils.mkdir_p(File.join(cache_dir, 'favicons', 'folder'))
         expect { previews }.to raise_error(
-          Jekyll::LinkPreviews::CacheError,
+          Jekyll::LinkPreviews::PreviewDataError,
           "_link_previews/links.yml: the favicon for #{@base}/page, folder, is not a file in _link_previews/favicons/"
         )
       end
@@ -728,11 +728,11 @@ describe Jekyll::LinkPreviews do
           )
         end
         expect { annotate_with_favicon.('gone.png') }.to raise_error(
-          Jekyll::LinkPreviews::CacheError,
+          Jekyll::LinkPreviews::PreviewDataError,
           "notes/page.md: the data-preview-favicon for #{@base}/page, gone.png, is not a file in _link_previews/favicons/"
         )
         expect { annotate_with_favicon.('../inline.png') }.to raise_error(
-          Jekyll::LinkPreviews::CacheError,
+          Jekyll::LinkPreviews::PreviewDataError,
           "notes/page.md: the data-preview-favicon for #{@base}/page must be a file name in _link_previews/favicons/, " \
           'not "../inline.png"'
         )

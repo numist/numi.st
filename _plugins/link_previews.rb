@@ -61,7 +61,8 @@ module Jekyll
     }mix
 
     class MarkupError < StandardError; end
-    class CacheError < StandardError; end
+    # Raised when the data previews are built from, in links.yml or a link's data-preview-favicon, is invalid.
+    class PreviewDataError < StandardError; end
 
     def self.external?(href)
       uri = URI.parse(ascii_url(href))
@@ -429,12 +430,12 @@ module Jekyll
       def load
         path = File.join(@directory, CACHE_FILE)
         entries = File.exist?(path) ? YAML.safe_load_file(path) || {} : {}
-        raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE} must be a mapping of URLs to entries" unless entries.is_a?(Hash)
+        raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE} must be a mapping of URLs to entries" unless entries.is_a?(Hash)
 
         entries.each do |url, entry|
           unless entry.is_a?(Hash)
-            raise CacheError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
-                              "not #{entry.inspect}"
+            raise PreviewDataError, "#{CACHE_DIR}/#{CACHE_FILE}: the entry for #{url} must be a mapping with title: and favicon:, " \
+                                    "not #{entry.inspect}"
           end
           name = entry['favicon']
           next if name.is_a?(String) ? blank?(name) : name.nil?
@@ -445,11 +446,11 @@ module Jekyll
 
       def check_favicon(name, owner)
         unless name.is_a?(String) && File.basename(name) == name && !name.start_with?('.')
-          raise CacheError, "#{owner} must be a file name in #{CACHE_DIR}/favicons/, not #{name.inspect}"
+          raise PreviewDataError, "#{owner} must be a file name in #{CACHE_DIR}/favicons/, not #{name.inspect}"
         end
         return if File.file?(favicon_path(name))
 
-        raise CacheError, "#{owner}, #{name}, is not a file in #{CACHE_DIR}/favicons/"
+        raise PreviewDataError, "#{owner}, #{name}, is not a file in #{CACHE_DIR}/favicons/"
       end
     end
 
