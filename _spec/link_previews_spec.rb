@@ -666,7 +666,7 @@ describe Jekyll::LinkPreviews do
           ['text/html', %(<html><head><title>Home</title><link rel="#{rel}" href="/static/icon.png"></head></html>)]
         end
 
-        def untitled_page
+        def iconless_page
           ['text/html', '<html><head><title>Deep</title></head></html>']
         end
 
@@ -689,8 +689,32 @@ describe Jekyll::LinkPreviews do
           end
         end
 
+        it "uses the final host's homepage when the page redirects to an HTML page on another host" do
+          with_server('/article' => iconless_page, '/' => homepage,
+                      '/static/icon.png' => ['image/png', png_bytes]) do |publisher|
+            with_server('/doi' => ['text/html', '', 302, { 'Location' => "#{publisher}/article" }], '/' => homepage,
+                        '/static/icon.png' => ['image/gif', gif_bytes]) do |redirector|
+              expect(previews.favicon("#{redirector}/doi")).to eq(favicon_name(png_bytes, 'png'))
+              expect(@requests).to eq(['/doi', '/article', '/favicon.ico', '/', '/static/icon.png'])
+            end
+          end
+        end
+
+        it 'uses the icon the homepage declares when the page cannot be fetched, recording its error' do
+          with_server('/' => homepage, '/static/icon.png' => ['image/png', png_bytes]) do |base|
+            expect(previews.title("#{base}/deep/missing")).to be_nil
+            expect(previews.favicon("#{base}/deep/missing")).to eq(favicon_name(png_bytes, 'png'))
+            previews.save
+            expect(load_links.fetch("#{base}/deep/missing")).to eq(
+              'title' => nil, 'favicon' => favicon_name(png_bytes, 'png'), 'error' => 'HTTP 404', 'fetched' => today
+            )
+            expect(@requests).to eq(['/deep/missing', '/favicon.ico', '/', '/static/icon.png'])
+            expect(report).to include("Link preview: #{base}/deep/missing: no title (HTTP 404); #{fix_hint}")
+          end
+        end
+
         it 'uses the icon the homepage declares when the page declares none and /favicon.ico is empty' do
-          with_server('/deep/page' => untitled_page, '/favicon.ico' => ['image/x-icon', ''],
+          with_server('/deep/page' => iconless_page, '/favicon.ico' => ['image/x-icon', ''],
                       '/' => homepage('shortcut icon'), '/static/icon.png' => ['image/png', png_bytes]) do |base|
             expect(previews.favicon("#{base}/deep/page")).to eq(favicon_name(png_bytes, 'png'))
             expect(@requests).to eq(['/deep/page', '/favicon.ico', '/', '/static/icon.png'])
@@ -698,7 +722,7 @@ describe Jekyll::LinkPreviews do
         end
 
         it "is not fetched when the page's own candidates yield a favicon" do
-          with_server('/deep/page' => untitled_page, '/favicon.ico' => ['image/x-icon', ico_bytes],
+          with_server('/deep/page' => iconless_page, '/favicon.ico' => ['image/x-icon', ico_bytes],
                       '/' => homepage, '/static/icon.png' => ['image/png', png_bytes]) do |base|
             expect(previews.favicon("#{base}/deep/page")).to eq(favicon_name(ico_bytes, 'ico'))
             expect(@requests).to eq(['/deep/page', '/favicon.ico'])
@@ -706,14 +730,14 @@ describe Jekyll::LinkPreviews do
         end
 
         it 'is not fetched again when the page is the homepage' do
-          with_server('/' => untitled_page) do |base|
+          with_server('/' => iconless_page) do |base|
             expect(previews.favicon(base)).to be_nil
             expect(@requests).to eq(['/', '/favicon.ico'])
           end
         end
 
         it 'leaves the page without a favicon, recording no error, when the homepage cannot be fetched' do
-          with_server('/deep/page' => untitled_page, '/' => ['text/html', 'Server Error', 500]) do |base|
+          with_server('/deep/page' => iconless_page, '/' => ['text/html', 'Server Error', 500]) do |base|
             expect(previews.title("#{base}/deep/page")).to eq('Deep')
             expect(previews.favicon("#{base}/deep/page")).to be_nil
             previews.save
