@@ -300,8 +300,8 @@ module Jekyll
     end
 
     # Returns what fragment names on the page that a link to href links to, or nil if that page isn't
-    # searched (it isn't an HTML page in this site, is generated, or its cache entry has an error) or
-    # doesn't have it. page is the page with the link, for warnings.
+    # searched (it isn't an HTML page in this site, is generated, or its cache entry has an error),
+    # can't be fetched, or doesn't have it. page is the page with the link, for warnings.
     def self.find_fragment(fragment, href, previews, generated:, target:, page:)
       if target
         target.fragment_text(fragment) if target.page?
