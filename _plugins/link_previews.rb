@@ -191,8 +191,9 @@ module Jekyll
       end
     end
 
+    # Collapses runs of whitespace, non-breaking spaces included, to single spaces, and trims the ends.
     def self.squish(text)
-      text.to_s.gsub(/\s+/, ' ').strip
+      text.to_s.gsub(/[[:space:]]+/, ' ').strip
     end
 
     # Yields each element as it closes: its name, the offsets of its start, the end of its opening
@@ -340,7 +341,7 @@ module Jekyll
     def self.visible_text(document)
       text = +''
       append_visible_text(document.root, text) if document.root
-      text.gsub(/[[:space:]]+/, ' ').strip
+      squish(text)
     end
 
     def self.append_visible_text(node, text)
@@ -492,7 +493,7 @@ module Jekyll
       end
 
       def term(text)
-        Regexp.escape(text.gsub(/[[:space:]]+/, ' ').strip)
+        Regexp.escape(LinkPreviews.squish(text))
       end
     end
 

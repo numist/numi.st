@@ -268,6 +268,11 @@ describe Jekyll::LinkPreviews do
       expect(described_class.extract_title(html.b, nil)).to eq('Fish & Chips: “A History”')
     end
 
+    it 'collapses non-breaking spaces like other whitespace' do
+      html = "<title>&nbsp;Fish&nbsp;&amp;\u00A0 Chips&nbsp;</title>"
+      expect(described_class.extract_title(html.b, nil)).to eq('Fish & Chips')
+    end
+
     it 'falls back to og:title' do
       html = '<html><head><meta property="og:title" content="  OG  Title "></head></html>'
       expect(described_class.extract_title(html.b, nil)).to eq('OG Title')
@@ -425,9 +430,11 @@ describe Jekyll::LinkPreviews do
           <h2 id="glyph-word">#hashtag</h2>
           <h2 id="glyphs"><a href="#glyphs">¶</a></h2>
           <h2 id="empty"> <a href="#empty"></a> </h2>
+          <h2 id="nbsp">&nbsp;Non-breaking&nbsp;&nbsp;spaces&nbsp;<a href="#nbsp">&nbsp;¶&nbsp;</a></h2>
         HTML
-        expect(%w[spaced glued leading plain c-sharp glyph-word glyphs empty].map { |id| resolve("##{id}", page) }).to eq(
-          ['Spaced', 'Glued', 'Leading', 'Plain', 'C# and F#', '#hashtag', 'glyphs', 'empty']
+        ids = %w[spaced glued leading plain c-sharp glyph-word glyphs empty nbsp]
+        expect(ids.map { |id| resolve("##{id}", page) }).to eq(
+          ['Spaced', 'Glued', 'Leading', 'Plain', 'C# and F#', '#hashtag', 'glyphs', 'empty', 'Non-breaking spaces']
         )
       end
 
@@ -1102,6 +1109,13 @@ describe Jekyll::LinkPreviews do
       ))
       expect(@log.string).to be_empty
       expect(load_links.fetch("#{@base}/missing")['title']).to be_nil
+    end
+
+    it 'treats a title attribute of only non-breaking spaces as no title, and collapses them in one' do
+      blank = annotate(article(%(<a href="#{@base}/page" title="&nbsp; &nbsp;">x</a>)))
+      spaced = annotate(article(%(<a href="#{@base}/page" title="&nbsp;Inline&nbsp;&nbsp;Title&nbsp;">x</a>)))
+      expect(blank).to include(%(rel=&quot;noopener&quot;&gt;Fish &amp;amp; Chips: “A History”&lt;/a&gt;"))
+      expect(spaced).to include(%(rel=&quot;noopener&quot;&gt;Inline Title&lt;/a&gt;"))
     end
 
     describe 'data-preview-favicon' do
