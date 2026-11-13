@@ -1,4 +1,5 @@
 ---
+title: "1990 Honda VFR750F"
 layout: page
 ---
 

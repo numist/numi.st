@@ -1,4 +1,5 @@
 ---
+title: "Projects"
 layout: page
 ---
 
@@ -23,8 +24,8 @@ I have an ongoing [VFR project](/projects/vfr/).
 
 # Software
 
-There's a [whole page dedicated to smaller bits of code](/code), but I also have some larger ongoing projects that I either help out with or am responsible for, like [feedyour.email](/post/2022/feedyour.email/) (which turns newsletters into RSS feeds) and  [Switch](switch) (a window-based context switcher for macOS). Also, obviously, [this website](/colophon).
+There's a [whole page dedicated to smaller bits of code](/code), but I also have some larger ongoing projects that I either help out with or am responsible for, like [feedyour.email](/post/2022/feedyour.email/){: data-no-preview="" } (which turns newsletters into RSS feeds) and  [Switch](switch) (a window-based context switcher for macOS). Also, obviously, [this website](/colophon).
 
 # Woodworking
 
-My first significant project with the Shaper Origin was [a media center for my record player](/post/2019/media-center/), followed by a [travel ukulele](/post/2022/travel-uke/) of which I've now made two.
+My first significant project with the Shaper Origin was [a media center for my record player](/post/2019/media-center/), followed by a [travel ukulele](/post/2022/travel-uke/){: data-no-preview="" } of which I've now made two.

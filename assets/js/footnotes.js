@@ -26,9 +26,9 @@ window.addEventListener("load", function () {
     // Hide the reversefootnote links
     $("a.reversefootnote").hide();
 
-    // Hide popovers when clicking outside
+    // Hide popovers when clicking outside them and their references
     $(document).on("click", function (e) {
-        if (!$(e.target).closest(".footnote").length) {
+        if (!$(e.target).closest(".footnote, .popover").length) {
             $(".footnote").popover("hide");
             // Clear the hash if it matches a footnote
             if ($(".footnote").filter(function () {
@@ -77,7 +77,7 @@ function configureFootnotes() {
         $(".footnote").each(function () {
             var footnoteID = $(this).attr("href");
             var escapedFootnoteID = escapeSelector(footnoteID);
-            var footnoteContent = $(escapedFootnoteID).html();
+            var footnoteContent = inlineLinkPreviewFavicons($(escapedFootnoteID).clone()).html();
 
             $(this).popover({
                 content: footnoteContent,
@@ -113,6 +113,15 @@ function configureFootnotes() {
     oldWidth = $(window).width();
 }
 
+
+// Link previews can't open from inside a footnote popover, so preview links there show their
+// favicon inline before the link text and navigate directly.
+function inlineLinkPreviewFavicons(footnote) {
+    footnote.find("a.link-preview[data-favicon]").each(function () {
+        $(this).prepend($("<img>", { class: "link-preview-favicon", src: $(this).attr("data-favicon"), alt: "" }));
+    });
+    return footnote;
+}
 
 function alignFootnotes() {
     var previousFootnoteBottom = 0;

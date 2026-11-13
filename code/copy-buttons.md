@@ -74,5 +74,5 @@ All that's left is styling to suit your application. To get started, the followi
 }
 ```
 
-[^rss]: In fact, one unexpected point in favour of doing this in the client, which I learned from implementing the [site's footnotes](https://numi.st/colophon/#:~:text=Sidebar%2Fpopover%20footnotes,-3), is that it saves the RSS feed from totally avoidable brokenness.
+[^rss]: In fact, one unexpected point in favour of doing this in the client, which I learned from implementing the [site's footnotes](/colophon/#:~:text=Sidebar%2Fpopover%20footnotes,-3), is that it saves the RSS feed from totally avoidable brokenness.
 [^viz]: Elements are not styled by the browser unless they are part of the document, hence the need for `document.body.appendChild(clone)` before `getComputedStyle()`. Removing it synchronously should avoid the clone getting picked up by the browser's rendering cycle.

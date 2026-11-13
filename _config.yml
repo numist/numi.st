@@ -36,6 +36,13 @@ markdown: kramdown
 
 permalink: /post/:year/:title/
 
+# _link_previews is the build-time cache written by _plugins/link_previews.rb, excluded so writing it doesn't
+# retrigger --watch; AGENTS.md and CLAUDE.md are instructions for coding agents, not pages.
+exclude:
+  - _link_previews
+  - AGENTS.md
+  - CLAUDE.md
+
 header_pages:
   - about.md
   - blog.md

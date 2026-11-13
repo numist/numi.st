@@ -1,4 +1,5 @@
 ---
+title: "Stories"
 layout: page
 ---
 

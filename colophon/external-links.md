@@ -3,6 +3,13 @@ layout: page
 title: Labelling External Links
 ---
 
+{% callout info %}
+<div class="date-right">November 12, 2026</div>
+#### Update
+
+Since this was published, external link presentation was rewritten for build-time link previews (`_plugins/link_previews.rb`, `assets/js/link-preview.js`); this writeup is preserved for posterity.
+{% endcallout %}
+
 This website labels external links by executing some javascript when the window loads:
 
 ``` javascript

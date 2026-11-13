@@ -110,6 +110,6 @@ Charlie	35	Teacher
 
 ## But wait, there's more!
 
-If you're keen to write equations (and don't mind adding `dentaku` to your dependencies), [here's](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_plugins/csv_block.rb) a version[^tests] that supports the common `=SUM(A1:A15)` style.
+If you're keen to write equations (and don't mind adding `dentaku` to your dependencies), [here's](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_plugins/csv_block.rb "numi.st/_plugins/csv_block.rb at main · numist/numi.st · GitHub") a version[^tests] that supports the common `=SUM(A1:A15)` style.
 
-[^tests]: [With tests!](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_spec/csv_block_spec.rb)
+[^tests]: [With tests!](https://github.com/numist/numi.st/blob/{{ site.git_head | default: "main" }}/_spec/csv_block_spec.rb "numi.st/_spec/csv_block_spec.rb at main · numist/numi.st · GitHub")

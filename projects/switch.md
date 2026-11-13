@@ -1,4 +1,5 @@
 ---
+title: "Project: Switch"
 layout: page
 ---
 

@@ -22,7 +22,7 @@ Also, this allows me to use a real git repo.
 ### Git
 
 * [Git diff support for plists](/code/git/diff-plist)
-* [Git diff support for SQLite databases](/code/git/diff-sqlite)
+* [Git diff support for SQLite databases](/code/git/diff-sqlite){: data-no-preview="" }
 * [Better diff hunk headers with Swift](https://juripakaste.fi/swift-git-attributes/)[^juripakaste]
 
 ----
@@ -36,20 +36,20 @@ Also, this allows me to use a real git repo.
 
 ### Objective-C
 
-* [`defer` for Objective-C](/post/2022/objc-defer/)
+* [`defer` for Objective-C](/post/2022/objc-defer/){: data-no-preview="" }
 
 ----
 
 ### Swift
 
-* [`.onLazyHover`](/post/2022/onLazyHover/), for when [`.onHover`](https://developer.apple.com/documentation/swiftui/view/onhover(perform:)) is too eager
+* [`.onLazyHover`](/post/2022/onLazyHover/){: data-no-preview="" }, for when [`.onHover`](https://developer.apple.com/documentation/swiftui/view/onhover(perform:)) is too eager
 
 ----
 
 ### Web
 
 * Some [CSS and JS for decorating external links](/colophon/external-links) on a page.
-* Automatic [copy buttons](/code/copy-buttons/) for all elements with `class="copyable"`.
+* Automatic [copy buttons](/code/copy-buttons/){: data-no-preview="" } for all elements with `class="copyable"`.
 * A [page](https://numist.github.io/highlight-css/) hosting various code highlighting themes[^highlight]
 
 [^highlight]: This site uses a variation of [tomorrow](https://numist.github.io/highlight-css/#other-tomorrow)
