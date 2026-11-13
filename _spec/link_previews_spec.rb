@@ -1219,6 +1219,8 @@ describe Jekyll::LinkPreviews do
         output = build_site
         expect(popover_link(link_named(output, 'section')).text).to eq('Post & Co')
         expect(popover_link(link_named(output, 'section'))['href']).to eq('#section')
+        expect(popover_link(link_named(output, 'page')).text).to eq('Post & Co')
+        expect(popover_link(link_named(output, 'page'))['href']).to eq('')
       end
 
       it 'leaves footnote references and back-references to the footnotes script' do
