@@ -3,6 +3,10 @@ source "https://rubygems.org"
 gem "jekyll", "~> 4.3.4"
 gem "posix-spawn", "~> 0.3.9"
 
+# Default gems that leave the standard library in Ruby 3.4, loaded by jekyll and safe_yaml
+gem "base64"
+gem "csv"
+
 group :jekyll_plugins do
   gem "jekyll-mermaid", "~> 1.0.0"
   gem "jekyll-postfiles", "~> 3.1"
