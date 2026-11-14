@@ -19,7 +19,8 @@ describe '_includes/head.html' do
       destination = File.join(dir, '_site')
       Jekyll::Site.new(Jekyll.configuration(
         'source' => source, 'destination' => destination, 'quiet' => true,
-        'title' => 'numist log', 'plugins' => ['jekyll-seo-tag']
+        'title' => 'numist log', 'description' => 'The public memory bank of Scott Perry.',
+        'plugins' => ['jekyll-seo-tag']
       )).process
       pages.keys.to_h do |name|
         html = File.read(File.join(destination, name.sub(/\.md\z/, '.html')))
