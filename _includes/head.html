@@ -2,7 +2,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title | default: site.title | markdownify | strip_html | normalize_whitespace | escape_once }}</title>
+  <title>{{ page.title | markdownify | strip_html | normalize_whitespace | default: site.title | escape_once }}</title>
   {%- seo title=false -%}
   <link rel="shortcut icon" type="image/png" href="{{ "/favicon.png" | relative_url }}">
   {% if page.name == "blog.md" or page.url == "/" %}

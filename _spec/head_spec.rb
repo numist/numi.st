@@ -36,6 +36,10 @@ describe '_includes/head.html' do
     expect(titles_of('untitled.md' => {})).to eq('untitled.md' => ['numist log'])
   end
 
+  it "titles a page whose title has no text with the site's title" do
+    expect(titles_of('blank.md' => { 'title' => '<br>' })).to eq('blank.md' => ['numist log'])
+  end
+
   it 'titles a page with the plain text of its Markdown title' do
     expect(titles_of('misadventure.md' => { 'title' => "Scott's `misadventure` & co" }))
       .to eq('misadventure.md' => ['Scott’s misadventure &amp; co'])
