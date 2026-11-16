@@ -111,6 +111,10 @@ http://daughertymotorsports.com/Backup/:
   title: DMr Performance Suspension
   favicon: 8fb774d558f641ea.ico
   fetched: 2026-11-12
+http://jsomers.net/blog/dictionary:
+  title: You’re probably using the wrong dictionary « the jsomers.net blog
+  favicon: 70d156b18f38ad5c.ico
+  fetched: 2026-11-14
 http://ntpbikes.com:
   title: NTP Bikes
   fetched: 2026-11-12
@@ -130,6 +134,10 @@ http://numist.net/series/funemployment-cross-country-trip/:
   title:
   error: Failed to open TCP connection to numist.net:80 (Connection refused - connect(2) for 208.85.243.230:80)
   fetched: 2026-11-12
+http://stopdesign.com/archive/2009/03/20/goodbye-google.html:
+  title: Goodbye, Google | Stopdesign
+  favicon: e62339ad7126591f.ico
+  fetched: 2026-11-14
 http://swanjolras.tumblr.com/post/102498776997:
   title:
   error: HTTP 403
@@ -153,17 +161,34 @@ http://www.factorypro.com/Prod_Pages/prodh20.html:
 http://www.maybefriday.com:
   title: Tanya Breshears
   fetched: 2026-11-12
+http://www.mhs.mb.ca/docs/people/perry_el.shtml:
+  title: 'Memorable Manitobans: Edna Lenora Perry (1923-2020)'
+  favicon: d57513de09c8f32e.ico
+  fetched: 2026-11-14
 http://www.nicoleaptekar.com:
   title: Nicole Aptekar
   favicon: 75b2806e03b71b08.ico
   fetched: 2026-11-12
+? http://www.nytimes.com/2009/03/01/business/01marissa.html?_r=1&adxnnl=1&pagewanted=print&adxnnlx=1251965002-g/Lw1H22m/zj1u/7BlfHIQ
+: title: Putting a Bolder Face on Google - The New York Times
+  favicon: 94de5ae7e9bcf747.ico
+  fetched: 2026-11-14
 http://www.rc30.info/rc30brochures.html:
   title: Honda RC30 Brochures
   fetched: 2026-11-12
+https://500px.com/p/tristan:
+  title:
+  favicon: 8799a65ee800fa5f.ico
+  error: no title found
+  fetched: 2026-11-14
 https://andre.arko.net/2022/02/17/feedyouremail/:
   title: feedyour.email
   favicon: '089a3f29b0f5321a.ico'
   fetched: 2026-11-12
+https://archive.org/details/webstersinternat00port:
+  title: 'Webster''s international dictionary of the English language; being the authentic edition of Webster''s unabridged dictionary, comprising the issues of 1864, 1879, and 1884; : Porter, Noah, 1811-1892, ed : Free Download, Borrow, and Streaming : Internet Archive'
+  favicon: bb381eedb9095fd3.ico
+  fetched: 2026-11-14
 https://arko.net:
   title: André Arko
   favicon: decc88a7dca418ea.ico
@@ -176,6 +201,10 @@ https://blacker.caltech.edu:
   title:
   error: Failed to open TCP connection to blacker.caltech.edu:443 (Operation timed out - user specified timeout)
   fetched: 2026-11-12
+https://books.google.com/books/about/A_Prairie_Girl_s_Life_The_Story_of_The_R.html?id=d_oMCAAAQBAJ:
+  title: 'A Prairie Girl’s Life: The Story of The Reverend Edna Lenora Perry - Edna L. Perry, Keith C. Perry - Google Books'
+  favicon: 6da5620880159634.ico
+  fetched: 2026-11-14
 https://bookshop.org/p/books/hogfather-terry-pratchett/6432864:
   title: Hogfather a book by Terry Pratchett - Bookshop.org US
   favicon: f275f9ec48f7af3e.ico
@@ -200,6 +229,10 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/:
   title: Deed - Attribution-NonCommercial-ShareAlike 4.0 International - Creative Commons
   favicon: d7dd7bbeea7bdcc8.ico
   fetched: 2026-11-12
+https://cropo.com/tribute/details/7009/EDNA-PERRY/obituary.html:
+  title:
+  error: HTTP 403
+  fetched: 2026-11-14
 https://datatracker.ietf.org/doc/html/rfc5023:
   title: RFC 5023 - The Atom Publishing Protocol
   favicon: 9b8ea08883a7ba9f.png
@@ -291,6 +324,10 @@ https://garagedoorlighting.com/product/double-track-garage-door-lighting-system/
   title: Double Track Garage Door Lighting System | Garage Door Lighting
   favicon: 60b99b30f3061df8.png
   fetched: 2026-11-12
+https://gcide.gnu.org.ua:
+  title: GNU Collaborative International Dictionary of English
+  favicon: 4ace86d3b7cc558a.png
+  fetched: 2026-11-14
 https://gist.github.com/numist/1cc7d4ee6355380cdb5e91585189247b:
   title: Exception test for `defer` · GitHub
   favicon: 74cf90ac2fe6624a.png
@@ -416,6 +453,12 @@ https://jekyllrb.com/docs/plugins/generators/:
   title: Generators | Jekyll • Simple, blog-aware, static sites
   favicon: eee20940c27f3f60.ico
   fetched: 2026-11-12
+https://jsomers.net/blog/dictionary:
+  title: You’re probably using the wrong dictionary « the jsomers.net blog
+  favicon: 70d156b18f38ad5c.ico
+  fetched: 2026-11-14
+  fragments:
+    ":~:text=It continued. 2.,so much closer to felt experience.": It continued. 2. That quality or property of anything which touches the feelings or excites emotions and passions, esp., that which awakens tender emotions, such as pity, sorrow, and the like; contagious warmth of feeling, action, or expression; pathetic quality; as, the pathos of a picture, of a poem, or of a cry. Dear god! How did I not know about this dictionary? How could you even call yourself a dictionary if all you give for "pathos" is "a quality that evokes pity or sadness"? Webster's definition is so much fuller, so much closer to felt experience.
 https://juripakaste.fi/swift-git-attributes/:
   title: Better diff hunk headers with Swift
   fetched: 2026-11-12
@@ -476,6 +519,9 @@ https://mefi.social/@biogeo/112864616066293382:
   title: 'Geoffrey Adams: "I think we need to encourage people to stop using…" - mefi.social'
   favicon: 4cde60134d087989.png
   fetched: 2026-11-12
+https://micra.com/COSMO/PatCassidy.htm:
+  title: Patrick Cassidy's Home Page
+  fetched: 2026-11-14
 https://mrgan.com/gb/:
   title: Glyphboard
   favicon: 78d180da322f9e4f.png
@@ -499,6 +545,10 @@ https://pankeysradiator.com:
   title: Industrial Radiator Repairs, cleaning and services | Pankeys Radiator
   favicon: c965a500f6984835.png
   fetched: 2026-11-12
+https://pdx.social/@nedley/115738621213374118:
+  title: 'Ned Holbrook: "@numist@xoxo.zone @jrose@belkadan.com @erynofwale…" - pdx.social'
+  favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-14
 https://pspdfkit.com/blog/2017/even-swiftier-objective-c/:
   title: Even Swiftier Objective-C
   favicon: 7a2c16ff083629fb.png
@@ -515,10 +565,19 @@ https://rubygems.org/gems/jekyll-mermaid/versions/1.0.0:
   title: jekyll-mermaid | RubyGems.org | your community gem host
   favicon: 03a3589af56ff3a5.ico
   fetched: 2026-11-12
+https://s3.amazonaws.com/jsomers/dictionary.zip:
+  title:
+  favicon: 1dc902bf12f36533.ico
+  error: not HTML (application/zip)
+  fetched: 2026-11-14
 https://shop.keyboard.io/products/model-100:
   title: The Model 100 – Keyboardio
   favicon: a229ca6c6f161743.png
   fetched: 2026-11-12
+https://signal.org/blog/new-year-new-ceo/:
+  title: Signal >> Blog >> New year, new CEO
+  favicon: 1f6591a18849a077.ico
+  fetched: 2026-11-14
 https://simonwillison.net/2024/Aug/26/gemini-bounding-box-visualization/:
   title: Building a tool showing how Gemini Pro can return bounding boxes for objects in images
   favicon: 3cee34add5f59757.ico
@@ -553,6 +612,10 @@ https://slate.com/human-interest/2024/04/parenting-effects-nature-nurture-atlant
   fetched: 2026-11-12
   fragments:
     ":~:text=I find it interesting that,have been written by men": I find it interesting that most of the recent essays I’ve come across that argue that parents don’t matter have been written by men
+https://software.sil.org/gentium/:
+  title: Home - Gentium—a Greek font with Latin and Cyrillic
+  favicon: 50ec61fcff3c0f72.ico
+  fetched: 2026-11-14
 https://sqlite.org/forum/forumpost/3ce1ee76242cfb29:
   title: 'SQLite User Forum: Is `pragma mmap_size` still considered dangerous on macOS?'
   favicon: 76d60ff1eb9596a1.ico
@@ -595,6 +658,11 @@ https://twitter.com/numist/status/1210394543301939200:
   favicon: cc4939af5d16855f.ico
   error: HTTP 404
   fetched: 2026-11-12
+https://twitter.com/numist/status/1473757657798348800:
+  title:
+  favicon: cc4939af5d16855f.ico
+  error: HTTP 404
+  fetched: 2026-11-14
 https://vfrworld.com/threads/more-power-from-a-neutered-california-3rd-gen.33650/:
   title: More Power from a Neutered California 3rd Gen | VFRworld
   favicon: f0b029c51dcc6417.png
@@ -605,6 +673,10 @@ https://vfrworld.com/threads/vfr-750-1992-rear-shock-upgrade.40731/:
   fetched: 2026-11-12
   fragments:
     post-385082: post-385082
+https://web.archive.org/web/20160108161120/http://machaut.uchicago.edu:80/websters:
+  title: Webster's Revised Unabridged Dictionary (1913) - The ARTFL Project
+  favicon: abac83a6e6813515.ico
+  fetched: 2026-11-14
 https://webmention.io:
   title: Webmention.io
   favicon: '049ff8decf05bd52.ico'
@@ -699,10 +771,19 @@ https://www.cbgitty.com/guitar-instrument-parts/1pc-ukulele-rod-piezo-pickup/:
   title: Rod Piezo Acoustic Instrument Pickups - Choose from 3, 4 and 6-string Options - C. B. Gitty Crafter Supply
   favicon: 1e920ef72e8e25ff.jpg
   fetched: 2026-11-12
+? https://www.centralbedfordshire.gov.uk/info/34/hm_lord-lieutenant_of_bedfordshire_helen_nellis/256/anniversary_and_birthday_greetings_from_hm_the_queen
+: title:
+  favicon: 3941b8d6e48324e8.ico
+  error: HTTP 404
+  fetched: 2026-11-14
 https://www.cisa.gov/resources-tools/resources/product-security-bad-practices:
   title: Product Security Bad Practices | CISA
   favicon: 5996f010067604f7.png
   fetched: 2026-11-12
+https://www.dict.org/bin/Dict?Form=Dict1&Query=00-database-info&Strategy=*&Database=*:
+  title: dict.org- 00-database-info
+  favicon: 4754cdb814dd131c.ico
+  fetched: 2026-11-14
 https://www.energy.ca.gov/news/2022-02/new-data-indicates-california-remains-ahead-clean-electricity-goals:
   title:
   error: HTTP 404
@@ -714,6 +795,10 @@ https://www.fender.com/en-US/accessories/digital-tuners/fender-bullet-tuner/0239
 https://www.grainger.com/product/DAYTON-Definite-Purpose-Magnetic-6GNV0?opr=ILOF:
   title: DAYTON, 2 Poles, 208-240V AC, Definite Purpose Magnetic Contactor - 6GNV0|6GNV0 - Grainger
   fetched: 2026-11-12
+https://www.gutenberg.org/ebooks/673:
+  title: The Gutenberg Webster's Unabridged Dictionary by Project Gutenberg | Project Gutenberg
+  favicon: b71e72a17c6bffa5.ico
+  fetched: 2026-11-14
 https://www.huffpost.com/entry/time-perception-aging_l_63973dc2e4b0169d76d92560:
   title: Why Time Flies By Faster As We Get Older | HuffPost Life
   favicon: 8a5cf405c8e7c3f5.ico
@@ -743,6 +828,9 @@ https://www.linkedin.com/in/numist/:
   title: Scott Perry - Apple | LinkedIn
   favicon: 19b079c09197fba6.ico
   fetched: 2026-11-12
+https://www.micra.com:
+  title: MICRA Home page
+  fetched: 2026-11-14
 https://www.motoairbag.com/en/shop/accessories-and-refills/upgrade-to-fast-lock/:
   title: UPGRADE TO FAST LOCK - Motoairbag - L'airbag per i motociclisti
   favicon: 56420f02f0c27a80.png
@@ -773,6 +861,12 @@ https://www.nytimes.com/2026/11/04/us/politics/susan-collins-defeat-donald-trump
   fragments:
     ? ":~:text=“Everybody ignores the fact that I voted to convict him in the second impeachment trial%2C” Ms. Collins said. “What bigger break could there be? It is never enough. I want results and they want angry rhetoric.”"
     :
+https://www.php.net/archive/2026.php:
+  title: 'PHP: News Archive - 2026'
+  favicon: 64d6b84ed439cc4f.png
+  fetched: 2026-11-14
+  fragments:
+    2026-10-21-5: 2026-10-21-5
 ? https://www.qdexhaust.it/en/catalog-qd-exhaust/ducati-en/monster-s4-en/ducati-monster-s4-ex-box-series-stainless-steel-exhaust-system/
 : title: Impianti di Scarico Unici Interamente Realizzati a Mano - QD Exhaust
   favicon: 5daf6b446cf26f21.png
@@ -789,10 +883,18 @@ https://www.reddit.com/r/synthesizers/comments/kjzwj5/my_yamaha_pss_a50_wont_tur
   title: 'My Yamaha PSS A50 won’t turn on : r/synthesizers'
   favicon: f60ae5a33ee8d16c.png
   fetched: 2026-11-12
+https://www.schneier.com/blog/archives/2006/08/security_is_a_t.html:
+  title: Human/Bear Security Trade-Off - Schneier on Security
+  favicon: 4d8e1bcd4ce738dc.png
+  fetched: 2026-11-16
 https://www.sciencedirect.com/science/article/abs/pii/S175058360800056X:
   title: CO2 capture from coal-fired power plants based on sodium carbonate slurry; a systems feasibility and sensitivity study - ScienceDirect
   favicon: 244b5f1f329c752f.ico
   fetched: 2026-11-12
+https://www.sfchronicle.com/business/article/Square-co-founder-who-created-company-s-first-13655221.php:
+  title: Tristan O’Tierney, Square co-founder who created firm’s first mobile app, dies
+  favicon: fbbb4e87f39c1a0c.ico
+  fetched: 2026-11-14
 https://www.shapertools.com/en-us/origin/overview:
   title: Shaper Origin | Handheld CNC Routing
   favicon: 2d21081c3df5ae5e.ico
@@ -912,6 +1014,9 @@ https://www.vortexracing.com/product/gc210/:
   title: Motorcycle Gas Cap - GC210 | Vortex Racing
   favicon: e736cca2920c9792.jpg
   fetched: 2026-11-12
+https://www.websters1913.com/words/Pathos:
+  title: Webster's 1913
+  fetched: 2026-11-14
 https://www.weforum.org/agenda/2024/09/negative-energy-price-record-in-europe-and-other-top-energy-stories/:
   title: Negative energy price record in Europe and more energy stories | World Economic Forum
   favicon: 2da4fe38eec0a41e.ico
@@ -942,6 +1047,10 @@ https://www.youtube.com/watch?v=zJOS0sV2a24:
   fetched: 2026-11-12
   fragments:
     t=44m30s:
+https://xoxo.zone/@nedley@pdx.social/115738621244734091:
+  title: XOXO Zone
+  favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-14
 https://xoxo.zone/@numist/110812673720717013:
   title: 'Scott Perry: "Time for a new project: de-WiSA-fying our speaker…" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
@@ -954,6 +1063,10 @@ https://xoxo.zone/@numist/111747541251099631:
   title: 'Scott Perry: "Git diff support for plists: [diff "plist"] …" - XOXO Zone'
   favicon: 0caf3805ab85bfd1.png
   fetched: 2026-11-12
+https://xoxo.zone/@numist/115737212837012235:
+  title: 'Scott Perry: "What are these vowels'' silly hats, and how do I d…" - XOXO Zone'
+  favicon: 0caf3805ab85bfd1.png
+  fetched: 2026-11-14
 https://yalereview.org/article/brandy-jensen-polycrisis:
   title: 'The Yale Review | Brandy Jensen: "The Polycrisis"'
   favicon: 2f74276525b2f739.ico

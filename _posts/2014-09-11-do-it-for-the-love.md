@@ -32,3 +32,5 @@ excerpt: ""
 		</div>
 	</span>
 </div>
+
+([more](/good-words/))

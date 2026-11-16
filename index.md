@@ -9,6 +9,7 @@ Hi! I'm [Scott Perry](/about), and this is where I [write things](/blog) that I 
 This site is made to be explored[^garden]; by category, you'll find:
 
 * [online tools](tool) I've built to make my life easier
+* [good words](good-words) that speak directly to the soul
 * [ideas](ideas){: data-no-preview="" } I couldn't get out of my head
 * [stories](stories){: data-no-preview="" } of things that have happened to me (or that I did to myself)
 * [code](code){: data-no-preview="" } snippets, solutions to small problems I've had and ideas that have struck me
