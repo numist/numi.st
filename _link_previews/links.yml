@@ -68,6 +68,12 @@
 "/post/2025/data-loss/IMG_5448.jpg":
   title:
   error: not HTML (image/jpeg)
+"/post/2026/ok-linter/at-least-they-have-a-sense-of-humour-about-it.png":
+  title:
+  error: not HTML (image/png)
+"/post/2026/ok-linter/clanker-on-duty.png":
+  title:
+  error: not HTML (image/png)
 "/projects/dewisa/ADAU1701.pdf":
   title:
   error: not HTML (application/pdf)
@@ -301,6 +307,10 @@ https://en.wikipedia.org/wiki/Carboniferous:
   fetched: 2026-11-12
   fragments:
     Coal_formation: Coal formation
+https://en.wikipedia.org/wiki/OK_boomer:
+  title: OK boomer - Wikipedia
+  favicon: 3638de61226857e6.ico
+  fetched: 2026-11-17
 https://en.wikipedia.org/wiki/Pascal%27s_Wager:
   title: Pascal's wager - Wikipedia
   favicon: 3638de61226857e6.ico
