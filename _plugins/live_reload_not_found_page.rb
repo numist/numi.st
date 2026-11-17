@@ -14,7 +14,8 @@ module Jekyll
   end
 end
 
-# WEBrick is only installed for development, so the servlet is loaded only when the site is being served.
+# Jekyll loads its servlet only to serve the site, and the patch matters only under `serve --livereload`,
+# so the servlet is loaded and patched only then.
 Jekyll::Hooks.register :site, :after_init do |site|
   next unless site.config['serving'] && site.config['livereload']
 

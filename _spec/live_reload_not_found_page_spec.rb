@@ -7,12 +7,13 @@ require 'fileutils'
 require 'open3'
 require 'rbconfig'
 require 'net/http'
+require 'jekyll/commands/serve/servlet'
 require_relative '../_plugins/live_reload_not_found_page'
 
 describe 'the LiveReload 404 page' do
   let(:live_reload_script) { 'livereload.js' }
 
-  def get(path, livereload:)
+  def request(method, path, livereload:)
     Dir.mktmpdir do |source|
       dir = File.join(source, '_site')
       FileUtils.mkdir_p(dir)
@@ -31,7 +32,7 @@ describe 'the LiveReload 404 page' do
       server.mount('', Jekyll::Commands::Serve::Servlet, dir, WEBrick::Config::FileHandler)
       thread = Thread.new { server.start }
       begin
-        Net::HTTP.get_response(URI("http://127.0.0.1:#{server.config[:Port]}#{path}"))
+        Net::HTTP.start('127.0.0.1', server.config[:Port]) { |http| http.send_request(method, path) }
       ensure
         server.shutdown
         thread.join
@@ -39,8 +40,8 @@ describe 'the LiveReload 404 page' do
     end
   end
 
-  # Sets up a site with the plugin in a fresh Ruby, reporting whether that loaded WEBrick and patched the servlet.
-  def setting_up_site(config)
+  # Sets up a site with the plugin in a fresh Ruby, reporting whether that patched Jekyll's servlet.
+  def patches_servlet?(config)
     script = <<~RUBY
       require 'jekyll'
       require 'tmpdir'
@@ -50,38 +51,45 @@ describe 'the LiveReload 404 page' do
       end
       patched = defined?(Jekyll::Commands::Serve::Servlet) &&
                 Jekyll::Commands::Serve::Servlet.include?(Jekyll::LiveReloadNotFoundPage)
-      print [defined?(WEBrick) && 'loads WEBrick', patched && 'patches the servlet'].select(&:itself).join(', ')
+      print patched ? 'patched' : 'unpatched'
     RUBY
     output, status = Open3.capture2e(RbConfig.ruby, '-e', script)
     raise output unless status.success?
 
-    output
+    output == 'patched'
   end
 
   it 'serves a missing path as the 404 page with the LiveReload script' do
-    response = get('/nope', livereload: true)
+    response = request('GET', '/nope', livereload: true)
     expect(response.code).to eq('404')
     expect(response.body).to include('Not here')
     expect(response.body.scan(live_reload_script).size).to eq(1)
   end
 
   it 'serves an existing page with the LiveReload script once' do
-    response = get('/', livereload: true)
+    response = request('GET', '/', livereload: true)
     expect(response.code).to eq('200')
     expect(response.body).to include('Home')
     expect(response.body.scan(live_reload_script).size).to eq(1)
   end
 
   it 'serves a missing path as the 404 page without the script when LiveReload is off' do
-    response = get('/nope', livereload: false)
+    Jekyll::Commands::Serve::Servlet.include(Jekyll::LiveReloadNotFoundPage)
+    response = request('GET', '/nope', livereload: false)
     expect(response.code).to eq('404')
     expect(response.body).to include('Not here')
     expect(response.body).not_to include(live_reload_script)
   end
 
-  it 'loads WEBrick and patches the servlet only when the site is served with LiveReload' do
-    expect(setting_up_site({})).to eq('')
-    expect(setting_up_site('serving' => true)).to eq('')
-    expect(setting_up_site('serving' => true, 'livereload' => true)).to eq('loads WEBrick, patches the servlet')
+  it 'answers a HEAD request for a missing path with 404 and no body' do
+    response = request('HEAD', '/nope', livereload: true)
+    expect(response.code).to eq('404')
+    expect(response.body).to be_nil
+  end
+
+  it 'patches the servlet only when the site is served with LiveReload' do
+    expect(patches_servlet?({})).to be(false)
+    expect(patches_servlet?('serving' => true)).to be(false)
+    expect(patches_servlet?('serving' => true, 'livereload' => true)).to be(true)
   end
 end
