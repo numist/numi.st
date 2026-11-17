@@ -58,22 +58,31 @@ window.addEventListener("load", function () {
     // });
 
     $(window).resize(function () {
-        var hash = window.location.hash;
         configureFootnotes();
     });
 
     configureFootnotes();
 });
 
-var oldWidth = 992;
+// How footnotes are displayed: "sidebar" on wide screens, "popover" on narrow ones
+var footnoteMode = null;
 function configureFootnotes() {
-    if ($(window).width() >= 992) {
-        // Dismiss any open popovers
-        $(".footnote").popover("dispose");
+    var mode = $(window).width() >= 992 ? "sidebar" : "popover";
+    // Resizes that keep the display mode, like mobile browsers showing or hiding
+    // their toolbars, must not recreate popovers or scroll to the footnote in the URL
+    var modeChanged = mode !== footnoteMode;
+    footnoteMode = mode;
 
-        // Position the footnotes in the sidebar
+    if (mode === "sidebar") {
+        if (modeChanged) {
+            // Dismiss any open popovers
+            $(".footnote").popover("dispose");
+        }
+
+        // Position the footnotes in the sidebar, realigning on every resize
+        // because reflowed text moves their references
         alignFootnotes();
-    } else if (oldWidth >= 992) {
+    } else if (modeChanged) {
         $(".footnote").each(function () {
             var footnoteID = $(this).attr("href");
             var escapedFootnoteID = escapeSelector(footnoteID);
@@ -99,6 +108,8 @@ function configureFootnotes() {
         }
     }
 
+    if (!modeChanged) { return; }
+
     // Now that the footnotes are positioned, move the viewport to any footnote linked in the URL
     var hash = window.location.hash;
     if (hash) {
@@ -110,7 +121,6 @@ function configureFootnotes() {
             }, 5);
         }
     }
-    oldWidth = $(window).width();
 }
 
 
