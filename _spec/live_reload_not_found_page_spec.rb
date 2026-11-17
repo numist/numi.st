@@ -81,9 +81,10 @@ describe 'the LiveReload 404 page' do
     expect(response.body).not_to include(live_reload_script)
   end
 
-  it 'answers a HEAD request for a missing path with 404 and no body' do
+  it 'answers a HEAD request for a missing path as it would a GET, without the body' do
     response = request('HEAD', '/nope', livereload: true)
     expect(response.code).to eq('404')
+    expect(response['X-Rack-LiveReload']).to eq('1')
     expect(response.body).to be_nil
   end
 
